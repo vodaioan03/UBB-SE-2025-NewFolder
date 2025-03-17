@@ -8,5 +8,7 @@ namespace Hospital.Models
 {
     class Department
     {
+        int departmentId { get; set; }
+        string name { get; set; }
     }
 }
