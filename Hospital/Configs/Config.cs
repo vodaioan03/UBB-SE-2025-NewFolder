@@ -45,8 +45,12 @@ namespace Hospital.Configs
             return _instance;
         }
 
-        // We'll use this property to prove that our Singleton really works.
-        private string _databaseConnection = "connection";
+    // We'll use this property to prove that our Singleton really works.
+
+    // Microsoft.Data.SqlClient uses Encrypted=true by default, so we need to add TrustServerCertificate=True
+    // _databaseConnection = "Data Source={SERVER NAME};Initial Catalog={DATABASE_NAME};Integrated Security=True;TrustServerCertificate=True"
+
+    private string _databaseConnection = "Here paste the connection string";
         public string DatabaseConnection { get { return _databaseConnection; } }
     }
 }

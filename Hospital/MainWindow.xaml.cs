@@ -1,36 +1,63 @@
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+using System.Threading.Tasks;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
-
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
+using Hospital.Models;
+using Hospital.DatabaseServices;
 
 namespace Hospital
 {
-    /// <summary>
-    /// An empty window that can be used on its own or navigated to within a Frame.
-    /// </summary>
-    public sealed partial class MainWindow : Window
+  public sealed partial class MainWindow : Window
+  {
+    public MainWindow()
     {
-        public MainWindow()
-        {
-            this.InitializeComponent();
-        }
-
-        private void myButton_Click(object sender, RoutedEventArgs e)
-        {
-            myButton.Content = "Clicked";
-        }
+      InitializeComponent();
     }
+
+    // Function to test adding an appointment to database
+    public async Task<bool> AddAppointmentToDatabase()
+    {
+      try
+      {
+        Appointment appointmentToAdd = new Appointment(
+            appointmentId: 1,
+            doctorId: 1,
+            patientId: 1,
+            dateAndTime: new DateTime(
+                DateTime.Now.Year,
+                DateTime.Now.Month,
+                DateTime.Now.Day,
+                12,
+                0,
+                0
+            ),
+            finished: false,
+            procedureId: 1
+        );
+
+        AppointmentsDatabaseService appointmentDatabaseService = new AppointmentsDatabaseService(Configs.Config.GetInstance());
+
+        bool result = await appointmentDatabaseService.AddAppointmentToDB(appointmentToAdd);
+        return result;
+      }
+      catch (Exception exception)
+      {
+        Console.WriteLine($"Error adding appointment: {exception.Message}");
+        return false;
+      }
+    }
+
+    private async void myButton_Click(object sender, RoutedEventArgs e)
+    {
+      try
+      {
+        bool result = await AddAppointmentToDatabase();
+        myButton.Content = result ? "Success" : "Failure";
+      }
+      catch (Exception exception)
+      {
+        myButton.Content = $"Error: {exception.Message}";
+      }
+    }
+  }
 }
