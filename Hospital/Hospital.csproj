@@ -41,7 +41,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DatabaseServices\" />
-    <Folder Include="Configs\" />
     <Folder Include="Managers\" />
     <Folder Include="Helpers\" />
     <Folder Include="ViewModels\" />
