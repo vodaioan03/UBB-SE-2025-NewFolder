@@ -14,6 +14,33 @@
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
+# NEW
+bin/
+obj/
+*.cache
+*.nupkg
+*.lock.json
+
+.vscode/
+.vs/
+*.suo
+*.user
+*.VC.db
+*.opendb
+
+*.nuget.g.targets
+project.nuget.cache
+packages/
+
+Hospital/obj/**/Hospital.AssemblyInfo.cs
+Hospital/obj/**/project.assets.json
+Hospital/obj/**/project.nuget.cache
+Hospital/obj/**/x64.Reference.cache
+Hospital/obj/**/x64.Debug/
+
+*.editorconfig
+*.tmp
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
