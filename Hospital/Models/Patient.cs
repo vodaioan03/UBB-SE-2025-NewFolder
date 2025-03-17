@@ -18,5 +18,16 @@ namespace Hospital.Models
         public float Weight { get; set; }
         //Height in cm
         public int Height { get; set; }
+
+        public Patient(int userId, int patientId, string bloodType, string emergencyContact, string allergies, float weight, int height)
+        {
+            UserId = userId;
+            PatientId = patientId;
+            BloodType = bloodType;
+            EmergencyContact = emergencyContact;
+            Allergies = allergies;
+            Weight = weight;
+            Height = height;
+        }
     }
 }

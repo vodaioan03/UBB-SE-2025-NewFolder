@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "E:\\Facultate\\Teme\\ISS\\UBB-SE-2025-NewFolder\\vodaioan03\\UBB-SE-2025-NewFolder\\Hospital\\Hospital.csproj": {}
+    "C:\\MyProjects\\repos\\UBB-SE-2025-NewFolder\\Hospital\\Hospital.csproj": {}
   },
   "projects": {
-    "E:\\Facultate\\Teme\\ISS\\UBB-SE-2025-NewFolder\\vodaioan03\\UBB-SE-2025-NewFolder\\Hospital\\Hospital.csproj": {
+    "C:\\MyProjects\\repos\\UBB-SE-2025-NewFolder\\Hospital\\Hospital.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Facultate\\Teme\\ISS\\UBB-SE-2025-NewFolder\\vodaioan03\\UBB-SE-2025-NewFolder\\Hospital\\Hospital.csproj",
+        "projectUniqueName": "C:\\MyProjects\\repos\\UBB-SE-2025-NewFolder\\Hospital\\Hospital.csproj",
         "projectName": "Hospital",
-        "projectPath": "E:\\Facultate\\Teme\\ISS\\UBB-SE-2025-NewFolder\\vodaioan03\\UBB-SE-2025-NewFolder\\Hospital\\Hospital.csproj",
-        "packagesPath": "C:\\Users\\Hugo\\.nuget\\packages\\",
-        "outputPath": "E:\\Facultate\\Teme\\ISS\\UBB-SE-2025-NewFolder\\vodaioan03\\UBB-SE-2025-NewFolder\\Hospital\\obj\\",
+        "projectPath": "C:\\MyProjects\\repos\\UBB-SE-2025-NewFolder\\Hospital\\Hospital.csproj",
+        "packagesPath": "C:\\Users\\Asus\\.nuget\\packages\\",
+        "outputPath": "C:\\MyProjects\\repos\\UBB-SE-2025-NewFolder\\Hospital\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Hugo\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Asus\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -26,7 +26,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {

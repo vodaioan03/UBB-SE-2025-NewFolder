@@ -1,1 +1,1 @@
-E:\Facultate\Teme\ISS\UBB-SE-2025-NewFolder\vodaioan03\UBB-SE-2025-NewFolder\Hospital\Hospital.csproj;x64
+C:\MyProjects\repos\UBB-SE-2025-NewFolder\Hospital\Hospital.csproj;x64
