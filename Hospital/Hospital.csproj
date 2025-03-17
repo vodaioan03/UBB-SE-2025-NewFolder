@@ -40,7 +40,6 @@
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.6.250228001" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\" />
     <Folder Include="DatabaseServices\" />
     <Folder Include="Configs\" />
     <Folder Include="Managers\" />
