@@ -12,9 +12,9 @@ namespace Hospital.Models
         public int DepartmentId { get; set; }
         public string Name { get; set; }
         //Duration in minutes
-        public int Duration { get; set; }
+        public TimeSpan Duration { get; set; }
 
-        public Procedure(int procedureId, int departmentId, string name, int duration)
+        public Procedure(int procedureId, int departmentId, string name, TimeSpan duration)
         {
             this.ProcedureId = procedureId;
             this.DepartmentId = departmentId;
