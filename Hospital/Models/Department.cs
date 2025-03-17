@@ -6,9 +6,15 @@ using System.Threading.Tasks;
 
 namespace Hospital.Models
 {
-    class Department
+    public class Department
     {
-        int departmentId { get; set; }
-        string name { get; set; }
+        int DepartmentId { get; set; }
+        string Name { get; set; }
+
+        public Department(int departmentId, string name)
+        {
+            this.DepartmentId = departmentId;
+            this.Name = name;
+        }
     }
 }
