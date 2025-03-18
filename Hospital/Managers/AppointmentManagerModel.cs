@@ -5,6 +5,8 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using Hospital.Exceptions;
+
 
 namespace Hospital.Managers
 {
@@ -59,22 +61,58 @@ namespace Hospital.Managers
 
 
 
+
         public async Task LoadAppointmentsForPatient(int patientId)
         {
             try
             {
+                Console.WriteLine($"Calling GetAppointmentsForPatient for Patient ID: {patientId}");
                 List<AppointmentJointModel> appointments = await _appointmentsDBService
                     .GetAppointmentsForPatient(patientId)
                     .ConfigureAwait(false);
 
-                s_appointmentList = new ObservableCollection<AppointmentJointModel>(
-                    appointments.Where(a => a.Date > DateTime.Now && !a.Finished)
-                );
+                Console.WriteLine($"Appointments received: {appointments.Count}");
+
+                s_appointmentList.Clear();
+                foreach (AppointmentJointModel appointment in appointments)
+                {
+                    Console.WriteLine($"Adding to UI: {appointment.AppointmentId} - {appointment.Date}");
+                    s_appointmentList.Add(appointment);
+                }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error loading patient appointments: {ex.Message}");
-                return;
+            }
+        }
+
+
+
+        public async Task<bool> RemoveAppointment(int appointmentId)
+        {
+            try
+            {
+                AppointmentJointModel appointment = await _appointmentsDBService.GetAppointment(appointmentId);
+                if (appointment == null)
+                {
+                    throw new AppointmentNotFoundException($"Appointment with ID {appointmentId} not found.");
+                }
+
+                if ((appointment.Date - DateTime.Now).TotalHours < 24)
+                {
+                    throw new CancellationNotAllowedException($"Appointment {appointmentId} is within 24 hours and cannot be canceled.");
+                }
+
+                if (!await _appointmentsDBService.RemoveAppointmentFromDB(appointmentId))
+                {
+                    throw new DatabaseOperationException($"Failed to cancel appointment {appointmentId} due to a database error.");
+                }
+
+                return true;
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
 
@@ -96,6 +134,7 @@ namespace Hospital.Managers
                 throw new Exception($"Error loading appointments for doctor {doctorId}: {ex.Message}");
             }
         }
+
 
     }
 }
