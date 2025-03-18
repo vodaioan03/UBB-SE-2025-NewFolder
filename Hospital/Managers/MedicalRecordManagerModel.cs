@@ -84,6 +84,8 @@ namespace Hospital.Managers
                 medicalRecord.MedicalRecordId = newMedicalRecordId;
                 // And if required, update the ObservableCollection accordingly:
                 // s_medicalRecordList.Add(new MedicalRecordJointModel(...));
+
+                s_medicalRecordList.Add(GetMedicalRecordById(newMedicalRecordId));
             }
 
             return newMedicalRecordId;
