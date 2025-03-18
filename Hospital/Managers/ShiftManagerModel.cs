@@ -34,7 +34,7 @@ namespace Hospital.Managers
         }
 
 
-        public List<Shift> GetShifts(int doctorId)
+        public List<Shift> GetShifts()
         {
             return _shifts;
         }
