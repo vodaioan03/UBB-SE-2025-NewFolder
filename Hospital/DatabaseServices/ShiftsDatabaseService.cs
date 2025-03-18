@@ -29,7 +29,7 @@ namespace Hospital.DatabaseServices
                 using SqlConnection conn = new SqlConnection(_config.DatabaseConnection);
                 await conn.OpenAsync();
 
-                using SqlCommand cmd = new SqlCommand(GetShiftsQuery, conn);
+                using SqlCommand cmd = new SqlCommand(query, conn);
                 using SqlDataReader reader = await cmd.ExecuteReaderAsync();
                 while (await reader.ReadAsync())
                 {
