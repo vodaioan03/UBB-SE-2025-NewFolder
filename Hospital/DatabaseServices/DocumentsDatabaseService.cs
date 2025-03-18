@@ -10,9 +10,9 @@ namespace Hospital.DatabaseServices
 	{
 		private readonly Config _config;
 
-		public DocumentDatabaseService(Config config)
+		public DocumentDatabaseService()
 		{
-			_config = config;
+			_config = Config.GetInstance();
 		}
 
 		public async Task<bool> UploadDocumentToDB(Document document )
