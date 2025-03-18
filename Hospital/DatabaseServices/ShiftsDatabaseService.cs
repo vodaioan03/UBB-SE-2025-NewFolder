@@ -13,7 +13,7 @@ namespace Hospital.DatabaseServices
     {
         private Config configs;
         private List<Shift> shifts; //Can be deleted later -> used for hard coding the data at the moment
-        private List<Schedule> schedules //Can be deleted later -> used for hard coding the data at the moment
+        private List<Schedule> schedules; //Can be deleted later -> used for hard coding the data at the moment
 
         public ShiftsDatabaseService()
         {
