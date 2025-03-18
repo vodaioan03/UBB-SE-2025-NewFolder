@@ -8,8 +8,8 @@ namespace Hospital.Models
 {
     public class Department
     {
-        int DepartmentId { get; set; }
-        string Name { get; set; }
+        public int DepartmentId { get; set; }
+        public string Name { get; set; }
 
         public Department(int departmentId, string name)
         {
