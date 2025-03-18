@@ -61,7 +61,6 @@ namespace Hospital.DatabaseServices
       }
     }
 
-    // New method added from the second branch.
     public async Task<List<AppointmentJointModel>> GetAppointments()
     {
       const string query = @"
