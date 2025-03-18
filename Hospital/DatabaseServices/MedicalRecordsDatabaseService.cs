@@ -6,19 +6,20 @@ using System.Threading.Tasks;
 
 namespace Hospital.DatabaseServices
 {
-    class MedicalRecordDatabaseService
+    class MedicalRecordsDatabaseService
     {
         private readonly Config _config;
 
-        public MedicalRecordDatabaseService(Config config)
+        public MedicalRecordsDatabaseService()
         {
-            _config = config;
+            _config = Config.GetInstance();
         }
 
-        public async Task<bool> AddMedicalRecord(MedicalRecord MedicalRecord)
+        public async Task<int> AddMedicalRecord(MedicalRecord medicalRecord)
         {
             const string queryAddMedicalRecord =
               "INSERT INTO MedicalRecord(DoctorId, PatientId, ProcedureId, Conclusion) " +
+              "OUTPUT INSERTED.MedicalRecordId " +
               "VALUES (@DoctorId, @PatientId, @ProcedureId, @Conclusion)";
 
             try
@@ -32,30 +33,33 @@ namespace Hospital.DatabaseServices
                 // Create a command to execute the SQL query
                 using var command = new SqlCommand(queryAddMedicalRecord, connection);
 
-                // Add the parameters to the query with values from the appointment object
-                command.Parameters.AddWithValue("@DoctorId", MedicalRecord.DoctorId);
-                command.Parameters.AddWithValue("@PatientId", MedicalRecord.PatientId);
-                command.Parameters.AddWithValue("@ProcedureId", MedicalRecord.ProcedureId);
-                command.Parameters.AddWithValue("@Conclusion", MedicalRecord.Conclusion);
+                // Add parameters to the query
+                command.Parameters.AddWithValue("@DoctorId", medicalRecord.DoctorId);
+                command.Parameters.AddWithValue("@PatientId", medicalRecord.PatientId);
+                command.Parameters.AddWithValue("@ProcedureId", medicalRecord.ProcedureId);
+                command.Parameters.AddWithValue("@Conclusion", medicalRecord.Conclusion ?? (object)DBNull.Value);
 
-                // Execute the query asynchronously and check how many rows were affected
-                int rowsAffected = await command.ExecuteNonQueryAsync().ConfigureAwait(false);
+                // Execute the query asynchronously and retrieve the generated MedicalRecordId
+                SqlDataReader result = await command.ExecuteReaderAsync().ConfigureAwait(false);
+                int MedicalRecordId = -1;
+                while (await result.ReadAsync().ConfigureAwait(false))
+                {
+                    MedicalRecordId = result.GetInt32(0);
+                }
 
-                // Close DB Connection
-                connection.Close();
 
-                // If at least one row was affected, the insert was successful
-                return rowsAffected > 0;
+                // Return the generated MedicalRecordId or -1 if insertion failed
+                return MedicalRecordId;
             }
             catch (SqlException sqlException)
             {
                 Console.WriteLine($"SQL Error: {sqlException.Message}");
-                return false;
+                return -1;
             }
             catch (Exception exception)
             {
                 Console.WriteLine($"General Error: {exception.Message}");
-                return false;
+                return -1;
             }
         }
     }
