@@ -57,7 +57,7 @@ namespace Hospital.Managers
       }
     }
 
-        
+
 
    public async Task LoadAppointmentsForPatient(int patientId)
 {
