@@ -123,6 +123,8 @@ namespace Hospital.DatabaseServices
           ));
         }
 
+        connection.Close();
+        
         return appointments;
       }
       catch (SqlException sqlException)
@@ -201,6 +203,8 @@ namespace Hospital.DatabaseServices
           ));
         }
 
+        connection.Close();
+        
         return appointments;
       }
       catch (SqlException sqlException)
@@ -284,6 +288,8 @@ namespace Hospital.DatabaseServices
           ));
         }
 
+        connection.Close();
+
         return appointments;
       }
       catch (SqlException sqlException)
@@ -364,6 +370,8 @@ namespace Hospital.DatabaseServices
             (TimeSpan)row["ProcedureDuration"]
           ));
         }
+
+        connection.Close();
 
         return appointments;
       }
