@@ -1,4 +1,4 @@
-﻿using Hospital.DatabaseServices;
+using Hospital.DatabaseServices;
 using Hospital.Models;
 using System;
 using System.Linq;
