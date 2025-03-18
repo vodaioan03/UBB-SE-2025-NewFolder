@@ -29,7 +29,11 @@ namespace Hospital.Managers
                 List<MedicalRecordJointModel> medicalRecords = await _medicalRecordsDBService
                     .GetMedicalRecordsForPatient(patientId)
                     .ConfigureAwait(false);
-                s_medicalRecordList = new ObservableCollection<MedicalRecordJointModel>(medicalRecords);
+                s_medicalRecordList.Clear();
+                foreach (MedicalRecordJointModel medicalRecord in medicalRecords)
+                {
+                    s_medicalRecordList.Add(medicalRecord);
+                }
             }
             catch (Exception ex)
             {
