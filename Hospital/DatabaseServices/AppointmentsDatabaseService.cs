@@ -388,7 +388,7 @@ namespace Hospital.DatabaseServices
 
         public async Task<AppointmentJointModel> GetAppointment(int appointmentId)
         {
-            string query = @"SELECT 
+            string GetAppointmentByAppointmentIdQuery = @"SELECT 
             a.AppointmentId,
             a.Finished,
             a.DateAndTime,
@@ -416,7 +416,7 @@ namespace Hospital.DatabaseServices
                 using SqlConnection connection = new SqlConnection(_config.DatabaseConnection);
                 await connection.OpenAsync().ConfigureAwait(false);
                 Console.WriteLine("Connection established successfully.");
-                using SqlCommand command = new SqlCommand(query, connection);
+                using SqlCommand command = new SqlCommand(GetAppointmentByAppointmentIdQuery, connection);
                 command.Parameters.AddWithValue("@DoctorId", appointmentId);
                 using SqlDataReader reader = await command.ExecuteReaderAsync().ConfigureAwait(false);
                 await Task.Run(() => dt.Load(reader)).ConfigureAwait(false);
