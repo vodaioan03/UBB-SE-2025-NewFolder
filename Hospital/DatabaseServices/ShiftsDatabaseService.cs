@@ -21,7 +21,7 @@ namespace Hospital.DatabaseServices
 
         public async Task<List<Shift>> GetShifts()
         {
-            const string query = "SELECT ShiftId, Date, StartTime, EndTime FROM Shifts";
+            const string GetShiftsQuery = "SELECT ShiftId, Date, StartTime, EndTime FROM Shifts";
             List<Shift> shifts = new List<Shift>();
 
             try
@@ -29,7 +29,7 @@ namespace Hospital.DatabaseServices
                 using SqlConnection conn = new SqlConnection(_config.DatabaseConnection);
                 await conn.OpenAsync();
 
-                using SqlCommand cmd = new SqlCommand(query, conn);
+                using SqlCommand cmd = new SqlCommand(GetShiftsQuery, conn);
                 using SqlDataReader reader = await cmd.ExecuteReaderAsync();
                 while (await reader.ReadAsync())
                 {
@@ -57,7 +57,7 @@ namespace Hospital.DatabaseServices
 
         public async Task<List<Schedule>> GetSchedules()
         {
-            const string query = "SELECT DoctorId, ShiftId FROM Schedules";
+            const string getSchedulesQuery = "SELECT DoctorId, ShiftId FROM Schedules";
             List<Schedule> schedules = new List<Schedule>();
 
             try
@@ -65,7 +65,7 @@ namespace Hospital.DatabaseServices
                 using SqlConnection conn = new SqlConnection(_config.DatabaseConnection);
                 await conn.OpenAsync();
 
-                using SqlCommand cmd = new SqlCommand(query, conn);
+                using SqlCommand cmd = new SqlCommand(getSchedulesQuery, conn);
                 using SqlDataReader reader = await cmd.ExecuteReaderAsync();
                 while (await reader.ReadAsync())
                 {
@@ -88,7 +88,7 @@ namespace Hospital.DatabaseServices
 
         public async Task<List<Shift>> GetShiftsByDoctorId(int doctorId)
         {
-            const string query = @"
+            const string GetShiftByDoctorIdQuery = @"
             SELECT s.ShiftId, s.Date, s.StartTime, s.EndTime
             FROM Shifts s
             JOIN Schedules sch ON s.ShiftId = sch.ShiftId
@@ -101,7 +101,7 @@ namespace Hospital.DatabaseServices
                 using SqlConnection conn = new SqlConnection(_config.DatabaseConnection);
                 await conn.OpenAsync();
 
-                using SqlCommand cmd = new SqlCommand(query, conn);
+                using SqlCommand cmd = new SqlCommand(GetShiftByDoctorIdQuery, conn);
                 cmd.Parameters.AddWithValue("@DoctorId", doctorId);
 
                 using SqlDataReader reader = await cmd.ExecuteReaderAsync();
