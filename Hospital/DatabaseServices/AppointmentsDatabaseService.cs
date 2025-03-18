@@ -44,6 +44,8 @@ namespace Hospital.DatabaseServices
         // Execute the query asynchronously and check how many rows were affected
         int rowsAffected = await command.ExecuteNonQueryAsync().ConfigureAwait(false);
 
+        connection.Close();
+
         // If at least one row was affected, the insert was successful
         return rowsAffected > 0;
       }
