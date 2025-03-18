@@ -101,7 +101,11 @@ namespace Hospital.Managers
                 List<AppointmentJointModel> appointments =
                     await _appointmentsDBService.GetAppointmentsForDoctor(doctorId).ConfigureAwait(false);
 
-                s_appointmentList = new ObservableCollection<AppointmentJointModel>(appointments);
+                s_appointmentList.Clear();
+                foreach (AppointmentJointModel appointment in appointments)
+                {
+                    s_appointmentList.Add(appointment);
+                }
             }
             catch (Exception ex)
             {
