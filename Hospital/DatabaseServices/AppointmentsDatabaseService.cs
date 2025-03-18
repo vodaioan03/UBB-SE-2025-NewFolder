@@ -1,4 +1,4 @@
-﻿using Hospital.Configs;
+using Hospital.Configs;
 using Hospital.Models;
 using Microsoft.Data.SqlClient;
 using System;
@@ -61,6 +61,7 @@ namespace Hospital.DatabaseServices
       }
     }
 
+    // New method added from the second branch.
     public async Task<List<AppointmentJointModel>> GetAppointments()
     {
       const string query = @"
@@ -139,7 +140,6 @@ namespace Hospital.DatabaseServices
       }
     }
 
-
     public async Task<List<AppointmentJointModel>> GetAppointmentsForPatient(int patientId)
     {
       const string query = @"
@@ -204,7 +204,6 @@ namespace Hospital.DatabaseServices
         }
 
         connection.Close();
-        
         return appointments;
       }
       catch (SqlException sqlException)
