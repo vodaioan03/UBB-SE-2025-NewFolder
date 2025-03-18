@@ -29,7 +29,6 @@ namespace Hospital.DatabaseServices
             };
             return schedules;
         }
-
         private List<Shift> populateShifts()
         {
             List<Shift> shifts = new List<Shift>
