@@ -1,10 +1,10 @@
 using Hospital.Configs;
-using Hospital.Models;
+using Hospital.Exceptions;
 using Microsoft.Data.SqlClient;
 using System;
-using System.Threading.Tasks;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
+using Document = Hospital.Models.Document;
 
 namespace Hospital.DatabaseServices
 {
@@ -91,6 +91,11 @@ namespace Hospital.DatabaseServices
                 }
                 // Close DB Connection
                 connection.Close();
+
+                if (documents.Count == 0)
+                {
+                    throw new DocumentNotFoundException("No documents found for the medical record with the given ID.");
+                }
                 // Return the list of Document objects
                 return documents;
             }
