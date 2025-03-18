@@ -1,4 +1,4 @@
-﻿using Hospital.Configs;
+using Hospital.Configs;
 using Hospital.Models;
 using Microsoft.Data.SqlClient;
 using System;
@@ -58,6 +58,84 @@ namespace Hospital.DatabaseServices
       {
         Console.WriteLine($"General Error: {exception.Message}");
         return false;
+      }
+    }
+
+    public async Task<List<AppointmentJointModel>> GetAppointments()
+    {
+      const string query = @"
+        SELECT 
+            a.AppointmentId,
+            a.Finished,
+            a.DateAndTime,
+            d.DepartmentId,
+            d.DepartmentName,
+            doc.DoctorId,
+            doc.DoctorName,
+            p.PatientId,
+            p.PatientName,
+            pr.ProcedureId,
+            pr.ProcedureName,
+            pr.ProcedureDuration
+        FROM Appointments a
+        JOIN Doctors doc ON a.DoctorId = doc.DoctorId
+        JOIN Departments d ON doc.DepartmentId = d.DepartmentId
+        JOIN Patients p ON a.PatientId = p.PatientId
+        JOIN Procedures pr ON a.ProcedureId = pr.ProcedureId
+        ORDER BY a.AppointmentId;
+      ";
+
+      using DataTable dt = new DataTable();
+
+      try
+      {
+        using SqlConnection connection = new SqlConnection(_config.DatabaseConnection);
+        // Open the database connection asynchronously.
+        await connection.OpenAsync().ConfigureAwait(false);
+        Console.WriteLine("Connection established successfully.");
+
+        // Create a command to execute the SQL query.
+        using SqlCommand command = new SqlCommand(query, connection);
+
+        // Execute the command and obtain a SqlDataReader.
+        using SqlDataReader reader = await command.ExecuteReaderAsync().ConfigureAwait(false);
+
+        // Load the results into a DataTable.
+        await Task.Run(() => dt.Load(reader)).ConfigureAwait(false);
+
+        // Create a list to store the AppointmentJointModel objects.
+        List<AppointmentJointModel> appointments = new List<AppointmentJointModel>();
+        foreach (DataRow row in dt.Rows)
+        {
+          appointments.Add(new AppointmentJointModel(
+            (int)row["AppointmentId"],
+            (bool)row["Finished"],
+            (DateTime)row["DateAndTime"],
+            (int)row["DepartmentId"],
+            (string)row["DepartmentName"],
+            (int)row["DoctorId"],
+            (string)row["DoctorName"],
+            (int)row["PatientId"],
+            (string)row["PatientName"],
+            (int)row["ProcedureId"],
+            (string)row["ProcedureName"],
+            (TimeSpan)row["ProcedureDuration"]
+          ));
+        }
+
+        connection.Close();
+        
+        return appointments;
+      }
+      catch (SqlException sqlException)
+      {
+        Console.WriteLine($"SQL Error: {sqlException.Message}");
+        return new List<AppointmentJointModel>();
+      }
+      catch (Exception exception)
+      {
+        Console.WriteLine($"General Error: {exception.Message}");
+        return new List<AppointmentJointModel>();
       }
     }
 
@@ -125,7 +203,6 @@ namespace Hospital.DatabaseServices
         }
 
         connection.Close();
-
         return appointments;
       }
       catch (SqlException sqlException)
@@ -225,8 +302,6 @@ namespace Hospital.DatabaseServices
       }
     }
 
-
-    // GetAppointmentsForDoctor
     public async Task<List<AppointmentJointModel>> GetAppointmentsForDoctor(int doctorId)
     {
       const string query = @"
