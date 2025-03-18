@@ -1,5 +1,6 @@
 using Hospital.Configs;
 using Hospital.Models;
+using Hospital.Exceptions;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
@@ -447,6 +448,8 @@ namespace Hospital.DatabaseServices
                 return null;
 
             }
+
+            throw new AppointmentNotFoundException($"Appointment not found for id {appointmentId}");
         }
     }
 }
