@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
-using Hospital.Exceptions;
 
 namespace Hospital.DatabaseServices
 {
@@ -446,11 +445,8 @@ namespace Hospital.DatabaseServices
             {
                 Console.WriteLine($"General Error: {exception.Message}");
                 return null;
+
             }
-
-            throw new AppointmentNotFoundException($"Appointment not found for id {appointmentId}");
-
         }
-
     }
 }
