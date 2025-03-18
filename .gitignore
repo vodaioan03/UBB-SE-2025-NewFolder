@@ -557,3 +557,8 @@ FodyWeavers.xsd
 Hospital/obj/x64/Debug/net8.0-windows10.0.19041.0/win-x64/Hospital.AssemblyInfo.cs
 Hospital/obj/x64/Debug/net8.0-windows10.0.19041.0/win-x64/Hospital.AssemblyInfoInputs.cache
 Hospital/obj/x64/Debug/net8.0-windows10.0.19041.0/win-x64/MainWindow.xaml
+Hospital/obj/project.nuget.cache
+Hospital/obj/x64/Debug/net8.0-windows10.0.19041.0/win-x64/Hospital.AssemblyInfo.cs
+Hospital/obj/x64/Debug/net8.0-windows10.0.19041.0/win-x64/Hospital.AssemblyInfoInputs.cache
+Hospital/obj/x64/Debug/net8.0-windows10.0.19041.0/win-x64/Hospital.assets.cache
+Hospital/obj/x64/Debug/net8.0-windows10.0.19041.0/win-x64/Hospital.csproj.AssemblyReference.cache
