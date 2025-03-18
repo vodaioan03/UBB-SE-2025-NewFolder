@@ -11,16 +11,19 @@ namespace Hospital.Models
         public int DoctorId { get; set; }
         public int UserId { get; set; }
         public int DepartmentId { get; set; }
-        public float Rating { get; set; }
+        public double Rating { get; set; }
         public string LicenseNumber { get; set; }
+        public string DoctorName { get; set; }
 
-        public DoctorJointModel(int doctorId, int userId, int departmentId, float rating, string licenseNumber)
+
+        public DoctorJointModel(int doctorId, int userId, string doctorName, int departmentId, double rating, string licenseNumber)
         {
             DoctorId = doctorId;
             UserId = userId;
             DepartmentId = departmentId;
             Rating = rating;
             LicenseNumber = licenseNumber;
+            DoctorName = doctorName;
         }
     }
 }

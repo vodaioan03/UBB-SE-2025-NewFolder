@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace Hospital.Models
 {
-    public class Patient
+    public class PatientJointModel
     {
         public int UserId { get; set; }
         public int PatientId { get; set; }
+        public string PatientName { get; set; }
         //De adaugat enum cu BloodType si sa fie de acolo
         public string BloodType { get; set; }
         //Phone number for EmergencyContact
@@ -19,7 +20,7 @@ namespace Hospital.Models
         //Height in cm
         public int Height { get; set; }
 
-        public Patient(int userId, int patientId, string bloodType, string emergencyContact, string allergies, float weight, int height)
+        public PatientJointModel(int userId, int patientId, string patientName, string bloodType, string emergencyContact, string allergies, float weight, int height)
         {
             UserId = userId;
             PatientId = patientId;
@@ -28,6 +29,7 @@ namespace Hospital.Models
             Allergies = allergies;
             Weight = weight;
             Height = height;
+            PatientName = patientName;
         }
     }
 }
