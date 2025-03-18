@@ -11,14 +11,14 @@ namespace Hospital.Models
         public int ShiftId { get; set; }
         public DateTime DateTime { get; set; }
         public TimeSpan StartTime { get; set; }
-        public TimeSpan Endtime { get; set; }
+        public TimeSpan EndTime { get; set; }
 
         public Shift(int shiftId, DateTime dateTime, TimeSpan startTime, TimeSpan endtime)
         {
             ShiftId = shiftId;
             DateTime = dateTime;
             StartTime = startTime;
-            Endtime = endtime;
+            EndTime = endtime;
         }
     }
 }
