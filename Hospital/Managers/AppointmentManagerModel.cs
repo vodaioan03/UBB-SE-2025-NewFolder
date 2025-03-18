@@ -57,43 +57,25 @@ namespace Hospital.Managers
       }
     }
 
-        
 
-    public async Task<List<Appointment>> LoadAppointmentsForPatient(int patientId)
+
+    public async Task LoadAppointmentsForPatient(int patientId)
     {
-          try
-          {
-                
-                List<AppointmentJointModel> appointments =
-                    await _appointmentsDBService.GetAppointmentsForPatient(patientId).ConfigureAwait(false);
+        try
+        {
+            List<AppointmentJointModel> appointments = await _appointmentsDBService
+                .GetAppointmentsForPatient(patientId)
+                .ConfigureAwait(false);
 
-               
-                DateTime now = DateTime.Now;
-                List<Appointment> upcomingAppointments = appointments
-                    .Where(a => a.DateAndTime > now && !a.Finished)
-                    .Select(a => new Appointment
-                    {
-                        AppointmentId = a.AppointmentId,
-                        PatientId = a.PatientId,
-                        DoctorId = a.DoctorId,
-                        DateAndTime = a.DateAndTime,
-                        ProcedureId = a.ProcedureId,
-                        Finished = a.Finished
-                    })
-                    .ToList();
-
-                if (!upcomingAppointments.Any())
-                {
-                    throw new NotFoundException($"No upcoming appointments found for Patient ID {patientId}.");
-                }
-
-                return upcomingAppointments;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error loading appointments: {ex.Message}");
-                throw;
-            }
+            s_appointmentList = new ObservableCollection<AppointmentJointModel>(
+                appointments.Where(a => a.Date > DateTime.Now && !a.Finished)
+            );
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading patient appointments: {ex.Message}");
+            return;
+        }
     }
-  }
+    }
 }

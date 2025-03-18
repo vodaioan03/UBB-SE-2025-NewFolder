@@ -21,7 +21,7 @@ namespace Hospital.DatabaseServices
         // This method will be used to get the departments from the database
         public async Task<List<Department>> GetDepartmentsFromDB()
         {
-            const string querySelectDepartments = "select * from Departments";
+            const string querySelectDepartments = "SELECT * FROM Departments";
 
             try
             {
@@ -34,17 +34,17 @@ namespace Hospital.DatabaseServices
 
 
                 //Prepare the list of departments
-                List<Department> departments = new List<Department>();
+                List<Department> departmentList = new List<Department>();
 
                 //Read the data from the database
                 while (await reader.ReadAsync().ConfigureAwait(false))
                 {
                     int departmentId = reader.GetInt32(0);
-                    string name = reader.GetString(1);
-                    Department department = new Department(departmentId, name);
-                    departments.Add(department);
+                    string departmentName = reader.GetString(1);
+                    Department department = new Department(departmentId, departmentName);
+                    departmentList.Add(department);
                 }
-                return departments;
+                return departmentList;
             }
             catch(SqlException e)
             {
