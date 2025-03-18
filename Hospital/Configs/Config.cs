@@ -41,8 +41,6 @@ namespace Hospital.Configs
             _instance = new Config();
           }
         }
-      }
-      return _instance;
     }
 
     // We'll use this property to prove that our Singleton really works.

@@ -11,7 +11,7 @@ namespace Hospital.DatabaseServices
 {
     public class ShiftsDatabaseService
     {
-        private Config configs;
+        private readonly Config configs;
         private List<Shift> shifts; //Can be deleted later -> used for hard coding the data at the moment
         private List<Schedule> schedules; //Can be deleted later -> used for hard coding the data at the moment
 
