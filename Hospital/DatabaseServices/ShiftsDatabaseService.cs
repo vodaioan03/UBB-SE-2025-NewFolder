@@ -19,9 +19,75 @@ namespace Hospital.DatabaseServices
             this._config = Config.GetInstance();
         }
 
-        public List<Shift> GetShiftsByDoctorId(int doctorId)
+        public async Task<List<Shift>> GetShifts()
         {
+            const string query = "SELECT ShiftId, Date, StartTime, EndTime FROM Shifts";
+            List<Shift> shifts = new List<Shift>();
 
+            try
+            {
+                using SqlConnection conn = new SqlConnection(_config.DatabaseConnection);
+                await conn.OpenAsync();
+
+                using SqlCommand cmd = new SqlCommand(query, conn);
+                using SqlDataReader reader = await cmd.ExecuteReaderAsync();
+                while (await reader.ReadAsync())
+                {
+                    shifts.Add(new Shift(
+                        reader.GetInt32(0),
+                        reader.GetDateTime(1),
+                        reader.GetTimeSpan(2),
+                        reader.GetTimeSpan(3)
+                    ));
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                Console.WriteLine($"SQL Error: {sqlEx.Message}");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"General Error: {ex.Message}");
+                throw;
+            }
+
+            return shifts;
+        }
+
+        public async Task<List<Schedule>> GetSchedules()
+        {
+            const string query = "SELECT DoctorId, ShiftId FROM Schedules";
+            List<Schedule> schedules = new List<Schedule>();
+
+            try
+            {
+                using SqlConnection conn = new SqlConnection(_config.DatabaseConnection);
+                await conn.OpenAsync();
+
+                using SqlCommand cmd = new SqlCommand(query, conn);
+                using SqlDataReader reader = await cmd.ExecuteReaderAsync();
+                while (await reader.ReadAsync())
+                {
+                    schedules.Add(new Schedule(reader.GetInt32(0), reader.GetInt32(1)));
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                Console.WriteLine($"SQL Error: {sqlEx.Message}");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"General Error: {ex.Message}");
+                throw;
+            }
+
+            return schedules;
+        }
+
+        public async Task<List<Shift>> GetShiftsByDoctorId(int doctorId)
+        {
             const string query = @"
             SELECT s.ShiftId, s.Date, s.StartTime, s.EndTime
             FROM Shifts s
@@ -30,24 +96,40 @@ namespace Hospital.DatabaseServices
 
             List<Shift> shifts = new List<Shift>();
 
-            using (SqlConnection conn = new SqlConnection(_config.DatabaseConnection))
+            try
             {
-                conn.Open();
-                using (SqlCommand cmd = new SqlCommand(query, conn))
+                using SqlConnection conn = new SqlConnection(_config.DatabaseConnection);
+                await conn.OpenAsync();
+
+                using SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@DoctorId", doctorId);
+
+                using SqlDataReader reader = await cmd.ExecuteReaderAsync();
+                while (await reader.ReadAsync())
                 {
-                    cmd.Parameters.AddWithValue("@DoctorId", doctorId);
-                    using (SqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            Shift shift = new Shift(reader.GetInt32(0),reader.GetDateTime(1),reader.GetTimeSpan(2),reader.GetTimeSpan(3));
-                            shifts.Add(shift);
-                        }
-                    }
+                    shifts.Add(new Shift(
+                        reader.GetInt32(0),
+                        reader.GetDateTime(1),
+                        reader.GetTimeSpan(2),
+                        reader.GetTimeSpan(3)
+                    ));
                 }
             }
+            catch (SqlException sqlEx)
+            {
+                Console.WriteLine($"SQL Error: {sqlEx.Message}");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"General Error: {ex.Message}");
+                throw;
+            }
+
             return shifts;
         }
-
     }
+
+
 }
+
