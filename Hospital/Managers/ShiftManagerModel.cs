@@ -30,17 +30,11 @@ namespace Hospital.Managers
             return _shifts;
         }
 
-        public Shift GetShiftByDay(TimeSpan date)
+        public Shift GetShiftByDay(DateTime day)
         {
-            Shift shift = _shifts.FirstOrDefault(s => s.StartTime == date);
+            Shift shift = _shifts.FirstOrDefault(s => s.DateTime == day);
             if (shift == null)
-                throw new ShiftNotFoundException(string.Format("Shift not found for date {0}", date.ToString()));
-            return shift;
-        }
-
-        public Shift GetShiftByDoctorAndDate(int doctorId, DateTime date)
-        {
-            Shift shift = _shiftsDatabaseService.GetShiftByDoctorAndDate(doctorId, date);
+                throw new ShiftNotFoundException(string.Format("Shift not found for date {0}", day.ToString()));
             return shift;
         }
 
