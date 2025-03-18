@@ -1,1 +1,1 @@
-C:\MyProjects\repos\UBB-SE-2025-NewFolder\Hospital\Hospital.csproj;x64
+C:\Users\alext\Desktop\UBB-SE-2025-NewFolder\Hospital\Hospital.csproj;x64
