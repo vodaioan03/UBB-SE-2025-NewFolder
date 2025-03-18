@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\MyProjects\\repos\\UBB-SE-2025-NewFolder\\Hospital\\Hospital.csproj": {}
+    "C:\\Users\\alext\\Desktop\\UBB-SE-2025-NewFolder\\Hospital\\Hospital.csproj": {}
   },
   "projects": {
-    "C:\\MyProjects\\repos\\UBB-SE-2025-NewFolder\\Hospital\\Hospital.csproj": {
+    "C:\\Users\\alext\\Desktop\\UBB-SE-2025-NewFolder\\Hospital\\Hospital.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\MyProjects\\repos\\UBB-SE-2025-NewFolder\\Hospital\\Hospital.csproj",
+        "projectUniqueName": "C:\\Users\\alext\\Desktop\\UBB-SE-2025-NewFolder\\Hospital\\Hospital.csproj",
         "projectName": "Hospital",
-        "projectPath": "C:\\MyProjects\\repos\\UBB-SE-2025-NewFolder\\Hospital\\Hospital.csproj",
-        "packagesPath": "C:\\Users\\Asus\\.nuget\\packages\\",
-        "outputPath": "C:\\MyProjects\\repos\\UBB-SE-2025-NewFolder\\Hospital\\obj\\",
+        "projectPath": "C:\\Users\\alext\\Desktop\\UBB-SE-2025-NewFolder\\Hospital\\Hospital.csproj",
+        "packagesPath": "C:\\Users\\alext\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\alext\\Desktop\\UBB-SE-2025-NewFolder\\Hospital\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Asus\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\alext\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -50,6 +50,10 @@
         "net8.0-windows10.0.19041": {
           "targetAlias": "net8.0-windows10.0.19041.0",
           "dependencies": {
+            "Microsoft.Data.SqlClient": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            },
             "Microsoft.Windows.SDK.BuildTools": {
               "target": "Package",
               "version": "[10.0.26100.1742, )"
@@ -73,27 +77,27 @@
           "downloadDependencies": [
             {
               "name": "Microsoft.AspNetCore.App.Runtime.win-arm64",
-              "version": "[8.0.14, 8.0.14]"
+              "version": "[8.0.13, 8.0.13]"
             },
             {
               "name": "Microsoft.AspNetCore.App.Runtime.win-x64",
-              "version": "[8.0.14, 8.0.14]"
+              "version": "[8.0.13, 8.0.13]"
             },
             {
               "name": "Microsoft.AspNetCore.App.Runtime.win-x86",
-              "version": "[8.0.14, 8.0.14]"
+              "version": "[8.0.13, 8.0.13]"
             },
             {
               "name": "Microsoft.NETCore.App.Runtime.win-arm64",
-              "version": "[8.0.14, 8.0.14]"
+              "version": "[8.0.13, 8.0.13]"
             },
             {
               "name": "Microsoft.NETCore.App.Runtime.win-x64",
-              "version": "[8.0.14, 8.0.14]"
+              "version": "[8.0.13, 8.0.13]"
             },
             {
               "name": "Microsoft.NETCore.App.Runtime.win-x86",
-              "version": "[8.0.14, 8.0.14]"
+              "version": "[8.0.13, 8.0.13]"
             },
             {
               "name": "Microsoft.Windows.SDK.NET.Ref",
@@ -101,15 +105,15 @@
             },
             {
               "name": "Microsoft.WindowsDesktop.App.Runtime.win-arm64",
-              "version": "[8.0.14, 8.0.14]"
+              "version": "[8.0.13, 8.0.13]"
             },
             {
               "name": "Microsoft.WindowsDesktop.App.Runtime.win-x64",
-              "version": "[8.0.14, 8.0.14]"
+              "version": "[8.0.13, 8.0.13]"
             },
             {
               "name": "Microsoft.WindowsDesktop.App.Runtime.win-x86",
-              "version": "[8.0.14, 8.0.14]"
+              "version": "[8.0.13, 8.0.13]"
             }
           ],
           "frameworkReferences": {
@@ -120,7 +124,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.201/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.200/PortableRuntimeIdentifierGraph.json"
         }
       },
       "runtimes": {
