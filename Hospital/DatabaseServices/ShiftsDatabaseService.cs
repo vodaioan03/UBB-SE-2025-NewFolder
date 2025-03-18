@@ -11,9 +11,9 @@ namespace Hospital.DatabaseServices
 {
     public class ShiftsDatabaseService
     {
-        private  readonly Config configs;
+        private Config configs;
         private List<Shift> shifts; //Can be deleted later -> used for hard coding the data at the moment
-        private List<Schedule> schedules; //Can be deleted later -> used for hard coding the data at the moment
+        private List<Schedule> schedules //Can be deleted later -> used for hard coding the data at the moment
 
         public ShiftsDatabaseService()
         {
@@ -37,6 +37,7 @@ namespace Hospital.DatabaseServices
                 new Schedule(4,5)
             }; //Can be deleted later , after connecting to the database;
         }
+
         public List<Shift> GetShiftsByDoctorId(int doctorId)
         {
             return schedules.Where(schedule => schedule.DoctorId == doctorId).Join(shifts, schedule => schedule.ShiftId, shift => shift.ShiftId, (schedule, shift) => shift).ToList();
