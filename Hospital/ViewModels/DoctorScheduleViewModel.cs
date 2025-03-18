@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Hospital.Managers;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using Hospital.Commands;
 
 namespace Hospital.ViewModels
 {
@@ -16,7 +17,7 @@ namespace Hospital.ViewModels
         private readonly ShiftManagerModel _shiftManager;
 
         public ObservableCollection<AppointmentJointModel> Appointments { get; set; }
-        public List<Shift> Shifts { get; set; }  // Changed to List<Shift>
+        public List<Shift> Shifts { get; set; }  
 
         public ICommand OpenDetailsCommand { get; set; }
 
@@ -27,7 +28,7 @@ namespace Hospital.ViewModels
             Appointments = new ObservableCollection<AppointmentJointModel>();
             Shifts = new List<Shift>();
 
-            OpenDetailsCommand = new RelayCommand<object>(OpenDetails);
+            OpenDetailsCommand = new RelayCommand(OpenDetails);
         }
 
         private void OpenDetails(object obj)
