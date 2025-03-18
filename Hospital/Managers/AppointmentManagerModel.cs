@@ -59,23 +59,24 @@ namespace Hospital.Managers
 
 
 
-    public async Task LoadAppointmentsForPatient(int patientId)
+   public async Task LoadAppointmentsForPatient(int patientId)
+{
+    try
     {
-        try
-        {
-            List<AppointmentJointModel> appointments = await _appointmentsDBService
-                .GetAppointmentsForPatient(patientId)
-                .ConfigureAwait(false);
+        List<AppointmentJointModel> appointments = await _appointmentsDBService
+            .GetAppointmentsForPatient(patientId)
+            .ConfigureAwait(false);
 
-            s_appointmentList = new ObservableCollection<AppointmentJointModel>(
-                appointments.Where(a => a.Date > DateTime.Now && !a.Finished)
-            );
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error loading patient appointments: {ex.Message}");
-            return;
-        }
+        s_appointmentList = new ObservableCollection<AppointmentJointModel>(
+            appointments.Where(a => a.Date > DateTime.Now && !a.Finished)
+        );
     }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Error loading patient appointments: {ex.Message}");
+        return;
     }
+}
+
+  }
 }
