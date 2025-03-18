@@ -111,5 +111,9 @@ namespace Hospital.Managers
             }
         }
 
+        public async Task<ObservableCollection<MedicalRecordJointModel>> getMedicalRecord()
+        {
+            return s_medicalRecordList;
+        }
     }
 }
