@@ -17,7 +17,7 @@ namespace Hospital.DatabaseServices
 
 		public async Task<bool> UploadDocumentToDB(Document document )
 		{
-			const string query =
+			const string queryUploadDocument =
 			  "INSERT INTO Documents (MedicalRecordId, File) " +
 			  "VALUES (@MedicalRecordId, @File)";
 			
@@ -30,7 +30,7 @@ namespace Hospital.DatabaseServices
 				Console.WriteLine("Connection established successfully.");
 
 				// Create a command to execute the SQL query
-				using var command = new SqlCommand(query, connection);
+				using var command = new SqlCommand(queryUploadDocument, connection);
 
 				// Add the parameters to the query with values from the appointment object
 				command.Parameters.AddWithValue("@MedicalRecordId", document.MedicalRecordId);
