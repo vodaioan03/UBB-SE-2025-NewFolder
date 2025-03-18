@@ -49,18 +49,5 @@ namespace Hospital.DatabaseServices
             return shifts;
         }
 
-        public Shift GetShiftByDoctorAndDate(int doctorId, DateTime date)
-        {
-            Schedule schedule = schedules.FirstOrDefault(s => s.DoctorId == doctorId);
-            if (schedule == null)
-                throw new ScheduleNotFoundException(string.Format("Schedule not found for doctor ID {0}", doctorId));
-
-            Shift shift = shifts.FirstOrDefault(shift => shift.ShiftId == schedule.ShiftId && shift.DateTime.Date == date.Date);
-            if (shift == null)
-                throw new ShiftNotFoundException(string.Format("Shift not found for doctor ID {0} on date {1}", doctorId, date.ToString()));
-
-            return shift;
-        }
-
     }
 }
