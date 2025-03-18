@@ -1,10 +1,11 @@
-﻿using Hospital.DatabaseServices;
-using Hospital.Models;
+﻿//using ABI.System;
+using Hospital.DatabaseServices;
+using Hospital.Exceptions;
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using Document = Hospital.Models.Document;
 
 
 namespace Hospital.Managers
@@ -22,6 +23,10 @@ namespace Hospital.Managers
 
         public async Task<ObservableCollection<Document>> GetDocuments()
         {
+            if (s_documentList.Count == 0)
+            {
+                throw new DocumentNotFoundException("No documents found.");
+            }
             return s_documentList;
         }
 
@@ -47,6 +52,10 @@ namespace Hospital.Managers
             {
                 List<Document> documents = await _documentDBService.GetDocumentsByMedicalRecordId(MedicalRecordId).ConfigureAwait(false);
                 s_documentList = new ObservableCollection<Document>(documents);
+            }
+            catch (DocumentNotFoundException)
+            {
+                throw new DocumentNotFoundException("No documents found for the medical record with the given ID.");
             }
             catch (Exception ex)
             {
