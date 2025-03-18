@@ -1,5 +1,6 @@
 ﻿using Hospital.Configs;
 using Hospital.Models;
+using Hospital.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -59,11 +60,11 @@ namespace Hospital.DatabaseServices
 
             Schedule schedule = schedules.FirstOrDefault(s => s.DoctorId == doctorId);
             if (schedule == null)
-                throw new Exception(string.Format("Schedule not found for doctor ID {0}", doctorId));
+                throw new ScheduleNotFoundException(string.Format("Schedule not found for doctor ID {0}", doctorId));
 
             Shift shift = shifts.FirstOrDefault(shift => shift.ShiftId == schedule.ShiftId && shift.DateTime.Date == date.Date);
             if (shift == null)
-                throw new Exception(string.Format("Shift not found for doctor ID {0} on date {1}", doctorId, date.ToString()));
+                throw new ShiftNotFoundException(string.Format("Shift not found for doctor ID {0} on date {1}", doctorId, date.ToString()));
 
             return shift;
         }
