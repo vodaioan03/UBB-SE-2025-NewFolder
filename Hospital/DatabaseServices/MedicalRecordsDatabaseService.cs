@@ -174,5 +174,54 @@ namespace Hospital.DatabaseServices
                 return null;
             }
         }
+
+        public async Task<List<MedicalRecordJointModel>> GetMedicalRecordsForDoctor(int DoctorId)
+        {
+            const string queryGetMedicalRecordsForDoctor =
+              "SELECT * FROM MedicalRecord WHERE DoctorId = @DoctorId";
+            try
+            {
+                using var connection = new SqlConnection(_config.DatabaseConnection);
+                // Open the database connection asynchronously
+                await connection.OpenAsync().ConfigureAwait(false);
+                Console.WriteLine("Connection established successfully.");
+                // Create a command to execute the SQL query
+                using var command = new SqlCommand(queryGetMedicalRecordsForDoctor, connection);
+                // Add parameters to the query
+                command.Parameters.AddWithValue("@DoctorId", DoctorId);
+                // Execute the query asynchronously and retrieve the MedicalRecords
+                SqlDataReader result = await command.ExecuteReaderAsync().ConfigureAwait(false);
+                List<MedicalRecordJointModel> medicalRecords = new List<MedicalRecordJointModel>();
+                while (await result.ReadAsync().ConfigureAwait(false))
+                {
+                    medicalRecords.Add(new MedicalRecordJointModel(
+                        result.GetInt32(0),
+                        result.GetInt32(1),
+                        result.GetString(2),
+                        result.GetInt32(3),
+                        result.GetString(4),
+                        result.GetInt32(5),
+                        result.GetString(6),
+                        result.GetDateTime(7),
+                        result.GetString(8)
+                    ));
+                }
+                if (medicalRecords.Count == 0)
+                {
+                    throw new MedicalRecordNotFoundException("No medical records found for the given doctor.");
+                }
+                return medicalRecords;
+            }
+            catch (SqlException sqlException)
+            {
+                Console.WriteLine($"SQL Error: {sqlException.Message}");
+                return null;
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine($"General Error: {exception.Message}");
+                return null;
+            }
+        }
     }
 }
