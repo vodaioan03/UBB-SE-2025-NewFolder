@@ -1,0 +1,281 @@
+-------------------------------------
+-- Clean up existing tables (optional)
+-------------------------------------
+IF OBJECT_ID('dbo.Appointments', 'U') IS NOT NULL
+    DROP TABLE dbo.Appointments;
+
+IF OBJECT_ID('dbo.Doctors', 'U') IS NOT NULL
+    DROP TABLE dbo.Doctors;
+
+IF OBJECT_ID('dbo.Patients', 'U') IS NOT NULL
+    DROP TABLE dbo.Patients;
+
+IF OBJECT_ID('dbo.Users', 'U') IS NOT NULL
+    DROP TABLE dbo.Users;
+
+IF OBJECT_ID('dbo.Procedures', 'U') IS NOT NULL
+    DROP TABLE dbo.Procedures;
+
+IF OBJECT_ID('dbo.Departments', 'U') IS NOT NULL
+    DROP TABLE dbo.Departments;
+
+-------------------------------------
+-- Create Departments
+-------------------------------------
+CREATE TABLE Departments (
+    DepartmentId INT IDENTITY(1,1) PRIMARY KEY,
+    DepartmentName VARCHAR(100) NOT NULL
+);
+
+
+CREATE TABLE Users (
+    UserId INT IDENTITY(1,1) PRIMARY KEY, -- Auto-incrementing primary key
+    Username NVARCHAR(50) NOT NULL UNIQUE, -- Unique username
+    Password NVARCHAR(255) NOT NULL, -- Store hashed passwords, so length is higher
+    Mail NVARCHAR(100) NOT NULL UNIQUE, -- Unique email
+    Role NVARCHAR(50) NOT NULL DEFAULT 'User', -- Default role
+    Name NVARCHAR(100) NOT NULL,
+    BirthDate DATE NOT NULL, -- 'DateOnly' maps to DATE in SQL
+    Cnp NVARCHAR(20) NOT NULL UNIQUE, -- Unique identifier
+    Address NVARCHAR(255) NULL,
+    PhoneNumber NVARCHAR(20) NULL,
+    RegistrationDate DATETIME NOT NULL DEFAULT GETDATE() -- Automatically set on insert
+);
+
+
+-------------------------------------
+-- Create Doctors
+-------------------------------------
+CREATE TABLE Doctors (
+    DoctorId INT IDENTITY(1,1) PRIMARY KEY,
+	UserId INT,
+    DepartmentId INT NOT NULL,
+	DoctorRating FLOAT NULL DEFAULT 0.0,
+    LicenseNumber NVARCHAR(50) NOT NULL,
+    CONSTRAINT FK_Doctors_Departments
+        FOREIGN KEY (DepartmentId) REFERENCES Departments(DepartmentId),
+	CONSTRAINT FK_Doctors_Users
+		FOREIGN KEY (UserId) REFERENCES Users(UserId)
+);
+
+
+
+-------------------------------------
+-- Create Patients
+-------------------------------------
+CREATE TABLE Patients (
+    UserId INT NOT NULL, -- Foreign key reference to Users table
+    PatientId INT IDENTITY(1,1) PRIMARY KEY, -- Auto-increment primary key
+    BloodType NVARCHAR(3) NOT NULL CHECK (BloodType IN ('A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-')), -- Enum-like constraint
+    EmergencyContact NVARCHAR(20) NOT NULL, -- Phone number for emergency contact
+    Allergies NVARCHAR(255) NULL, -- Can be NULL if no allergies
+    Weight FLOAT NOT NULL CHECK (Weight > 0), -- Prevent invalid weight values
+    Height INT NOT NULL CHECK (Height > 0), -- Height in cm, must be positive
+
+    CONSTRAINT FK_Patients_Users FOREIGN KEY (UserId) REFERENCES Users(UserId) ON DELETE CASCADE
+);
+
+
+-------------------------------------
+-- Create Procedures
+-------------------------------------
+CREATE TABLE Procedures (
+    ProcedureId INT IDENTITY(1,1) PRIMARY KEY,
+    ProcedureName VARCHAR(100) NOT NULL,
+    ProcedureDuration TIME NOT NULL,
+    DepartmentId INT NOT NULL,
+    CONSTRAINT FK_Procedures_Departments
+        FOREIGN KEY (DepartmentId) REFERENCES Departments(DepartmentId)
+);
+
+-------------------------------------
+-- Create Appointments
+-------------------------------------
+CREATE TABLE Appointments (
+    AppointmentId INT IDENTITY(1,1) PRIMARY KEY,
+    DoctorId INT NOT NULL,
+    PatientId INT NOT NULL,
+    DateAndTime DATETIME2 NOT NULL,
+    Finished BIT NOT NULL,
+    ProcedureId INT NOT NULL,
+    CONSTRAINT FK_Appointments_Doctors
+        FOREIGN KEY (DoctorId) REFERENCES Doctors(DoctorId),
+    CONSTRAINT FK_Appointments_Patients
+        FOREIGN KEY (PatientId) REFERENCES Patients(PatientId),
+    CONSTRAINT FK_Appointments_Procedures
+        FOREIGN KEY (ProcedureId) REFERENCES Procedures(ProcedureId)
+);
+
+
+INSERT INTO Users (Username, Password, Mail, Role, Name, BirthDate, Cnp, Address, PhoneNumber)
+VALUES 
+('john_doe', 'hashed_password_1', 'john@example.com', 'Doctor', 'John Doe', '1990-05-15', '1234567890123', '123 Main St', '123-456-7890'),
+('jane_doe', 'hashed_password_2', 'jane@example.com', 'Doctor', 'Jane Doe', '1995-08-20', '2345678901234', '456 Elm St', '321-654-0987'),
+('alice_smith', 'hashed_password_3', 'alice@example.com', 'Doctor', 'Alice Smith', '1988-12-10', '3456789012345', '789 Oak St', '987-123-4567'),
+('bob_johnson', 'hashed_password_4', 'bob@example.com', 'Doctor', 'Bob Johnson', '1985-07-25', '4567890123456', '147 Pine St', '654-987-3210');
+
+INSERT INTO Users (Username, Password, Mail, Role, Name, BirthDate, Cnp, Address, PhoneNumber)
+VALUES 
+('jane_do', 'hashed_password_5', 'janedo@example.com', 'Patient', 'Jane Doe', '1992-03-10', '1334567890123', '123 Main St', '123-456-7890'),
+('mike_davis', 'hashed_password_6', 'mike@example.com', 'Patient', 'Mike Davis', '1988-07-15', '2445678901234', '456 Oak St', '321-654-0987'),
+('sarah_miller', 'hashed_password_7', 'sarah@example.com', 'Patient', 'Sarah Miller', '1995-12-05', '3756789012345', '789 Pine St', '987-123-4567');
+
+
+
+-------------------------------------
+-- Insert Sample Departments
+-------------------------------------
+INSERT INTO Departments (DepartmentName)
+VALUES
+    ('Cardiology'),      -- DepartmentId = 1
+    ('Neurology'),       -- DepartmentId = 2
+    ('Pediatrics');      -- DepartmentId = 3
+
+-------------------------------------
+-- Insert Sample Doctors
+-------------------------------------
+INSERT INTO Doctors (UserId, DepartmentId, LicenseNumber)
+VALUES
+    (1, 1, '696969'),   -- DoctorId = 1, Dept = Cardiology
+    (2, 1, '3222'),  -- DoctorId = 2, Dept = Cardiology
+    (3, 2, '231231'), -- DoctorId = 3, Dept = Neurology
+    (4, 3, '124211');   -- DoctorId = 4, Dept = Pediatrics
+
+-------------------------------------
+-- Insert Sample Patients
+-------------------------------------
+INSERT INTO Patients (UserId, BloodType, EmergencyContact, Allergies, Weight, Height)
+VALUES 
+(5, 'A+', '111-222-3333', 'Peanuts', 60.5, 165),  -- Jane Doe
+(6, 'O-', '222-333-4444', 'None', 80.0, 175),     -- Mike Davis
+(7, 'B+', '333-444-5555', 'Pollen', 70.2, 170);   -- Sarah Miller
+
+
+-------------------------------------
+-- Insert Sample Procedures
+-------------------------------------
+INSERT INTO Procedures (ProcedureName, ProcedureDuration, DepartmentId)
+VALUES
+    ('ECG', '00:30:00', 1),        -- ProcedureId = 1, Cardiology
+    ('Brain MRI', '01:00:00', 2),  -- ProcedureId = 2, Neurology
+    ('Child Checkup', '00:20:00', 3), -- ProcedureId = 3, Pediatrics
+    ('Stress Test', '00:45:00', 1);   -- ProcedureId = 4, Cardiology
+
+-------------------------------------
+-- Insert Sample Appointments
+-------------------------------------
+INSERT INTO Appointments (PatientId, DoctorId, DateAndTime, ProcedureId, Finished)
+VALUES
+    (1, 1, '2023-03-17T12:00:00', 1, 0), -- Jane Doe w/ Dr. John Smith (Cardiology)
+    (1, 2, '2023-03-17T13:00:00', 4, 1), -- Jane Doe w/ Dr. Alice Brown (Cardiology)
+    (2, 3, '2023-03-18T09:30:00', 2, 0), -- Mike Davis w/ Dr. Robert Johnson (Neurology)
+    (2, 4, '2023-03-19T10:15:00', 3, 0), -- Mike Davis w/ Dr. Emily Carter (Pediatrics)
+    (3, 1, '2023-03-19T14:45:00', 1, 1), -- Sarah Miller w/ Dr. John Smith (Cardiology)
+    (3, 2, '2023-03-20T15:00:00', 4, 0); -- Sarah Miller w/ Dr. Alice Brown (Cardiology)
+
+-------------------------------------
+-- Verify Data
+-------------------------------------
+-- All Appointments
+SELECT * FROM Appointments;
+
+-- All Doctors
+SELECT * FROM Doctors;
+
+-- All Patients
+SELECT * FROM Patients;
+
+-- All Procedures
+SELECT * FROM Procedures;
+
+-- All Departments
+SELECT * FROM Departments;
+
+-------------------------------------
+-- Example Join to produce AppointmentJointModel fields
+-------------------------------------
+SELECT 
+    a.AppointmentId,
+    a.Finished,
+    a.DateAndTime,
+    d.DepartmentId,
+    d.DepartmentName,
+    doc.DoctorId,
+    doc.DoctorName,
+    p.PatientId,
+    p.PatientName,
+    pr.ProcedureId,
+    pr.ProcedureName,
+    pr.ProcedureDuration
+FROM Appointments a
+JOIN Doctors doc ON a.DoctorId = doc.DoctorId
+JOIN Departments d ON doc.DepartmentId = d.DepartmentId
+JOIN Patients p ON a.PatientId = p.PatientId
+JOIN Procedures pr ON a.ProcedureId = pr.ProcedureId
+ORDER BY a.AppointmentId;
+
+-- GetAppointmentsByDoctorAndDate
+SELECT 
+    a.AppointmentId,
+    a.Finished,
+    a.DateAndTime,
+    d.DepartmentId,
+    d.DepartmentName,
+    doc.DoctorId,
+    doc.DoctorName,
+    p.PatientId,
+    p.PatientName,
+    pr.ProcedureId,
+    pr.ProcedureName,
+    pr.ProcedureDuration
+FROM Appointments a
+JOIN Doctors doc ON a.DoctorId = doc.DoctorId
+JOIN Departments d ON doc.DepartmentId = d.DepartmentId
+JOIN Patients p ON a.PatientId = p.PatientId
+JOIN Procedures pr ON a.ProcedureId = pr.ProcedureId
+WHERE a.DoctorId = 1
+  AND CONVERT(DATE, a.DateAndTime) = '2023-03-17'
+ORDER BY a.DateAndTime;
+
+-- GetAppointmentsForDoctor
+SELECT 
+    a.AppointmentId,
+    a.Finished,
+    a.DateAndTime,
+    d.DepartmentId,
+    d.DepartmentName,
+    doc.DoctorId,
+    doc.DoctorName,
+    p.PatientId,
+    p.PatientName,
+    pr.ProcedureId,
+    pr.ProcedureName,
+    pr.ProcedureDuration
+FROM Appointments a
+JOIN Doctors doc ON a.DoctorId = doc.DoctorId
+JOIN Departments d ON doc.DepartmentId = d.DepartmentId
+JOIN Patients p ON a.PatientId = p.PatientId
+JOIN Procedures pr ON a.ProcedureId = pr.ProcedureId
+WHERE a.DoctorId = 2
+ORDER BY a.DateAndTime;
+
+-- GetAppointments
+SELECT 
+    a.AppointmentId,
+    a.Finished,
+    a.DateAndTime,
+    d.DepartmentId,
+    d.DepartmentName,
+    doc.DoctorId,
+    doc.DoctorName,
+    p.PatientId,
+    p.PatientName,
+    pr.ProcedureId,
+    pr.ProcedureName,
+    pr.ProcedureDuration
+FROM Appointments a
+JOIN Doctors doc ON a.DoctorId = doc.DoctorId
+JOIN Departments d ON doc.DepartmentId = d.DepartmentId
+JOIN Patients p ON a.PatientId = p.PatientId
+JOIN Procedures pr ON a.ProcedureId = pr.ProcedureId
+ORDER BY a.AppointmentId;
