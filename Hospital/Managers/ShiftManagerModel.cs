@@ -20,7 +20,7 @@ namespace Hospital.Managers
             _shifts = new List<Shift>();
         }
 
-        public async Task<List<Shift>> LoadShiftsAsync(int doctorID)
+        public async Task<List<Shift>> LoadShifts(int doctorID)
         {
             try
             {
