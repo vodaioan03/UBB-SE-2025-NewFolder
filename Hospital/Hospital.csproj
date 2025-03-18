@@ -43,6 +43,7 @@
   <ItemGroup>
     <Folder Include="Managers\" />
     <Folder Include="Helpers\" />
+    <Folder Include="ViewModels\" />
     <Folder Include="Views\" />
   </ItemGroup>
 
