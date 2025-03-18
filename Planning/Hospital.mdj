@@ -2958,7 +2958,7 @@
 											"top": 1821,
 											"width": 445.73583984375,
 											"height": 13,
-											"text": "+DoctorsDatabaseService(Config config)",
+											"text": "+DoctorsDatabaseService()",
 											"horizontalAlignment": 0
 										},
 										{
@@ -3851,7 +3851,7 @@
 											"top": 1365,
 											"width": 359,
 											"height": 13,
-											"text": "+DepartmentDatabaseService(Config configs)",
+											"text": "+DepartmentDatabaseService()",
 											"horizontalAlignment": 0
 										},
 										{
@@ -4133,7 +4133,7 @@
 											"top": 1583,
 											"width": 500.68115234375,
 											"height": 13,
-											"text": "+MedicalRecordDatabaseService(Config configs)",
+											"text": "+MedicalRecordDatabaseService()",
 											"horizontalAlignment": 0
 										},
 										{
@@ -4974,7 +4974,7 @@
 											"top": 2141,
 											"width": 583.7021484375,
 											"height": 13,
-											"text": "+DocumentDatabaseService(Config configs)",
+											"text": "+DocumentDatabaseService()",
 											"horizontalAlignment": 0
 										},
 										{
@@ -10076,7 +10076,7 @@
 											"top": 1053,
 											"width": 594.861328125,
 											"height": 13,
-											"text": "+AppointmentsDatabaseServicel(Config configs)",
+											"text": "+AppointmentsDatabaseServicel()",
 											"horizontalAlignment": 0
 										},
 										{
@@ -12438,7 +12438,7 @@
 											"font": "Arial;13;0",
 											"parentStyle": true,
 											"left": -396,
-											"top": -622,
+											"top": -638,
 											"height": 13
 										},
 										{
@@ -12450,7 +12450,7 @@
 											"font": "Arial;13;1",
 											"parentStyle": true,
 											"left": 2957,
-											"top": 1951,
+											"top": 1943,
 											"width": 479,
 											"height": 13,
 											"text": "MedicalProceduresDatabaseService"
@@ -12465,7 +12465,7 @@
 											"font": "Arial;13;0",
 											"parentStyle": true,
 											"left": -396,
-											"top": -622,
+											"top": -638,
 											"width": 73.67724609375,
 											"height": 13,
 											"text": "(from Model)"
@@ -12480,7 +12480,7 @@
 											"font": "Arial;13;0",
 											"parentStyle": true,
 											"left": -396,
-											"top": -622,
+											"top": -638,
 											"height": 13,
 											"horizontalAlignment": 1
 										}
@@ -12488,7 +12488,7 @@
 									"font": "Arial;13;0",
 									"parentStyle": true,
 									"left": 2952,
-									"top": 1944,
+									"top": 1936,
 									"width": 489,
 									"height": 25,
 									"stereotypeLabel": {
@@ -12526,7 +12526,7 @@
 											"font": "Arial;13;0",
 											"parentStyle": true,
 											"left": 2957,
-											"top": 1974,
+											"top": 1966,
 											"width": 479,
 											"height": 13,
 											"text": "-configs: Config",
@@ -12536,7 +12536,7 @@
 									"font": "Arial;13;0",
 									"parentStyle": true,
 									"left": 2952,
-									"top": 1969,
+									"top": 1961,
 									"width": 489,
 									"height": 23
 								},
@@ -12562,10 +12562,10 @@
 											"font": "Arial;13;0",
 											"parentStyle": true,
 											"left": 2957,
-											"top": 1997,
+											"top": 1989,
 											"width": 479,
 											"height": 13,
-											"text": "+ProcedureDatabaseService(Config configs)",
+											"text": "+ProcedureDatabaseService()",
 											"horizontalAlignment": 0
 										},
 										{
@@ -12580,7 +12580,7 @@
 											"font": "Arial;13;0",
 											"parentStyle": true,
 											"left": 2957,
-											"top": 2012,
+											"top": 2004,
 											"width": 479,
 											"height": 13,
 											"text": "+GetProceduresByDepartmentId(int departmentId): Task<List<Procedure>>",
@@ -12590,7 +12590,7 @@
 									"font": "Arial;13;0",
 									"parentStyle": true,
 									"left": 2952,
-									"top": 1992,
+									"top": 1984,
 									"width": 489,
 									"height": 38
 								},
@@ -12607,7 +12607,7 @@
 									"font": "Arial;13;0",
 									"parentStyle": true,
 									"left": -198,
-									"top": -311,
+									"top": -319,
 									"width": 10,
 									"height": 10
 								},
@@ -12624,7 +12624,7 @@
 									"font": "Arial;13;0",
 									"parentStyle": true,
 									"left": -198,
-									"top": -311,
+									"top": -319,
 									"width": 10,
 									"height": 10
 								}
@@ -12633,7 +12633,7 @@
 							"parentStyle": false,
 							"containerChangeable": true,
 							"left": 2952,
-							"top": 1944,
+							"top": 1936,
 							"width": 488,
 							"height": 104,
 							"nameCompartment": {
@@ -12673,8 +12673,8 @@
 									},
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 3661,
-									"top": 1834,
+									"left": 3664,
+									"top": 1829,
 									"width": 28.5517578125,
 									"height": 13,
 									"alpha": 1.5707963267948966,
@@ -12697,8 +12697,8 @@
 									"visible": null,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 3671,
-									"top": 1820,
+									"left": 3674,
+									"top": 1815,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 30,
@@ -12719,8 +12719,8 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 3684,
-									"top": 1863,
+									"left": 3687,
+									"top": 1858,
 									"height": 13,
 									"alpha": -1.5707963267948966,
 									"distance": 15,
@@ -12739,7 +12739,7 @@
 								"$ref": "AAAAAAGVlOyNgzvGuNw="
 							},
 							"lineStyle": 1,
-							"points": "3378:1943;3983:1767",
+							"points": "3384:1935;3983:1766",
 							"showVisibility": true,
 							"nameLabel": {
 								"$ref": "AAAAAAGVlPGDd3gKxrY="
@@ -12873,7 +12873,7 @@
 									"font": "Arial;13;0",
 									"parentStyle": false,
 									"left": 2828,
-									"top": 1970,
+									"top": 1966,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 15,
@@ -12895,7 +12895,7 @@
 									"font": "Arial;13;0",
 									"parentStyle": false,
 									"left": 2828,
-									"top": 1955,
+									"top": 1951,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 30,
@@ -12916,8 +12916,8 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 2827,
-									"top": 1999,
+									"left": 2828,
+									"top": 1996,
 									"height": 13,
 									"alpha": -1.5707963267948966,
 									"distance": 15,
@@ -12938,8 +12938,8 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 2731,
-									"top": 1968,
+									"left": 2730,
+									"top": 1966,
 									"height": 13,
 									"alpha": 0.5235987755982988,
 									"distance": 30,
@@ -12961,7 +12961,7 @@
 									"font": "Arial;13;0",
 									"parentStyle": false,
 									"left": 2733,
-									"top": 1955,
+									"top": 1952,
 									"height": 13,
 									"alpha": 0.7853981633974483,
 									"distance": 40,
@@ -12983,7 +12983,7 @@
 									"font": "Arial;13;0",
 									"parentStyle": false,
 									"left": 2726,
-									"top": 1995,
+									"top": 1993,
 									"height": 13,
 									"alpha": -0.5235987755982988,
 									"distance": 25,
@@ -13005,7 +13005,7 @@
 									"font": "Arial;13;0",
 									"parentStyle": false,
 									"left": 2925,
-									"top": 1971,
+									"top": 1966,
 									"height": 13,
 									"alpha": -0.5235987755982988,
 									"distance": 30,
@@ -13025,8 +13025,8 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 2923,
-									"top": 1958,
+									"left": 2922,
+									"top": 1952,
 									"height": 13,
 									"alpha": -0.7853981633974483,
 									"distance": 40,
@@ -13046,7 +13046,7 @@
 									"font": "Arial;13;0",
 									"parentStyle": false,
 									"left": 2926,
-									"top": 1999,
+									"top": 1993,
 									"width": 7.22998046875,
 									"height": 13,
 									"alpha": 0.5235987755982988,
@@ -13096,7 +13096,7 @@
 								"$ref": "AAAAAAGVgaVj41vQwtc="
 							},
 							"lineStyle": 1,
-							"points": "2705:1989;2951:1993",
+							"points": "2705:1987;2951:1987",
 							"showVisibility": true,
 							"nameLabel": {
 								"$ref": "AAAAAAGVlPo/1CEn5OM="
@@ -13573,7 +13573,7 @@
 											"top": 2333,
 											"width": 231,
 											"height": 13,
-											"text": "+ShiftDatabaseService(Config configs)",
+											"text": "+ShiftDatabaseService()",
 											"horizontalAlignment": 0
 										},
 										{
@@ -20482,18 +20482,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGVdXKdIh0B0hg="
 							},
-							"name": "DoctorsDatabaseService",
-							"parameters": [
-								{
-									"_type": "UMLParameter",
-									"_id": "AAAAAAGVlOJbs7Atswg=",
-									"_parent": {
-										"$ref": "AAAAAAGVlOIlUa7WHeM="
-									},
-									"name": "Config config",
-									"type": ""
-								}
-							]
+							"name": "DoctorsDatabaseService"
 						},
 						{
 							"_type": "UMLOperation",
@@ -20816,7 +20805,8 @@
 									"_parent": {
 										"$ref": "AAAAAAGVgahlw1xItfM="
 									},
-									"name": "int appointmentId"
+									"name": "int appointmentId",
+									"type": ""
 								},
 								{
 									"_type": "UMLParameter",
@@ -21063,18 +21053,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGVgaRtgFtL1II="
 							},
-							"name": "DepartmentDatabaseService",
-							"parameters": [
-								{
-									"_type": "UMLParameter",
-									"_id": "AAAAAAGVlF52AX5lfhU=",
-									"_parent": {
-										"$ref": "AAAAAAGVlF2ztn2MU8Q="
-									},
-									"name": "Config configs",
-									"type": ""
-								}
-							]
+							"name": "DepartmentDatabaseService"
 						},
 						{
 							"_type": "UMLOperation",
@@ -21234,18 +21213,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGVgaSyalt34EQ="
 							},
-							"name": "MedicalRecordDatabaseService",
-							"parameters": [
-								{
-									"_type": "UMLParameter",
-									"_id": "AAAAAAGVlKIm0a0OnCU=",
-									"_parent": {
-										"$ref": "AAAAAAGVlKHSQaw1cg8="
-									},
-									"name": "Config configs",
-									"type": ""
-								}
-							]
+							"name": "MedicalRecordDatabaseService"
 						},
 						{
 							"_type": "UMLOperation",
@@ -21650,18 +21618,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGVgaW1b1v7jRk="
 							},
-							"name": "DocumentDatabaseService",
-							"parameters": [
-								{
-									"_type": "UMLParameter",
-									"_id": "AAAAAAGVlPTOK7OLMP4=",
-									"_parent": {
-										"$ref": "AAAAAAGVhYrtMChyCDQ="
-									},
-									"name": "Config configs",
-									"type": ""
-								}
-							]
+							"name": "DocumentDatabaseService"
 						},
 						{
 							"_type": "UMLOperation",
@@ -22629,7 +22586,8 @@
 									"_parent": {
 										"$ref": "AAAAAAGVlXKuClzYqeU="
 									},
-									"name": "object obj"
+									"name": "object obj",
+									"type": ""
 								},
 								{
 									"_type": "UMLParameter",
@@ -23858,18 +23816,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGVlDfNMbWknQg="
 							},
-							"name": "AppointmentsDatabaseServicel",
-							"parameters": [
-								{
-									"_type": "UMLParameter",
-									"_id": "AAAAAAGVlFzCEXUsxgE=",
-									"_parent": {
-										"$ref": "AAAAAAGVlFysTHO9rwk="
-									},
-									"name": "Config configs",
-									"type": ""
-								}
-							]
+							"name": "AppointmentsDatabaseServicel"
 						},
 						{
 							"_type": "UMLOperation",
@@ -24302,18 +24249,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGVlOx+Wjr/vdg="
 							},
-							"name": "ProcedureDatabaseService",
-							"parameters": [
-								{
-									"_type": "UMLParameter",
-									"_id": "AAAAAAGVlO6zpGp7+XI=",
-									"_parent": {
-										"$ref": "AAAAAAGVlO5tBmmiY14="
-									},
-									"name": "Config configs",
-									"type": ""
-								}
-							]
+							"name": "ProcedureDatabaseService"
 						},
 						{
 							"_type": "UMLOperation",
@@ -24389,18 +24325,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGVlQ+tB8pJAa0="
 							},
-							"name": "ShiftDatabaseService",
-							"parameters": [
-								{
-									"_type": "UMLParameter",
-									"_id": "AAAAAAGVlRBs4dgQ4kA=",
-									"_parent": {
-										"$ref": "AAAAAAGVlRAwWtYQQnQ="
-									},
-									"name": "Config configs",
-									"type": ""
-								}
-							]
+							"name": "ShiftDatabaseService"
 						},
 						{
 							"_type": "UMLOperation",
@@ -24780,7 +24705,8 @@
 									"_parent": {
 										"$ref": "AAAAAAGVlUvoiFC+HII="
 									},
-									"name": "MedicalRecordJointModel mr"
+									"name": "MedicalRecordJointModel mr",
+									"type": ""
 								}
 							]
 						},
