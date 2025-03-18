@@ -20,11 +20,12 @@ namespace Hospital.Managers
             _shifts = new List<Shift>();
         }
 
-        public async Task LoadShiftsAsync(int doctorID)
+        public async Task<List<Shift>> LoadShifts(int doctorID)
         {
             try
             {
                 _shifts = await _shiftsDatabaseService.GetShiftsByDoctorId(doctorID);
+                return _shifts;
             }
             catch (Exception ex)
             {
