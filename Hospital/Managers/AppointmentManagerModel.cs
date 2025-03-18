@@ -23,7 +23,7 @@ namespace Hospital.Managers
       try
       {
         List<AppointmentJointModel> appointmentJointModels =
-            await _appointmentsDBService.GetAppointments().ConfigureAwait(false)
+            await _appointmentsDBService.GetAppointments().ConfigureAwait(false);
 
         if(appointmentJointModels == null || appointmentJointModels.Count == 0)
         {
