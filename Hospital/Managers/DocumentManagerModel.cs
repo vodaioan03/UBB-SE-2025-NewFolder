@@ -46,11 +46,7 @@ namespace Hospital.Managers
             try
             {
                 List<Document> documents = await _documentDBService.GetDocumentsByMedicalRecordId(MedicalRecordId).ConfigureAwait(false);
-                s_documentList.Clear();
-                foreach (var document in documents)
-                {
-                    s_documentList.Add(document);
-                }
+                s_documentList = new ObservableCollection<Document>(documents);
             }
             catch (Exception ex)
             {
