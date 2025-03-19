@@ -135,43 +135,34 @@ namespace Hospital.Managers
             }
         }
         
-        public async Task<bool> CreateAppointment(AppointmentJointModel detailedAppointment)
+        public async Task<bool> CreateAppointment(Appointment appointment)
         {
             try
             {
                 // Validate the doctor is available for the given time slot
-                int doctorId = detailedAppointment.DoctorId;
-                DateTime date = detailedAppointment.Date;
+                int doctorId = appointment.DoctorId;
+                DateTime date = appointment.DateAndTime;
                 List<AppointmentJointModel> existingAppointments = await _appointmentsDBService
                                                                     .GetAppointmentsByDoctorAndDate(doctorId, date)
                                                                     .ConfigureAwait(false);
 
-                bool isSlotTaken = existingAppointments.Any(a => a.Date == detailedAppointment.Date);
+                bool isSlotTaken = existingAppointments.Any(a => a.Date == appointment.DateAndTime);
                 if(isSlotTaken)
                 {
                     throw new AppointmentConflictException($"The selected time slot is already booked for doctor with id {doctorId}");
                 }
 
                 // Validate the patient doesn't have another appointment at the same time
-                int patientId = detailedAppointment.PatientId;
+                int patientId = appointment.PatientId;
                 List<AppointmentJointModel> patientAppointments = await _appointmentsDBService.GetAppointmentsForPatient(patientId).ConfigureAwait(false);
 
-                bool isPatientBusy = patientAppointments.Any(a => a.Date == detailedAppointment.Date);
+                bool isPatientBusy = patientAppointments.Any(a => a.Date == appointment.DateAndTime);
                 if(isPatientBusy)
                 {
-                    throw new AppointmentConflictException($"The patient with id {patientId} already has an appointment at the this time {detailedAppointment.Date}");
+                    throw new AppointmentConflictException($"The patient with id {patientId} already has an appointment at the this time {appointment.DateAndTime}");
                 }
 
-                Appointment newAppointment = new Appointment(
-                    detailedAppointment.AppointmentId, 
-                    detailedAppointment.DoctorId, 
-                    detailedAppointment.PatientId,
-                    detailedAppointment.Date, 
-                    detailedAppointment.Finished, 
-                    detailedAppointment.ProcedureId
-                );
-
-                bool isInserted = await _appointmentsDBService.AddAppointmentToDB(newAppointment).ConfigureAwait(false);
+                bool isInserted = await _appointmentsDBService.AddAppointmentToDB(appointment).ConfigureAwait(false);
 
                 if(!isInserted)
                 {
