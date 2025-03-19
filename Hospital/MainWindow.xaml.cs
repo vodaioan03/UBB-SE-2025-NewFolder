@@ -76,7 +76,8 @@ namespace Hospital
 
         private void Doctor1_Click(object sender, RoutedEventArgs e)
         {
-            //test ui of feature Patient3 here
+            DoctorScheduleView doctorScheduleView = new DoctorScheduleView(AppointmentManager, ShiftManager);
+            doctorScheduleView.Activate();
         }
 
         private void Doctor2_Click(object sender, RoutedEventArgs e)

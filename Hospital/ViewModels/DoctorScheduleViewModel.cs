@@ -1,4 +1,5 @@
 ﻿using Hospital.Models;
+using Hospital.DatabaseServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ using Hospital.Commands;
 
 namespace Hospital.ViewModels
 {
-    class DoctorScheduleViewModel
+    public class DoctorScheduleViewModel
     {
         private readonly AppointmentManagerModel _appointmentManager;
         private readonly ShiftManagerModel _shiftManager;
@@ -28,6 +29,17 @@ namespace Hospital.ViewModels
             Appointments = new List<AppointmentJointModel>();
             Shifts = new List<Shift>();
 
+            OpenDetailsCommand = new RelayCommand(OpenDetails);
+        }
+
+        public DoctorScheduleViewModel()
+        {
+            AppointmentsDatabaseService appointmentDatabaseService = new AppointmentsDatabaseService();
+            _appointmentManager = new AppointmentManagerModel(appointmentDatabaseService);
+            ShiftsDatabaseService shiftDatabaseService = new ShiftsDatabaseService();
+            _shiftManager = new ShiftManagerModel(shiftDatabaseService);
+            Appointments = new List<AppointmentJointModel>();
+            Shifts = new List<Shift>();
             OpenDetailsCommand = new RelayCommand(OpenDetails);
         }
 
