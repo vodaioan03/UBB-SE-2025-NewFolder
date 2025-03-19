@@ -13,13 +13,13 @@ namespace Hospital.Managers
 {
     public class MedicalRecordManagerModel
     {
-        public ObservableCollection<MedicalRecordJointModel> s_medicalRecordList { get; private set; }
+        public List<MedicalRecordJointModel> s_medicalRecordList { get; private set; }
         private readonly MedicalRecordsDatabaseService _medicalRecordsDBService;
 
         public MedicalRecordManagerModel(MedicalRecordsDatabaseService dbService)
         {
             _medicalRecordsDBService = dbService;
-            s_medicalRecordList = new ObservableCollection<MedicalRecordJointModel>();
+            s_medicalRecordList = new List<MedicalRecordJointModel>();
         }
 
         public async Task LoadMedicalRecordsForPatient(int patientId)
@@ -111,7 +111,7 @@ namespace Hospital.Managers
             }
         }
 
-        public async Task<ObservableCollection<MedicalRecordJointModel>> getMedicalRecords()
+        public async Task<List<MedicalRecordJointModel>> getMedicalRecords()
         {
             return s_medicalRecordList;
         }
