@@ -13,9 +13,9 @@ namespace Hospital.DatabaseServices
     {
         private readonly Config _config;
 
-        public AppointmentsDatabaseService(Config config)
+        public AppointmentsDatabaseService()
         {
-            _config = config;
+            _config = Config.GetInstance();
         }
 
         public async Task<bool> AddAppointmentToDB(Appointment appointment)
@@ -64,27 +64,27 @@ namespace Hospital.DatabaseServices
 
         public async Task<List<AppointmentJointModel>> GetAppointments()
         {
-            const string query = @"
-        SELECT 
-            a.AppointmentId,
-            a.Finished,
-            a.DateAndTime,
-            d.DepartmentId,
-            d.DepartmentName,
-            doc.DoctorId,
-            doc.DoctorName,
-            p.PatientId,
-            p.PatientName,
-            pr.ProcedureId,
-            pr.ProcedureName,
-            pr.ProcedureDuration
-        FROM Appointments a
-        JOIN Doctors doc ON a.DoctorId = doc.DoctorId
-        JOIN Departments d ON doc.DepartmentId = d.DepartmentId
-        JOIN Patients p ON a.PatientId = p.PatientId
-        JOIN Procedures pr ON a.ProcedureId = pr.ProcedureId
-        ORDER BY a.AppointmentId;
-      ";
+            const string query = @"SELECT 
+                    a.AppointmentId,
+                    a.Finished,
+                    a.DateAndTime,
+                    d.DepartmentId,
+                    d.DepartmentName,
+                    doc.DoctorId,
+                    u1.Name as DoctorName,
+                    p.PatientId,
+                    u2.Name as PatientName,
+                    pr.ProcedureId,
+                    pr.ProcedureName,
+                    pr.ProcedureDuration
+                FROM Appointments a
+                JOIN Doctors doc ON a.DoctorId = doc.DoctorId
+                JOIN Users u1 ON doc.UserId = u1.UserId
+                JOIN Departments d ON doc.DepartmentId = d.DepartmentId
+                JOIN Patients p ON a.PatientId = p.PatientId
+                JOIN Users u2 ON p.UserId = u2.UserId
+                JOIN Procedures pr ON a.ProcedureId = pr.ProcedureId
+                ORDER BY a.AppointmentId;";
 
             using DataTable dt = new DataTable();
 
@@ -142,28 +142,28 @@ namespace Hospital.DatabaseServices
 
         public async Task<List<AppointmentJointModel>> GetAppointmentsForPatient(int patientId)
         {
-            const string query = @"
-        SELECT 
-            a.AppointmentId,
-            a.Finished,
-            a.DateAndTime,
-            d.DepartmentId,
-            d.DepartmentName,
-            doc.DoctorId,
-            doc.DoctorName,
-            p.PatientId,
-            p.PatientName,
-            pr.ProcedureId,
-            pr.ProcedureName,
-            pr.ProcedureDuration
-        FROM Appointments a
-        JOIN Doctors doc ON a.DoctorId = doc.DoctorId
-        JOIN Departments d ON doc.DepartmentId = d.DepartmentId
-        JOIN Patients p ON a.PatientId = p.PatientId
-        JOIN Procedures pr ON a.ProcedureId = pr.ProcedureId
-        WHERE p.PatientId = @PatientId
-         ORDER BY a.AppointmentId;
-        ";
+            const string query = @"SELECT 
+                    a.AppointmentId,
+                    a.Finished,
+                    a.DateAndTime,
+                    d.DepartmentId,
+                    d.DepartmentName,
+                    doc.DoctorId,
+                    u1.Name as DoctorName,
+                    p.PatientId,
+                    u2.Name as PatientName,
+                    pr.ProcedureId,
+                    pr.ProcedureName,
+                    pr.ProcedureDuration
+                FROM Appointments a
+                JOIN Doctors doc ON a.DoctorId = doc.DoctorId
+                JOIN Users u1 ON doc.UserId = u1.UserId
+                JOIN Departments d ON doc.DepartmentId = d.DepartmentId
+                JOIN Patients p ON a.PatientId = p.PatientId
+                JOIN Users u2 ON p.UserId = u2.UserId
+                JOIN Procedures pr ON a.ProcedureId = pr.ProcedureId
+                WHERE p.PatientId = @PatientId
+                ORDER BY a.DateAndTime;";
 
             using DataTable dt = new DataTable();
 
@@ -219,29 +219,29 @@ namespace Hospital.DatabaseServices
 
         public async Task<List<AppointmentJointModel>> GetAppointmentsByDoctorAndDate(int doctorId, DateTime date)
         {
-            const string query = @"
-          SELECT 
-              a.AppointmentId,
-              a.Finished,
-              a.DateAndTime,
-              d.DepartmentId,
-              d.DepartmentName,
-              doc.DoctorId,
-              doc.DoctorName,
-              p.PatientId,
-              p.PatientName,
-              pr.ProcedureId,
-              pr.ProcedureName,
-              pr.ProcedureDuration
-          FROM Appointments a
-          JOIN Doctors doc ON a.DoctorId = doc.DoctorId
-          JOIN Departments d ON doc.DepartmentId = d.DepartmentId
-          JOIN Patients p ON a.PatientId = p.PatientId
-          JOIN Procedures pr ON a.ProcedureId = pr.ProcedureId
-          WHERE a.DoctorId = @DoctorId
-            AND CONVERT(DATE, a.DateAndTime) = @Date
-          ORDER BY a.DateAndTime;
-      ";
+            const string query = @"SELECT 
+                    a.AppointmentId,
+                    a.Finished,
+                    a.DateAndTime,
+                    d.DepartmentId,
+                    d.DepartmentName,
+                    doc.DoctorId,
+                    u1.Name as DoctorName,
+                    p.PatientId,
+                    u2.Name as PatientName,
+                    pr.ProcedureId,
+                    pr.ProcedureName,
+                    pr.ProcedureDuration
+                FROM Appointments a
+                JOIN Doctors doc ON a.DoctorId = doc.DoctorId
+                JOIN Users u1 ON doc.UserId = u1.UserId
+                JOIN Departments d ON doc.DepartmentId = d.DepartmentId
+                JOIN Patients p ON a.PatientId = p.PatientId
+                JOIN Users u2 ON p.UserId = u2.UserId
+                JOIN Procedures pr ON a.ProcedureId = pr.ProcedureId
+                WHERE a.DoctorId = @DoctorId
+                  AND CONVERT(DATE, a.DateAndTime) = @Date
+                ORDER BY a.DateAndTime;";
 
             using DataTable dt = new DataTable();
 
@@ -304,28 +304,28 @@ namespace Hospital.DatabaseServices
 
         public async Task<List<AppointmentJointModel>> GetAppointmentsForDoctor(int doctorId)
         {
-            const string query = @"
-          SELECT 
-              a.AppointmentId,
-              a.Finished,
-              a.DateAndTime,
-              d.DepartmentId,
-              d.DepartmentName,
-              doc.DoctorId,
-              doc.DoctorName,
-              p.PatientId,
-              p.PatientName,
-              pr.ProcedureId,
-              pr.ProcedureName,
-              pr.ProcedureDuration
-          FROM Appointments a
-          JOIN Doctors doc ON a.DoctorId = doc.DoctorId
-          JOIN Departments d ON doc.DepartmentId = d.DepartmentId
-          JOIN Patients p ON a.PatientId = p.PatientId
-          JOIN Procedures pr ON a.ProcedureId = pr.ProcedureId
-          WHERE a.DoctorId = @DoctorId
-          ORDER BY a.DateAndTime;
-      ";
+            const string query = @"SELECT 
+                    a.AppointmentId,
+                    a.Finished,
+                    a.DateAndTime,
+                    d.DepartmentId,
+                    d.DepartmentName,
+                    doc.DoctorId,
+                    u1.Name as DoctorName,
+                    p.PatientId,
+                    u2.Name as PatientName,
+                    pr.ProcedureId,
+                    pr.ProcedureName,
+                    pr.ProcedureDuration
+                FROM Appointments a
+                JOIN Doctors doc ON a.DoctorId = doc.DoctorId
+                JOIN Users u1 ON doc.UserId = u1.UserId
+                JOIN Departments d ON doc.DepartmentId = d.DepartmentId
+                JOIN Patients p ON a.PatientId = p.PatientId
+                JOIN Users u2 ON p.UserId = u2.UserId
+                JOIN Procedures pr ON a.ProcedureId = pr.ProcedureId
+                WHERE a.DoctorId = @DoctorId
+                ORDER BY a.DateAndTime;";
 
             using DataTable dt = new DataTable();
 
@@ -388,25 +388,26 @@ namespace Hospital.DatabaseServices
         public async Task<AppointmentJointModel> GetAppointment(int appointmentId)
         {
             string GetAppointmentByAppointmentIdQuery = @"SELECT 
-            a.AppointmentId,
-            a.Finished,
-            a.DateAndTime,
-            d.DepartmentId,
-            d.DepartmentName,
-            doc.DoctorId,
-            doc.DoctorName,
-            p.PatientId,
-            p.PatientName,
-            pr.ProcedureId,
-            pr.ProcedureName,
-            pr.ProcedureDuration
-            FROM Appointments a
-            JOIN Doctors doc ON a.DoctorId = doc.DoctorId
-            JOIN Departments d ON doc.DepartmentId = d.DepartmentId
-            JOIN Patients p ON a.PatientId = p.PatientId
-            JOIN Procedures pr ON a.ProcedureId = pr.ProcedureId
-            WHERE a.AppointmentId = @AppointmentId;
-            ";
+                    a.AppointmentId,
+                    a.Finished,
+                    a.DateAndTime,
+                    d.DepartmentId,
+                    d.DepartmentName,
+                    doc.DoctorId,
+                    u1.Name as DoctorName,
+                    p.PatientId,
+                    u2.Name as PatientName,
+                    pr.ProcedureId,
+                    pr.ProcedureName,
+                    pr.ProcedureDuration
+                FROM Appointments a
+                JOIN Doctors doc ON a.DoctorId = doc.DoctorId
+                JOIN Users u1 ON doc.UserId = u1.UserId
+                JOIN Departments d ON doc.DepartmentId = d.DepartmentId
+                JOIN Patients p ON a.PatientId = p.PatientId
+                JOIN Users u2 ON p.UserId = u2.UserId
+                JOIN Procedures pr ON a.ProcedureId = pr.ProcedureId
+                WHERE a.AppointmentId = @AppointmentId;";
 
             using DataTable dt = new DataTable();
             try

@@ -130,6 +130,26 @@ namespace Hospital.Managers
             }
         }
 
+        public async Task LoadAppointmentsByDoctorAndDate(int doctorId, DateTime date)
+        {
+            try
+            {
+                List<AppointmentJointModel> appointments = await _appointmentsDBService
+                    .GetAppointmentsByDoctorAndDate(doctorId, date)
+                    .ConfigureAwait(false);
+                s_appointmentList.Clear();
+                foreach (AppointmentJointModel appointment in appointments)
+                {
+                    s_appointmentList.Add(appointment);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading appointments: {ex.Message}");
+                return;
+            }
+        }
+
 
     }
 }
