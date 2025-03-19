@@ -11,7 +11,7 @@ namespace Hospital.Managers
 {
     class DepartmentManagerModel
     {
-        public static ObservableCollection<Department> s_departmentList { get; set; }
+        public static ObservableCollection<Department> s_departmentList { get; private set; }
         public readonly DepartmentsDatabaseService _departmentDBService;
 
         public DepartmentManagerModel(DepartmentsDatabaseService dbService)
@@ -32,6 +32,7 @@ namespace Hospital.Managers
         {
             try
             {
+                s_departmentList.Clear();
                 List<Department> departmentList = await _departmentDBService.GetDepartmentsFromDB().ConfigureAwait(false);
                 foreach(Department dep in departmentList)
                 {
