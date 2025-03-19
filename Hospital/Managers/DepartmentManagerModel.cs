@@ -9,19 +9,19 @@ using System.Threading.Tasks;
 
 namespace Hospital.Managers
 {
-    class DepartmentManagerModel
+    public class DepartmentManagerModel
     {
-        public static ObservableCollection<Department> s_departmentList { get; private set; }
+        public static List<Department> s_departmentList { get; private set; }
         public readonly DepartmentsDatabaseService _departmentDBService;
 
         public DepartmentManagerModel(DepartmentsDatabaseService dbService)
         {
             _departmentDBService = dbService;
-            s_departmentList = new ObservableCollection<Department>();
+            s_departmentList = new List<Department>();
         }
 
         // This method will be used to get the departments from the in memory repository
-        public ObservableCollection<Department> GetDepartments()
+        public List<Department> GetDepartments()
         {
             return s_departmentList;
         }

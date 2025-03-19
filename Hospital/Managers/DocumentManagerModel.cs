@@ -10,23 +10,19 @@ using Document = Hospital.Models.Document;
 
 namespace Hospital.Managers
 {
-    class DocumentManagerModel
+    public class DocumentManagerModel
     {
-        public static ObservableCollection<Document> s_documentList { get; private set; }
+        public static List<Document> s_documentList { get; private set; }
         private readonly DocumentDatabaseService _documentDBService;
 
         public DocumentManagerModel(DocumentDatabaseService dbService)
         {
             _documentDBService = dbService;
-            s_documentList = new ObservableCollection<Document>();
+            s_documentList = new List<Document>();
         }
 
-        public async Task<ObservableCollection<Document>> GetDocuments()
+        public async Task<List<Document>> GetDocuments()
         {
-            if (s_documentList.Count == 0)
-            {
-                throw new DocumentNotFoundException("No documents found.");
-            }
             return s_documentList;
         }
 
@@ -51,7 +47,7 @@ namespace Hospital.Managers
             try
             {
                 List<Document> documents = await _documentDBService.GetDocumentsByMedicalRecordId(MedicalRecordId).ConfigureAwait(false);
-                s_documentList = new ObservableCollection<Document>(documents);
+                s_documentList = new List<Document>(documents);
             }
             catch (DocumentNotFoundException)
             {

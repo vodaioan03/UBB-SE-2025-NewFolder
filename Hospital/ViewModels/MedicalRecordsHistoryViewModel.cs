@@ -15,7 +15,7 @@ namespace Hospital.ViewModels
     {
         private readonly MedicalRecordManagerModel _medicalRecordManager;
 
-        public ObservableCollection<MedicalRecordJointModel> MedicalRecords { get; private set; }
+        public List<MedicalRecordJointModel> MedicalRecords { get; private set; }
         public ICommand ViewDetails { get; set; }
 
         public MedicalRecordsHistoryViewModel(MedicalRecordManagerModel medicalRecordManager)

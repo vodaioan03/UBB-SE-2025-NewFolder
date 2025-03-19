@@ -9,19 +9,19 @@ using System.Threading.Tasks;
 
 namespace Hospital.Managers
 {
-    class MedicalProcedureManagerModel
+    public class MedicalProcedureManagerModel
     {
-        public static ObservableCollection<Procedure> s_procedureList { get; private set; }
+        public static List<Procedure> s_procedureList { get; private set; }
         private readonly MedicalProceduresDatabaseService _medicalProcedureDBService;
 
         public MedicalProcedureManagerModel(MedicalProceduresDatabaseService dbService)
         {
             _medicalProcedureDBService = dbService;
-            s_procedureList = new ObservableCollection<Procedure>();
+            s_procedureList = new List<Procedure>();
         }
 
         // This method will be used to get the procedures from the in memory repository
-        public ObservableCollection<Procedure> GetProcedures()
+        public List<Procedure> GetProcedures()
         {
             return s_procedureList;
         }

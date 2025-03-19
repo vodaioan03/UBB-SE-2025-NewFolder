@@ -17,27 +17,45 @@ using Hospital.DatabaseServices;
 using Hospital.Managers;
 using Hospital.ViewModels;
 using System.Diagnostics;
+using Windows.ApplicationModel.Appointments;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
 namespace Hospital
 {
-  /// <summary>
-  /// An empty window that can be used on its own or navigated to within a Frame.
-  /// </summary>
-      public sealed partial class MainWindow : Window
-      {
-            public MainWindow()
-            {
-              this.InitializeComponent();
-            }
+    /// <summary>
+    /// An empty window that can be used on its own or navigated to within a Frame.
+    /// </summary>
+    public sealed partial class MainWindow : Window
+    {
 
-            private void Patient1_Click(object sender, RoutedEventArgs e)
-            {
-                AppointmentCreationForm appointmentCreationForm = new AppointmentCreationForm();
-                appointmentCreationForm.Activate();
-            }
+        //DB Services
+        private DepartmentsDatabaseService? departmentService;
+        private MedicalProceduresDatabaseService? procedureService;
+        private DoctorsDatabaseService? doctorService;
+        private ShiftsDatabaseService? shiftService;
+        private AppointmentsDatabaseService? appointmentService;
+
+        //ManagerModels 
+        private DepartmentManagerModel? DepartmentManager;
+        private MedicalProcedureManagerModel? ProcedureManager;
+        private DoctorManagerModel? DoctorManager;
+        private ShiftManagerModel? ShiftManager;
+        private AppointmentManagerModel? AppointmentManager;
+
+
+        public MainWindow()
+        {
+            this.InitializeComponent();
+            this.SetupDatabaseServices();
+        }
+
+        private void Patient1_Click(object sender, RoutedEventArgs e)
+        {
+            AppointmentCreationForm appointmentCreationForm = new AppointmentCreationForm(DepartmentManager, ProcedureManager, DoctorManager, ShiftManager, AppointmentManager);
+            appointmentCreationForm.Activate();
+        }
 
         private void Patient2_Click(object sender, RoutedEventArgs e)
         {
@@ -65,5 +83,25 @@ namespace Hospital
         {
             //test ui of feature Patient3 here
         }
+
+        private void SetupDatabaseServices()
+        {
+            //setup database services here
+            departmentService = new DepartmentsDatabaseService();
+            procedureService = new MedicalProceduresDatabaseService();
+            doctorService = new DoctorsDatabaseService();
+            shiftService = new ShiftsDatabaseService();
+            appointmentService = new AppointmentsDatabaseService();
+
+            //setup manager models here
+            DepartmentManager = new DepartmentManagerModel(departmentService);
+            ProcedureManager = new MedicalProcedureManagerModel(procedureService);
+            DoctorManager = new DoctorManagerModel(doctorService);
+            ShiftManager = new ShiftManagerModel(shiftService);
+            AppointmentManager = new AppointmentManagerModel(appointmentService);
+        }
+
+
+
     }
 }
