@@ -98,7 +98,20 @@ namespace Hospital.ViewModels
         }
 
 
+        // Validate user input
+        public bool ValidateAppointment()
+        {
+            bool isValid = true;
 
+            if (SelectedDepartment == null || SelectedProcedure == null || SelectedDoctor == null ||
+                SelectedDate == null || SelectedTime == null)
+            {
+                isValid = false;
+                // Here you can show a message box to the user to understand the issue
+            }
+
+            return isValid;
+        }
 
     }
 }
