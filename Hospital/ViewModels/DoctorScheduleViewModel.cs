@@ -1,4 +1,5 @@
 ﻿using Hospital.Models;
+using Hospital.DatabaseServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +32,16 @@ namespace Hospital.ViewModels
             OpenDetailsCommand = new RelayCommand(OpenDetails);
         }
 
+        public DoctorScheduleViewModel()
+        {
+            AppointmentsDatabaseService appointmentDatabaseService = new AppointmentsDatabaseService();
+            _appointmentManager = new AppointmentManagerModel(appointmentDatabaseService);
+            ShiftsDatabaseService shiftDatabaseService = new ShiftsDatabaseService();
+            _shiftManager = new ShiftManagerModel(shiftDatabaseService);
+            Appointments = new List<AppointmentJointModel>();
+            Shifts = new List<Shift>();
+            OpenDetailsCommand = new RelayCommand(OpenDetails);
+        }
 
         private void OpenDetails(object obj)
         {
