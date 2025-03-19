@@ -12,13 +12,13 @@ namespace Hospital.Managers
 {
   public class DoctorManagerModel
   {
-    public ObservableCollection<DoctorJointModel> s_doctorList { get; private set; }
+    public List<DoctorJointModel> s_doctorList { get; private set; }
     private DoctorsDatabaseService _doctorDBService;
 
     public DoctorManagerModel(DoctorsDatabaseService dbService)
     {
             _doctorDBService = dbService;
-            s_doctorList = new ObservableCollection<DoctorJointModel>();
+            s_doctorList = new List<DoctorJointModel>();
     }
 
     public async Task LoadDoctors(int departmentId)
@@ -38,7 +38,7 @@ namespace Hospital.Managers
       }
     }
 
-    public ObservableCollection<DoctorJointModel> GetDoctorsWithRatings()
+    public List<DoctorJointModel> GetDoctorsWithRatings()
     {
       return s_doctorList;
     }
