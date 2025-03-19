@@ -21,22 +21,14 @@ namespace Hospital.Managers
         }
         public async Task<ObservableCollection<AppointmentJointModel>> GetAppointments()
         {
-            try
-            {
-                List<AppointmentJointModel> appointmentJointModels =
-                    await _appointmentsDBService.GetAppointments().ConfigureAwait(false);
-                if (appointmentJointModels == null)
-                {
-                    return new ObservableCollection<AppointmentJointModel>();
-                }
-                return new ObservableCollection<AppointmentJointModel>(appointmentJointModels);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error getting appointments: {ex.Message}");
-                return new ObservableCollection<AppointmentJointModel>();
-            }
+          if(s_appointmentList.Count == 0)
+          {
+            throw new AppointmentNotFoundException("No appointments found.");
+          }
+
+          return s_appointmentList;
         }
+
         public async Task LoadDoctorAppointmentsOnDate(int doctorId, DateTime date)
         {
             try
