@@ -161,7 +161,8 @@ namespace Hospital.DatabaseServices
         JOIN Departments d ON doc.DepartmentId = d.DepartmentId
         JOIN Patients p ON a.PatientId = p.PatientId
         JOIN Procedures pr ON a.ProcedureId = pr.ProcedureId
-        ORDER BY a.AppointmentId;
+        WHERE p.PatientId = @PatientId
+         ORDER BY a.AppointmentId;
         ";
 
             using DataTable dt = new DataTable();
@@ -169,41 +170,39 @@ namespace Hospital.DatabaseServices
             try
             {
                 using SqlConnection connection = new SqlConnection(_config.DatabaseConnection);
-
-                // Open the database connection asynchronously
                 await connection.OpenAsync().ConfigureAwait(false);
-                Console.WriteLine("Connection established successfully.");
+                Console.WriteLine($"Connected to DB. Fetching appointments for Patient ID: {patientId}");
 
-                // Create a command to execute the SQL query
                 using SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@PatientId", patientId);
 
-                // Get the results from running the command
                 using SqlDataReader reader = await command.ExecuteReaderAsync().ConfigureAwait(false);
-
-                // Load the results into the DataTable
                 await Task.Run(() => dt.Load(reader)).ConfigureAwait(false);
 
-                // Create a list to store the AppointmentJointModel objects
                 List<AppointmentJointModel> appointments = new List<AppointmentJointModel>();
+                Console.WriteLine($"Rows returned: {dt.Rows.Count}");
+
                 foreach (DataRow row in dt.Rows)
                 {
-                    appointments.Add(new AppointmentJointModel(
-                      (int)row["AppointmentId"],
-                      (bool)row["Finished"],
-                      (DateTime)row["DateAndTime"],
-                      (int)row["DepartmentId"],
-                      (string)row["DepartmentName"],
-                      (int)row["DoctorId"],
-                      (string)row["DoctorName"],
-                      (int)row["PatientId"],
-                      (string)row["PatientName"],
-                      (int)row["ProcedureId"],
-                      (string)row["ProcedureName"],
-                      (TimeSpan)row["ProcedureDuration"]
-                    ));
+                    var appointment = new AppointmentJointModel(
+                        (int)row["AppointmentId"],
+                        (bool)row["Finished"],
+                        (DateTime)row["DateAndTime"],
+                        (int)row["DepartmentId"],
+                        (string)row["DepartmentName"],
+                        (int)row["DoctorId"],
+                        (string)row["DoctorName"],
+                        (int)row["PatientId"],
+                        (string)row["PatientName"],
+                        (int)row["ProcedureId"],
+                        (string)row["ProcedureName"],
+                        (TimeSpan)row["ProcedureDuration"]
+                    );
+
+                    Console.WriteLine($"Appointment found: {appointment.AppointmentId} - {appointment.Date}");
+                    appointments.Add(appointment);
                 }
 
-                connection.Close();
                 return appointments;
             }
             catch (SqlException sqlException)
@@ -406,8 +405,7 @@ namespace Hospital.DatabaseServices
             JOIN Departments d ON doc.DepartmentId = d.DepartmentId
             JOIN Patients p ON a.PatientId = p.PatientId
             JOIN Procedures pr ON a.ProcedureId = pr.ProcedureId
-            WHERE a.DoctorId = @DoctorId
-            ORDER BY a.DateAndTime;
+            WHERE a.AppointmentId = @AppointmentId;
             ";
 
             using DataTable dt = new DataTable();
@@ -417,7 +415,7 @@ namespace Hospital.DatabaseServices
                 await connection.OpenAsync().ConfigureAwait(false);
                 Console.WriteLine("Connection established successfully.");
                 using SqlCommand command = new SqlCommand(GetAppointmentByAppointmentIdQuery, connection);
-                command.Parameters.AddWithValue("@DoctorId", appointmentId);
+                command.Parameters.AddWithValue("@AppointmentId", appointmentId);
                 using SqlDataReader reader = await command.ExecuteReaderAsync().ConfigureAwait(false);
                 await Task.Run(() => dt.Load(reader)).ConfigureAwait(false);
                 AppointmentJointModel appointment = new AppointmentJointModel(
@@ -451,5 +449,58 @@ namespace Hospital.DatabaseServices
 
             throw new AppointmentNotFoundException($"Appointment not found for id {appointmentId}");
         }
+        public async Task<bool> RemoveAppointmentFromDB(int appointmentId)
+        {
+            try
+            {
+                Console.WriteLine($"Checking if appointment ID {appointmentId} exists before deletion...");
+
+                const string checkQuery = "SELECT COUNT(*) FROM Appointments WHERE AppointmentId = @AppointmentId";
+                using SqlConnection connection = new SqlConnection(_config.DatabaseConnection);
+                await connection.OpenAsync().ConfigureAwait(false);
+
+                using SqlCommand checkCommand = new SqlCommand(checkQuery, connection);
+                checkCommand.Parameters.AddWithValue("@AppointmentId", appointmentId);
+
+                int count = (int)await checkCommand.ExecuteScalarAsync().ConfigureAwait(false);
+                if (count == 0)
+                {
+                    Console.WriteLine($"Appointment ID {appointmentId} does NOT exist in DB. Throwing exception.");
+                    throw new AppointmentNotFoundException($"Appointment {appointmentId} not found.");
+                }
+
+                Console.WriteLine($"Appointment ID {appointmentId} exists. Proceeding with deletion.");
+
+                const string deleteQuery = "DELETE FROM Appointments WHERE AppointmentId = @AppointmentId";
+                using SqlCommand deleteCommand = new SqlCommand(deleteQuery, connection);
+                deleteCommand.Parameters.AddWithValue("@AppointmentId", appointmentId);
+
+                int rowsAffected = await deleteCommand.ExecuteNonQueryAsync().ConfigureAwait(false);
+
+                if (rowsAffected > 0)
+                {
+                    Console.WriteLine($"Successfully deleted appointment ID {appointmentId}.");
+                    return true;
+                }
+                else
+                {
+                    Console.WriteLine($"Deletion failed for appointment ID {appointmentId}. No rows affected.");
+                    return false;
+                }
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine($"SQL Error while deleting appointment: {ex.Message}");
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"General Error while deleting appointment: {ex.Message}");
+                return false;
+            }
+        }
+
+
+
     }
 }
