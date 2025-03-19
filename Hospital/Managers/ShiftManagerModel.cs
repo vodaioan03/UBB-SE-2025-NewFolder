@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Hospital.Managers
 {
-    class ShiftManagerModel
+    public class ShiftManagerModel
     {
         private readonly ShiftsDatabaseService _shiftsDatabaseService;
         private List<Shift> _shifts;

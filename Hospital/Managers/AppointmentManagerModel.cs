@@ -10,22 +10,20 @@ using Hospital.Exceptions;
 
 namespace Hospital.Managers
 {
-    class AppointmentManagerModel
+    public class AppointmentManagerModel
     {
         public ObservableCollection<AppointmentJointModel> s_appointmentList { get; private set; }
+
         private readonly AppointmentsDatabaseService _appointmentsDBService;
+
         public AppointmentManagerModel(AppointmentsDatabaseService dbService)
         {
             _appointmentsDBService = dbService;
             s_appointmentList = new ObservableCollection<AppointmentJointModel>();
         }
+
         public async Task<ObservableCollection<AppointmentJointModel>> GetAppointments()
         {
-          if(s_appointmentList.Count == 0)
-          {
-            throw new AppointmentNotFoundException("No appointments found.");
-          }
-
           return s_appointmentList;
         }
 

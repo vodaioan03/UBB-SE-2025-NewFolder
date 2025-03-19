@@ -9,18 +9,31 @@ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 mc:Ignorable="d"
 Title="Register an appointment">
 
-    <Viewbox Margin="20, 20, 20, 20">
+    <Viewbox x:Name="AppointmentForm" Margin="20, 20, 20, 20">
         <StackPanel Spacing="10" HorizontalAlignment="Center" VerticalAlignment="Center" MinWidth="250" MaxWidth="900">
             <TextBlock Text="Make Appointment" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,50,0,0"/>
 
 
             <TextBlock Text="Department"/>
-            <ComboBox x:Name="DepartmentsComboBox" MinWidth="200" Width="500" 
-                      MaxWidth="850" HorizontalAlignment="Stretch" PlaceholderText="Select department"/>
+            <ComboBox x:Name="DepartmentsComboBox" ItemsSource="{Binding DepartmentsList}" 
+                      SelectedItem="{Binding SelectedDepartment}" SelectionChanged="LoadProceduresOfSelectedDepartment" MinWidth="200" Width="500" 
+                      MaxWidth="850" HorizontalAlignment="Stretch" PlaceholderText="Select department">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}"  FontWeight="Bold" Width="100"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
 
             <TextBlock Text="Procedure"/>
             <ComboBox x:Name="ProceduresComboBox" MinWidth="200" 
-                      MaxWidth="850" HorizontalAlignment="Stretch" PlaceholderText="Select procedure"/>
+                      MaxWidth="850" ItemsSource="{Binding ProceduresList}" HorizontalAlignment="Stretch" PlaceholderText="Select procedure">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}"  FontWeight="Bold" Width="100"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
 
             <TextBlock Text="Doctor"/>
             <ComboBox x:Name="DoctorsComboBox"  MinWidth="200" MaxWidth="850" HorizontalAlignment="Stretch" PlaceholderText="Select doctor">

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Hospital.Managers
 {
-    class MedicalProcedureManagerModel
+    public class MedicalProcedureManagerModel
     {
         public static ObservableCollection<Procedure> s_procedureList { get; private set; }
         private readonly MedicalProceduresDatabaseService _medicalProcedureDBService;

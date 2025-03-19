@@ -9,7 +9,7 @@ using Microsoft.Data.SqlClient;
 
 namespace Hospital.DatabaseServices
 {
-    class DepartmentsDatabaseService
+    public class DepartmentsDatabaseService
     {
         private readonly Config _config;
 

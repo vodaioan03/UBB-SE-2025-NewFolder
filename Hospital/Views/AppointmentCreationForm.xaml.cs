@@ -14,6 +14,8 @@ using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using Microsoft.UI;
 using Microsoft.UI.Windowing;
+using Hospital.Managers;
+using Hospital.ViewModels;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -25,16 +27,38 @@ namespace Hospital.Views
     /// </summary>
     public sealed partial class AppointmentCreationForm : Window
     {
-        public AppointmentCreationForm()
+
+        //Manager Models
+        private DepartmentManagerModel _departmentManager;
+        private MedicalProcedureManagerModel _procedureManager;
+        private DoctorManagerModel _doctorManager;
+        private ShiftManagerModel _shiftManager;
+        private  AppointmentManagerModel _appointmentManager;
+
+        private AppointmentCreationFormViewModel _viewModel;
+
+        public AppointmentCreationForm(DepartmentManagerModel departmentManagerModel, MedicalProcedureManagerModel procedureManagerModel, DoctorManagerModel doctorManagerModel, ShiftManagerModel shiftManagerModel, AppointmentManagerModel appointmentManagerModel)
         {
+            this.InitializeComponent();
+            this.StyleTitleBar();
+
+            //prepare view model
+            _departmentManager = departmentManagerModel;
+            _procedureManager = procedureManagerModel;
+            _doctorManager = doctorManagerModel;
+            _shiftManager = shiftManagerModel;
+            _appointmentManager = appointmentManagerModel;
+            _viewModel = new AppointmentCreationFormViewModel(_departmentManager, _procedureManager, _doctorManager, _shiftManager, _appointmentManager);
+
+            //set data context
+            this.AppointmentForm.DataContext = _viewModel;
+
+
             this.InitializeComponent();
             this.StyleTitleBar();
 
             //resize
             this.AppWindow.Resize(new(1000, 1400));
-
-            CalendarDatePicker.MinDate = DateTime.Today;
-            CalendarDatePicker.MaxDate = DateTime.Today.AddMonths(1);
 
         }
 

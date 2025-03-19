@@ -46,7 +46,6 @@
   <ItemGroup>
     <Folder Include="Managers\" />
     <Folder Include="Helpers\" />
-    <Folder Include="ViewModels\" />
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\AppointmentCreationForm.xaml">

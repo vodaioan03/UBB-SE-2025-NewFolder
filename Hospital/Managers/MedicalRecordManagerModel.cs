@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Hospital.Managers
 {
-    class MedicalRecordManagerModel
+    public class MedicalRecordManagerModel
     {
         public ObservableCollection<MedicalRecordJointModel> s_medicalRecordList { get; private set; }
         private readonly MedicalRecordsDatabaseService _medicalRecordsDBService;
