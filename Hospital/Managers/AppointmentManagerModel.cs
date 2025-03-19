@@ -45,9 +45,6 @@ namespace Hospital.Managers
             }
         }
 
-
-
-
         public async Task LoadAppointmentsForPatient(int patientId)
         {
             try
@@ -73,8 +70,6 @@ namespace Hospital.Managers
                 return;
             }
         }
-
-
 
         public async Task<bool> RemoveAppointment(int appointmentId)
         {
@@ -141,7 +136,56 @@ namespace Hospital.Managers
                 return;
             }
         }
+        
+        public async Task<bool> CreateAppointment(AppointmentJointModel detailedAppointment)
+        {
+            try
+            {
+                // Validate the doctor is available for the given time slot
+                int doctorId = detailedAppointment.DoctorId;
+                DateTime date = detailedAppointment.Date;
+                List<AppointmentJointModel> existingAppointments = await _appointmentsDBService
+                                                                    .GetAppointmentsByDoctorAndDate(doctorId, date)
+                                                                    .ConfigureAwait(false);
 
+                bool isSlotTaken = existingAppointments.Any(a => a.Date == detailedAppointment.Date);
+                if(isSlotTaken)
+                {
+                    throw new AppointmentConflictException($"The selected time slot is already booked for doctor with id {doctorId}");
+                }
 
+                // Validate the patient doesn't have another appointment at the same time
+                int patientId = detailedAppointment.PatientId;
+                List<AppointmentJointModel> patientAppointments = await _appointmentsDBService.GetAppointmentsForPatient(patientId).ConfigureAwait(false);
+
+                bool isPatientBusy = patientAppointments.Any(a => a.Date == detailedAppointment.Date);
+                if(isPatientBusy)
+                {
+                    throw new AppointmentConflictException($"The patient with id {patientId} already has an appointment at the this time {detailedAppointment.Date}");
+                }
+
+                Appointment newAppointment = new Appointment(
+                    detailedAppointment.AppointmentId, 
+                    detailedAppointment.DoctorId, 
+                    detailedAppointment.PatientId,
+                    detailedAppointment.Date, 
+                    detailedAppointment.Finished, 
+                    detailedAppointment.ProcedureId
+                );
+
+                bool isInserted = await _appointmentsDBService.AddAppointmentToDB(newAppointment).ConfigureAwait(false);
+
+                if(!isInserted)
+                {
+                    throw new DatabaseOperationException("Failed to save the appointment in the database");
+                }
+
+                return true;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }
