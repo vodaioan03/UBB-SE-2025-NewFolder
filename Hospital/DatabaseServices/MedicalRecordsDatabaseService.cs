@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Hospital.DatabaseServices
 {
-    class MedicalRecordsDatabaseService
+    public class MedicalRecordsDatabaseService
     {
         private readonly Config _config;
 
@@ -66,10 +66,24 @@ namespace Hospital.DatabaseServices
             }
         }
 
-        public async Task<List<MedicalRecordJointModel>> GetMedicalRecordsForPatient(int medicalRecordId)
+        public async Task<List<MedicalRecordJointModel>> GetMedicalRecordsForPatient(int patientId)
         {
             const string queryGetMedicalRecord =
-              "SELECT * FROM MedicalRecord WHERE MedicalRecordId = @MedicalRecordId";
+              "SELECT " +
+              "     mr.MedicalRecordId, " +
+              "     mr.PatientId, " +
+              "     p.Name AS PatientName, " +
+              "     mr.DoctorId, " +
+              "     d.Name AS DoctorName, " +
+              "     mr.ProcedureId, " +
+              "     pr.ProcedureName, " +
+              "     mr.DateAndTime, " +
+              "     mr.Conclusion " +
+              "FROM MedicalRecords mr " +
+              "JOIN Users p ON mr.PatientId = p.UserId " +
+              "JOIN Users d ON mr.DoctorId = d.UserId " +
+              "JOIN Procedures pr ON mr.ProcedureId = pr.ProcedureId " +
+              "WHERE mr.PatientId = @PatientId";
             try
             {
                 using var connection = new SqlConnection(_config.DatabaseConnection);
@@ -82,7 +96,7 @@ namespace Hospital.DatabaseServices
                 using var command = new SqlCommand(queryGetMedicalRecord, connection);
                 
                 // Add parameters to the query
-                command.Parameters.AddWithValue("@MedicalRecordId", medicalRecordId);
+                command.Parameters.AddWithValue("@PatientId", patientId);
                 
                 // Execute the query asynchronously and retrieve the MedicalRecord
                 SqlDataReader result = await command.ExecuteReaderAsync().ConfigureAwait(false);

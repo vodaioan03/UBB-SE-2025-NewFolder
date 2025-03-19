@@ -11,7 +11,7 @@ using Hospital.Models;
 
 namespace Hospital.ViewModels
 {
-    class MedicalRecordsHistoryViewModel
+    public class MedicalRecordsHistoryViewModel
     {
         private readonly MedicalRecordManagerModel _medicalRecordManager;
 
