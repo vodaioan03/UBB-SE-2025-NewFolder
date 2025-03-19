@@ -33,8 +33,17 @@ namespace Hospital.Views
             {
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Stretch,
-                SelectionMode = CalendarViewSelectionMode.Multiple
+                SelectionMode = CalendarViewSelectionMode.Multiple,
+
+                IsGroupLabelVisible = false,
+                IsOutOfScopeEnabled = false,
+
+                MinDate = new DateTimeOffset(new DateTime(DateTime.Now.Year,DateTime.Now.Month,1)),
+                MaxDate = new DateTimeOffset(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month))),
+
+                IsTodayHighlighted = true
             };
+            
 
             rootGrid.Children.Add(ScheduleCalendar);
             this.Content = rootGrid;
