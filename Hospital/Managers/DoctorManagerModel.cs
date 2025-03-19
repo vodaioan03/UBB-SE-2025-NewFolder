@@ -10,14 +10,15 @@ using System.Threading.Tasks;
 
 namespace Hospital.Managers
 {
-  class DoctorManagerModel
+  public class DoctorManagerModel
   {
-    public ObservableCollection<DoctorJointModel> s_doctorList;
+    public ObservableCollection<DoctorJointModel> s_doctorList { get; private set; }
     private DoctorsDatabaseService _doctorDBService;
 
     public DoctorManagerModel(DoctorsDatabaseService dbService)
     {
-      _doctorDBService = dbService;
+            _doctorDBService = dbService;
+            s_doctorList = new ObservableCollection<DoctorJointModel>();
     }
 
     public async Task LoadDoctors(int departmentId)
@@ -37,13 +38,8 @@ namespace Hospital.Managers
       }
     }
 
-    ObservableCollection<DoctorJointModel> GetDoctorsWithRatings()
+    public ObservableCollection<DoctorJointModel> GetDoctorsWithRatings()
     {
-      if(s_doctorList.Count == 0)
-      {
-        throw new DoctorNotFoundException("No doctors found.");
-      }
-
       return s_doctorList;
     }
   }

@@ -11,7 +11,7 @@ using Windows.System;
 
 namespace Hospital.DatabaseServices
 {
-    class DoctorsDatabaseService
+    public class DoctorsDatabaseService
     {
         private readonly Config _config;
 

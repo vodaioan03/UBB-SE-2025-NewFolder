@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Hospital.DatabaseServices
 {
-    class AppointmentsDatabaseService
+    public class AppointmentsDatabaseService
     {
         private readonly Config _config;
 

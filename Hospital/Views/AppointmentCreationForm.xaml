@@ -9,29 +9,46 @@ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 mc:Ignorable="d"
 Title="Register an appointment">
 
-    <Viewbox Margin="20, 20, 20, 20">
+    <Viewbox x:Name="AppointmentForm" Margin="20, 20, 20, 20">
         <StackPanel Spacing="10" HorizontalAlignment="Center" VerticalAlignment="Center" MinWidth="250" MaxWidth="900">
             <TextBlock Text="Make Appointment" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,50,0,0"/>
 
 
             <TextBlock Text="Department"/>
-            <ComboBox x:Name="DepartmentsComboBox" MinWidth="200" Width="500" 
-                      MaxWidth="850" HorizontalAlignment="Stretch" PlaceholderText="Select department"/>
+            <ComboBox x:Name="DepartmentsComboBox" ItemsSource="{Binding DepartmentsList}" 
+                      SelectedItem="{Binding SelectedDepartment, Mode=TwoWay}" DropDownClosed="DepartmentComboBox_DropDownClosed" MinWidth="200" Width="500" 
+                      MaxWidth="850" HorizontalAlignment="Stretch" PlaceholderText="Select department">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}"  FontWeight="Bold" Width="100"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
 
             <TextBlock Text="Procedure"/>
             <ComboBox x:Name="ProceduresComboBox" MinWidth="200" 
-                      MaxWidth="850" HorizontalAlignment="Stretch" PlaceholderText="Select procedure"/>
+                      MaxWidth="850" ItemsSource="{Binding ProceduresList}" 
+                      SelectedItem="{Binding SelectedProcedure, Mode=TwoWay}"
+                      HorizontalAlignment="Stretch" PlaceholderText="Select procedure">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}"  FontWeight="Bold" Width="100"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
 
             <TextBlock Text="Doctor"/>
-            <ComboBox x:Name="DoctorsComboBox"  MinWidth="200" MaxWidth="850" HorizontalAlignment="Stretch" PlaceholderText="Select doctor">
+            <ComboBox x:Name="DoctorsComboBox" ItemsSource="{Binding DoctorsList}" 
+                      SelectedItem="{Binding SelectedDoctor, Mode=TwoWay}"
+                      MinWidth="200" MaxWidth="850" HorizontalAlignment="Stretch" PlaceholderText="Select doctor">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal" Spacing="10">
                             <!-- Doctor Name -->
-                            <TextBlock Text="name" FontWeight="Bold" Width="100"/>
+                            <TextBlock Text="{Binding DoctorName}" FontWeight="Bold" Width="100"/>
 
                             <!-- Rating -->
-                            <TextBlock Text="rating" Foreground="DarkGray" Width="30"/>
+                            <TextBlock Text="{Binding Rating}" Foreground="DarkGray" Width="30"/>
 
                             <!-- Star Icon -->
                             <FontIcon Glyph="&#xE734;" FontSize="14" Foreground="Gold"/>

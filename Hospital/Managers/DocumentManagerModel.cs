@@ -10,7 +10,7 @@ using Document = Hospital.Models.Document;
 
 namespace Hospital.Managers
 {
-    class DocumentManagerModel
+    public class DocumentManagerModel
     {
         public static ObservableCollection<Document> s_documentList { get; private set; }
         private readonly DocumentDatabaseService _documentDBService;
@@ -23,10 +23,6 @@ namespace Hospital.Managers
 
         public async Task<ObservableCollection<Document>> GetDocuments()
         {
-            if (s_documentList.Count == 0)
-            {
-                throw new DocumentNotFoundException("No documents found.");
-            }
             return s_documentList;
         }
 
