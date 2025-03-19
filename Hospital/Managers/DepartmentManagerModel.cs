@@ -1,0 +1,48 @@
+﻿using Hospital.DatabaseServices;
+using Hospital.Models;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Hospital.Managers
+{
+    class DepartmentManagerModel
+    {
+        public static ObservableCollection<Department> s_departmentList { get; set; }
+        public readonly DepartmentsDatabaseService _departmentDBService;
+
+        public DepartmentManagerModel(DepartmentsDatabaseService dbService)
+        {
+            _departmentDBService = dbService;
+            s_departmentList = new ObservableCollection<Department>();
+        }
+
+        // This method will be used to get the departments from the in memory repository
+        public ObservableCollection<Department> GetDepartments()
+        {
+            return s_departmentList;
+        }
+
+
+        // This method will be used to load the departments from the database into the in memory repository
+        public async Task LoadDepartments()
+        {
+            try
+            {
+                List<Department> departmentList = await _departmentDBService.GetDepartmentsFromDB().ConfigureAwait(false);
+                foreach(Department dep in departmentList)
+                {
+                    s_departmentList.Add(dep);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading departments: {ex.Message}");
+            }
+        }
+
+    }
+}
