@@ -16,7 +16,7 @@ namespace Hospital.ViewModels
         private readonly AppointmentManagerModel _appointmentManager;
         private readonly ShiftManagerModel _shiftManager;
 
-        public ObservableCollection<AppointmentJointModel> Appointments { get; set; }
+        public List<AppointmentJointModel> Appointments { get; set; }
         public List<Shift> Shifts { get; set; }  
 
         public ICommand OpenDetailsCommand { get; set; }
@@ -25,7 +25,7 @@ namespace Hospital.ViewModels
         {
             _appointmentManager = appointmentManager;
             _shiftManager = shiftManager;
-            Appointments = new ObservableCollection<AppointmentJointModel>();
+            Appointments = new List<AppointmentJointModel>();
             Shifts = new List<Shift>();
 
             OpenDetailsCommand = new RelayCommand(OpenDetails);
