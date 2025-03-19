@@ -1,0 +1,19 @@
+<Page
+    x:Class="Hospital.DoctorScheduleView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Hospital.Views"
+    xmlns:vm="using:Hospital.ViewModels">
+
+    <Page.DataContext>
+        <vm:DoctorScheduleViewModel/>
+    </Page.DataContext>
+
+    <Grid Padding="20">
+        <CalendarView x:Name="ShiftCalendar"
+                      SelectedDatesChanged="ShiftCalendar_SelectedDatesChanged"
+                      SelectionMode="Single"
+                      DisplayMode="Month"
+                      IsTodayHighlighted="True"/>
+    </Grid>
+</Page>
