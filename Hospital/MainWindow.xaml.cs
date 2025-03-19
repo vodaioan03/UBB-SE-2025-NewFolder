@@ -13,6 +13,10 @@ using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using Hospital.Views;
+using Hospital.DatabaseServices;
+using Hospital.Managers;
+using Hospital.ViewModels;
+using System.Diagnostics;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -40,10 +44,17 @@ namespace Hospital
             //test ui of feature Patient2 here
         }
 
-        private void Patient3_Click(object sender, RoutedEventArgs e)
-        {
-            //test ui of feature Patient3 here
-        }
+            private void Patient3_Click(object sender, RoutedEventArgs e)
+            {
+                MedicalRecordsDatabaseService medicalRecordsDatabaseService = new MedicalRecordsDatabaseService();
+                MedicalRecordManagerModel medicalRecordManagerModel = new MedicalRecordManagerModel(medicalRecordsDatabaseService);
+                // After login is implemented, the patient id will be passed as a parameter
+                int loggedInUserId = 1;
+                medicalRecordManagerModel.LoadMedicalRecordsForPatient(loggedInUserId).Wait();
+                MedicalRecordsHistoryViewModel medicalRecordsHistoryViewModel = new MedicalRecordsHistoryViewModel(medicalRecordManagerModel);
+                MedicalRecordsHistoryView medicalRecordsHistoryView = new MedicalRecordsHistoryView(medicalRecordsHistoryViewModel);
+                medicalRecordsHistoryView.Activate();
+            }
 
         private void Doctor1_Click(object sender, RoutedEventArgs e)
         {
