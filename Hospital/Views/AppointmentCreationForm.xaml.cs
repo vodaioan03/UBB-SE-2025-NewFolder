@@ -52,6 +52,7 @@ namespace Hospital.Views
 
             //set data context
             this.AppointmentForm.DataContext = _viewModel;
+            _viewModel.Root = this.Content.XamlRoot;
 
 
             this.InitializeComponent();
@@ -97,6 +98,11 @@ namespace Hospital.Views
             arrivalCalendarDatePicker.Date = DateTime.Today;
             arrivalCalendarDatePicker.MaxDate = DateTime.Today.AddMonths(1);*/
 
+        }
+
+        private void DepartmentComboBox_DropDownClosed(object sender, object e)
+        {
+            _viewModel.LoadProceduresAndDoctorsOfSelectedDepartment();
         }
     }
 }

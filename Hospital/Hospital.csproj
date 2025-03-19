@@ -44,8 +44,8 @@
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.6.250228001" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Managers\" />
     <Folder Include="Helpers\" />
+    <Folder Include="Managers\" />
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\AppointmentCreationForm.xaml">

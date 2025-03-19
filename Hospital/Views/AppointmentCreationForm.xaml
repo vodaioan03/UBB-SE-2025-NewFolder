@@ -16,7 +16,7 @@ Title="Register an appointment">
 
             <TextBlock Text="Department"/>
             <ComboBox x:Name="DepartmentsComboBox" ItemsSource="{Binding DepartmentsList}" 
-                      SelectedItem="{Binding SelectedDepartment}" SelectionChanged="LoadProceduresOfSelectedDepartment" MinWidth="200" Width="500" 
+                      SelectedItem="{Binding SelectedDepartment, Mode=TwoWay}" DropDownClosed="DepartmentComboBox_DropDownClosed" MinWidth="200" Width="500" 
                       MaxWidth="850" HorizontalAlignment="Stretch" PlaceholderText="Select department">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
@@ -27,7 +27,9 @@ Title="Register an appointment">
 
             <TextBlock Text="Procedure"/>
             <ComboBox x:Name="ProceduresComboBox" MinWidth="200" 
-                      MaxWidth="850" ItemsSource="{Binding ProceduresList}" HorizontalAlignment="Stretch" PlaceholderText="Select procedure">
+                      MaxWidth="850" ItemsSource="{Binding ProceduresList}" 
+                      SelectedItem="{Binding SelectedProcedure, Mode=TwoWay}"
+                      HorizontalAlignment="Stretch" PlaceholderText="Select procedure">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Name}"  FontWeight="Bold" Width="100"/>
@@ -36,15 +38,17 @@ Title="Register an appointment">
             </ComboBox>
 
             <TextBlock Text="Doctor"/>
-            <ComboBox x:Name="DoctorsComboBox"  MinWidth="200" MaxWidth="850" HorizontalAlignment="Stretch" PlaceholderText="Select doctor">
+            <ComboBox x:Name="DoctorsComboBox" ItemsSource="{Binding DoctorsList}" 
+                      SelectedItem="{Binding SelectedDoctor, Mode=TwoWay}"
+                      MinWidth="200" MaxWidth="850" HorizontalAlignment="Stretch" PlaceholderText="Select doctor">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal" Spacing="10">
                             <!-- Doctor Name -->
-                            <TextBlock Text="name" FontWeight="Bold" Width="100"/>
+                            <TextBlock Text="{Binding DoctorName}" FontWeight="Bold" Width="100"/>
 
                             <!-- Rating -->
-                            <TextBlock Text="rating" Foreground="DarkGray" Width="30"/>
+                            <TextBlock Text="{Binding Rating}" Foreground="DarkGray" Width="30"/>
 
                             <!-- Star Icon -->
                             <FontIcon Glyph="&#xE734;" FontSize="14" Foreground="Gold"/>

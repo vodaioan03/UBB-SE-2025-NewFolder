@@ -11,6 +11,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Popups;
 
 namespace Hospital.ViewModels
 {
@@ -42,11 +43,8 @@ namespace Hospital.ViewModels
         public DateTime? SelectedDate { get; set; }
         public TimeSpan? SelectedTime { get; set; }
 
-
-
-        //commands
-        public RelayCommand LoadProceduresCommand { get; set; }
-
+        //XAML Root
+        public XamlRoot? Root { get; set; }
 
 
         public AppointmentCreationFormViewModel(DepartmentManagerModel departmentManagerModel, MedicalProcedureManagerModel procedureManagerModel, DoctorManagerModel doctorManagerModel, ShiftManagerModel shiftManagerModel, AppointmentManagerModel appointmentManagerModel)
@@ -61,9 +59,6 @@ namespace Hospital.ViewModels
             DepartmentsList = new ObservableCollection<Department>();
             ProceduresList = new ObservableCollection<Procedure>();
             DoctorsList = new ObservableCollection<DoctorJointModel>();
-
-            //initialize commands
-            //LoadProceduresCommand = new RelayCommand(LoadProceduresOfSelectedDepartment, CanLoadProcedures);
 
             //load data
             LoadDepartments();
@@ -81,27 +76,29 @@ namespace Hospital.ViewModels
             }
         }
 
-        public async void LoadProceduresOfSelectedDepartment(object sender, SelectionChangedEventArgs e)
+        public async void LoadProceduresAndDoctorsOfSelectedDepartment()
         {
             //clear the list
             ProceduresList.Clear();
+            DoctorsList.Clear();
 
             //load the procedures
             await _procedureManager.LoadProceduresByDepartmentId(SelectedDepartment.DepartmentId);
             foreach (Procedure proc in _procedureManager.GetProcedures())
             {
-                ProceduresList?.Add(proc);  
+                ProceduresList?.Add(proc);
+            }
+
+            //load the doctors
+            await _doctorManager.LoadDoctors(SelectedDepartment.DepartmentId);
+            foreach (DoctorJointModel doc in _doctorManager.GetDoctorsWithRatings())
+            {
+                DoctorsList?.Add(doc);
             }
         }
 
-        private bool CanLoadProcedures(object arg)
-        {
-            if(SelectedDepartment == null)
-            {
-                return false;
-            }
-            return true;
-        }
+
+
 
     }
 }
