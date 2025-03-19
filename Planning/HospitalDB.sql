@@ -4,6 +4,9 @@
 IF OBJECT_ID('dbo.Appointments', 'U') IS NOT NULL
     DROP TABLE dbo.Appointments;
 
+IF OBJECT_ID('dbo.MedicalRecords', 'U') IS NOT NULL
+    DROP TABLE dbo.MedicalRecords;
+
 IF OBJECT_ID('dbo.Doctors', 'U') IS NOT NULL
     DROP TABLE dbo.Doctors;
 
@@ -107,6 +110,22 @@ CREATE TABLE Appointments (
 );
 
 
+CREATE TABLE MedicalRecords (
+    MedicalRecordId INT IDENTITY(1,1) PRIMARY KEY,
+    PatientId INT NOT NULL,
+    DoctorId INT NOT NULL,
+    DateAndTime DATETIME2 NOT NULL,
+    ProcedureId INT NOT NULL,
+    Conclusion NVARCHAR(255) NULL,
+    CONSTRAINT FK_MedicalRecords_Patients
+        FOREIGN KEY (PatientId) REFERENCES Patients(PatientId),
+    CONSTRAINT FK_MedicalRecords_Doctors
+        FOREIGN KEY (DoctorId) REFERENCES Doctors(DoctorId),
+    CONSTRAINT FK_MedicalRecords_Procedures
+        FOREIGN KEY (ProcedureId) REFERENCES Procedures(ProcedureId)
+);
+
+
 INSERT INTO Users (Username, Password, Mail, Role, Name, BirthDate, Cnp, Address, PhoneNumber)
 VALUES 
 ('john_doe', 'hashed_password_1', 'john@example.com', 'Doctor', 'John Doe', '1990-05-15', '1234567890123', '123 Main St', '123-456-7890'),
@@ -174,6 +193,18 @@ VALUES
     (3, 2, '2023-03-20T15:00:00', 4, 0); -- Sarah Miller w/ Dr. Alice Brown (Cardiology)
 
 -------------------------------------
+-- Insert Sample Medical Records
+-------------------------------------
+INSERT INTO MedicalRecords (PatientId, DoctorId, DateAndTime, ProcedureId, Conclusion)
+VALUES
+    (1, 1, '2023-03-17T12:30:00', 1, 'Normal ECG results'), -- Jane Doe w/ Dr. John Smith (Cardiology)
+    (1, 2, '2023-03-17T13:45:00', 4, 'Stress test results pending'), -- Jane Doe w/ Dr. Alice Brown (Cardiology)
+    (2, 3, '2023-03-18T10:30:00', 2, 'Brain MRI results normal'), -- Mike Davis w/ Dr. Robert Johnson (Neurology)
+    (2, 4, '2023-03-19T11:00:00', 3, 'Child checkup results normal'), -- Mike Davis w/ Dr. Emily Carter (Pediatrics)
+    (3, 1, '2023-03-19T15:30:00', 1, 'ECG results pending'), -- Sarah Miller w/ Dr. John Smith (Cardiology)
+    (3, 2, '2023-03-20T16:00:00', 4, 'Stress test results normal'); -- Sarah Miller w/ Dr. Alice Brown (Cardiology)
+
+-------------------------------------
 -- Verify Data
 -------------------------------------
 -- All Appointments
@@ -191,91 +222,94 @@ SELECT * FROM Procedures;
 -- All Departments
 SELECT * FROM Departments;
 
+-- All Medical Records
+SELECT * FROM MedicalRecords;
+
 -------------------------------------
 -- Example Join to produce AppointmentJointModel fields
 -------------------------------------
-SELECT 
-    a.AppointmentId,
-    a.Finished,
-    a.DateAndTime,
-    d.DepartmentId,
-    d.DepartmentName,
-    doc.DoctorId,
-    doc.DoctorName,
-    p.PatientId,
-    p.PatientName,
-    pr.ProcedureId,
-    pr.ProcedureName,
-    pr.ProcedureDuration
-FROM Appointments a
-JOIN Doctors doc ON a.DoctorId = doc.DoctorId
-JOIN Departments d ON doc.DepartmentId = d.DepartmentId
-JOIN Patients p ON a.PatientId = p.PatientId
-JOIN Procedures pr ON a.ProcedureId = pr.ProcedureId
-ORDER BY a.AppointmentId;
+-- SELECT 
+--     a.AppointmentId,
+--     a.Finished,
+--     a.DateAndTime,
+--     d.DepartmentId,
+--     d.DepartmentName,
+--     doc.DoctorId,
+--     doc.DoctorName,
+--     p.PatientId,
+--     p.PatientName,
+--     pr.ProcedureId,
+--     pr.ProcedureName,
+--     pr.ProcedureDuration
+-- FROM Appointments a
+-- JOIN Doctors doc ON a.DoctorId = doc.DoctorId
+-- JOIN Departments d ON doc.DepartmentId = d.DepartmentId
+-- JOIN Patients p ON a.PatientId = p.PatientId
+-- JOIN Procedures pr ON a.ProcedureId = pr.ProcedureId
+-- ORDER BY a.AppointmentId;
 
 -- GetAppointmentsByDoctorAndDate
-SELECT 
-    a.AppointmentId,
-    a.Finished,
-    a.DateAndTime,
-    d.DepartmentId,
-    d.DepartmentName,
-    doc.DoctorId,
-    doc.DoctorName,
-    p.PatientId,
-    p.PatientName,
-    pr.ProcedureId,
-    pr.ProcedureName,
-    pr.ProcedureDuration
-FROM Appointments a
-JOIN Doctors doc ON a.DoctorId = doc.DoctorId
-JOIN Departments d ON doc.DepartmentId = d.DepartmentId
-JOIN Patients p ON a.PatientId = p.PatientId
-JOIN Procedures pr ON a.ProcedureId = pr.ProcedureId
-WHERE a.DoctorId = 1
-  AND CONVERT(DATE, a.DateAndTime) = '2023-03-17'
-ORDER BY a.DateAndTime;
+-- SELECT 
+--     a.AppointmentId,
+--     a.Finished,
+--     a.DateAndTime,
+--     d.DepartmentId,
+--     d.DepartmentName,
+--     doc.DoctorId,
+--     doc.DoctorName,
+--     p.PatientId,
+--     p.PatientName,
+--     pr.ProcedureId,
+--     pr.ProcedureName,
+--     pr.ProcedureDuration
+-- FROM Appointments a
+-- JOIN Doctors doc ON a.DoctorId = doc.DoctorId
+-- JOIN Departments d ON doc.DepartmentId = d.DepartmentId
+-- JOIN Patients p ON a.PatientId = p.PatientId
+-- JOIN Procedures pr ON a.ProcedureId = pr.ProcedureId
+-- WHERE a.DoctorId = 1
+--   AND CONVERT(DATE, a.DateAndTime) = '2023-03-17'
+-- ORDER BY a.DateAndTime;
 
 -- GetAppointmentsForDoctor
-SELECT 
-    a.AppointmentId,
-    a.Finished,
-    a.DateAndTime,
-    d.DepartmentId,
-    d.DepartmentName,
-    doc.DoctorId,
-    doc.DoctorName,
-    p.PatientId,
-    p.PatientName,
-    pr.ProcedureId,
-    pr.ProcedureName,
-    pr.ProcedureDuration
-FROM Appointments a
-JOIN Doctors doc ON a.DoctorId = doc.DoctorId
-JOIN Departments d ON doc.DepartmentId = d.DepartmentId
-JOIN Patients p ON a.PatientId = p.PatientId
-JOIN Procedures pr ON a.ProcedureId = pr.ProcedureId
-WHERE a.DoctorId = 2
-ORDER BY a.DateAndTime;
+-- SELECT 
+--     a.AppointmentId,
+--     a.Finished,
+--     a.DateAndTime,
+--     d.DepartmentId,
+--     d.DepartmentName,
+--     doc.DoctorId,
+--     doc.DoctorName,
+--     p.PatientId,
+--     p.PatientName,
+--     pr.ProcedureId,
+--     pr.ProcedureName,
+--     pr.ProcedureDuration
+-- FROM Appointments a
+-- JOIN Doctors doc ON a.DoctorId = doc.DoctorId
+-- JOIN Departments d ON doc.DepartmentId = d.DepartmentId
+-- JOIN Patients p ON a.PatientId = p.PatientId
+-- JOIN Procedures pr ON a.ProcedureId = pr.ProcedureId
+-- WHERE a.DoctorId = 2
+-- ORDER BY a.DateAndTime;
 
 -- GetAppointments
-SELECT 
-    a.AppointmentId,
-    a.Finished,
-    a.DateAndTime,
-    d.DepartmentId,
-    d.DepartmentName,
-    doc.DoctorId,
-    doc.DoctorName,
-    p.PatientId,
-    p.PatientName,
-    pr.ProcedureId,
-    pr.ProcedureName,
-    pr.ProcedureDuration
-FROM Appointments a
-JOIN Doctors doc ON a.DoctorId = doc.DoctorId
-JOIN Departments d ON doc.DepartmentId = d.DepartmentId
-JOIN Patients p ON a.PatientId = p.PatientId
-JOIN Procedures pr ON a.ProcedureId = pr.ProcedureId
-ORDER BY a.AppointmentId;
+-- SELECT 
+--     a.AppointmentId,
+--     a.Finished,
+--     a.DateAndTime,
+--     d.DepartmentId,
+--     d.DepartmentName,
+--     doc.DoctorId,
+--     doc.DoctorName,
+--     p.PatientId,
+--     p.PatientName,
+--     pr.ProcedureId,
+--     pr.ProcedureName,
+--     pr.ProcedureDuration
+-- FROM Appointments a
+-- JOIN Doctors doc ON a.DoctorId = doc.DoctorId
+-- JOIN Departments d ON doc.DepartmentId = d.DepartmentId
+-- JOIN Patients p ON a.PatientId = p.PatientId
+-- JOIN Procedures pr ON a.ProcedureId = pr.ProcedureId
+-- ORDER BY a.AppointmentId;

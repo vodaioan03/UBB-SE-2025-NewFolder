@@ -4,6 +4,7 @@ using Hospital.Models;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace Hospital.DatabaseServices
@@ -125,7 +126,21 @@ namespace Hospital.DatabaseServices
         public async Task<MedicalRecordJointModel> RetrieveMedicalRecordById(int medicalRecordId)
         {
             const string queryRetrieveMedicalRecord =
-              "SELECT * FROM MedicalRecord WHERE MedicalRecordId = @MedicalRecordId";
+              "SELECT " +
+              "     mr.MedicalRecordId, " +
+              "     mr.PatientId, " +
+              "     p.Name AS PatientName, " +
+              "     mr.DoctorId, " +
+              "     d.Name AS DoctorName, " +
+              "     mr.ProcedureId, " +
+              "     pr.ProcedureName, " +
+              "     mr.DateAndTime, " +
+              "     mr.Conclusion " +
+              "FROM MedicalRecords mr " +
+              "JOIN Users p ON mr.PatientId = p.UserId " +
+              "JOIN Users d ON mr.DoctorId = d.UserId " +
+              "JOIN Procedures pr ON mr.ProcedureId = pr.ProcedureId " +
+              "WHERE MedicalRecordId = @MedicalRecordId";
             try
             {
                 using var connection = new SqlConnection(_config.DatabaseConnection);
@@ -146,15 +161,15 @@ namespace Hospital.DatabaseServices
                 while (await result.ReadAsync().ConfigureAwait(false))
                 {
                     medicalRecord = new MedicalRecordJointModel(
-                        result.GetInt32(0),
-                        result.GetInt32(1),
-                        result.GetString(2),
-                        result.GetInt32(3),
-                        result.GetString(4),
-                        result.GetInt32(5),
-                        result.GetString(6),
-                        result.GetDateTime(7),
-                        result.GetString(8)
+                        result.GetInt32(0),     // MedicalRecordId
+                        result.GetInt32(1),     // PatientId
+                        result.GetString(2),    // PatientName
+                        result.GetInt32(3),     // DoctorId
+                        result.GetString(4),    // DoctorName
+                        result.GetInt32(5),     // ProcedureId
+                        result.GetString(6),    // ProcedureName
+                        result.GetDateTime(7),  // Date
+                        result.GetString(8)     // Conclusion
                     );
                 }
                 if (medicalRecord == null)
