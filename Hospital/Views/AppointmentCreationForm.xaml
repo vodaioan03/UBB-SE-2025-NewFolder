@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window
+    x:Class="Hospital.Views.AppointmentCreationForm"
+xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+xmlns:local="using:Hospital.Views"
+xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+mc:Ignorable="d"
+Title="Register an appointment">
+
+    <Viewbox Margin="20, 20, 20, 20">
+        <StackPanel Spacing="10" HorizontalAlignment="Center" VerticalAlignment="Center" MinWidth="250" MaxWidth="900">
+            <TextBlock Text="Make Appointment" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,50,0,0"/>
+
+
+            <TextBlock Text="Department"/>
+            <ComboBox x:Name="DepartmentsComboBox" MinWidth="200" Width="500" 
+                      MaxWidth="850" HorizontalAlignment="Stretch" PlaceholderText="Select department"/>
+
+            <TextBlock Text="Procedure"/>
+            <ComboBox x:Name="ProceduresComboBox" MinWidth="200" 
+                      MaxWidth="850" HorizontalAlignment="Stretch" PlaceholderText="Select procedure"/>
+
+            <TextBlock Text="Doctor"/>
+            <ComboBox x:Name="DoctorsComboBox"  MinWidth="200" MaxWidth="850" HorizontalAlignment="Stretch" PlaceholderText="Select doctor">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <!-- Doctor Name -->
+                            <TextBlock Text="name" FontWeight="Bold" Width="100"/>
+
+                            <!-- Rating -->
+                            <TextBlock Text="rating" Foreground="DarkGray" Width="30"/>
+
+                            <!-- Star Icon -->
+                            <FontIcon Glyph="&#xE734;" FontSize="14" Foreground="Gold"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+
+            <TextBlock Text="Date"/>
+            <CalendarDatePicker MinWidth="200" MaxWidth="850" HorizontalAlignment="Stretch" 
+                                        x:Name="CalendarDatePicker"/>
+
+            <TextBlock Text="Time"/>
+            <ComboBox x:Name="HourComboBox" MinWidth="200" MaxWidth="850" HorizontalAlignment="Stretch" PlaceholderText="Select time"/>
+
+            <StackPanel Orientation="Horizontal" Spacing="20" HorizontalAlignment="Center" Margin="0, 100, 0, 0">
+                <Button x:Name="CancelButton" Content="Cancel" Background="Red" Foreground="White" MinWidth="80" MaxWidth="120"/>
+                <Button x:Name="ConfirmButton" Content="Confirm" Background="Green" Foreground="White" MinWidth="80" MaxWidth="120"/>
+            </StackPanel>
+        </StackPanel>
+    </Viewbox>
+
+</Window>
+

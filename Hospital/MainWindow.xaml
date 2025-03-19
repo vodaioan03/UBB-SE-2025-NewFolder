@@ -9,7 +9,12 @@
     mc:Ignorable="d"
     Title="Hospital">
 
-    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-        <Button x:Name="myButton" Click="myButton_Click">Click Me</Button>
+    <StackPanel Spacing="10" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Button x:Name="Patient1" Click="Patient1_Click">Create Appointment</Button>
+        <Button x:Name="Patient2" Click="Patient2_Click">Patient2</Button>
+        <Button x:Name="Patient3" Click="Patient3_Click">Patient3</Button>
+        <Button x:Name="Doctor1" Click="Doctor1_Click">Doctor1</Button>
+        <Button x:Name="Doctor2" Click="Doctor2_Click">Doctor2</Button>
+
     </StackPanel>
 </Window>
