@@ -12,17 +12,17 @@ namespace Hospital.Managers
 {
     public class AppointmentManagerModel
     {
-        public ObservableCollection<AppointmentJointModel> s_appointmentList { get; private set; }
+        public List<AppointmentJointModel> s_appointmentList { get; private set; }
 
         private readonly AppointmentsDatabaseService _appointmentsDBService;
 
         public AppointmentManagerModel(AppointmentsDatabaseService dbService)
         {
             _appointmentsDBService = dbService;
-            s_appointmentList = new ObservableCollection<AppointmentJointModel>();
+            s_appointmentList = new List<AppointmentJointModel>();
         }
 
-        public async Task<ObservableCollection<AppointmentJointModel>> GetAppointments()
+        public async Task<List<AppointmentJointModel>> GetAppointments()
         {
           return s_appointmentList;
         }
@@ -34,7 +34,7 @@ namespace Hospital.Managers
                 List<AppointmentJointModel> appointments = await _appointmentsDBService
                     .GetAppointmentsByDoctorAndDate(doctorId, date)
                     .ConfigureAwait(false);
-                s_appointmentList = new ObservableCollection<AppointmentJointModel>(appointments);
+                s_appointmentList = new List<AppointmentJointModel>(appointments);
             }
             catch (Exception ex)
             {
@@ -51,7 +51,7 @@ namespace Hospital.Managers
                     .GetAppointmentsForPatient(patientId)
                     .ConfigureAwait(false);
 
-                s_appointmentList = new ObservableCollection<AppointmentJointModel>(
+                s_appointmentList = new List<AppointmentJointModel>(
                     appointments.Where(a => a.Date > DateTime.Now && !a.Finished)
                 );
                 
