@@ -14,6 +14,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Views\AppointmentCreationForm.xaml" />
+    <None Remove="Views\MedicalRecordsHistoryView.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -46,6 +47,11 @@
   <ItemGroup>
     <Folder Include="Helpers\" />
     <Folder Include="Managers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\MedicalRecordsHistoryView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\AppointmentCreationForm.xaml">
