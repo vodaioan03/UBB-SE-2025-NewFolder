@@ -11,7 +11,7 @@ using Hospital.Commands;
 
 namespace Hospital.ViewModels
 {
-    class DoctorScheduleViewModel
+    public class DoctorScheduleViewModel
     {
         private readonly AppointmentManagerModel _appointmentManager;
         private readonly ShiftManagerModel _shiftManager;
@@ -30,6 +30,7 @@ namespace Hospital.ViewModels
 
             OpenDetailsCommand = new RelayCommand(OpenDetails);
         }
+
 
         private void OpenDetails(object obj)
         {
