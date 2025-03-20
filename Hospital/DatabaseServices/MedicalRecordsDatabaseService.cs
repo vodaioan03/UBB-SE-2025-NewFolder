@@ -75,6 +75,8 @@ namespace Hospital.DatabaseServices
               "     p.Name AS PatientName, " +
               "     mr.DoctorId, " +
               "     d.Name AS DoctorName, " +
+              "     pr.DepartmentId, " +
+              "     dept.DepartmentName, " +
               "     mr.ProcedureId, " +
               "     pr.ProcedureName, " +
               "     mr.DateAndTime, " +
@@ -83,6 +85,7 @@ namespace Hospital.DatabaseServices
               "JOIN Users p ON mr.PatientId = p.UserId " +
               "JOIN Users d ON mr.DoctorId = d.UserId " +
               "JOIN Procedures pr ON mr.ProcedureId = pr.ProcedureId " +
+              "JOIN Departments dept ON pr.DepartmentId = dept.DepartmentId " +
               "WHERE mr.PatientId = @PatientId";
             try
             {
@@ -106,15 +109,17 @@ namespace Hospital.DatabaseServices
                 while (await result.ReadAsync().ConfigureAwait(false))
                 {
                     medicalRecords.Add(new MedicalRecordJointModel(
-                        result.GetInt32(0),
-                        result.GetInt32(1),
-                        result.GetString(2),
-                        result.GetInt32(3),
-                        result.GetString(4),
-                        result.GetInt32(5),
-                        result.GetString(6),
-                        result.GetDateTime(7),
-                        result.GetString(8)
+                        result.GetInt32(0),     // MedicalRecordId
+                        result.GetInt32(1),     // PatientId
+                        result.GetString(2),    // PatientName
+                        result.GetInt32(3),     // DoctorId
+                        result.GetString(4),    // DoctorName
+                        result.GetInt32(5),     // DepartmentId
+                        result.GetString(6),    // DepartmentName
+                        result.GetInt32(7),     // ProcedureId
+                        result.GetString(8),    // ProcedureName
+                        result.GetDateTime(9),  // Date
+                        result.GetString(10)    // Conclusion
                     ));
                 }
 
@@ -146,6 +151,8 @@ namespace Hospital.DatabaseServices
               "     p.Name AS PatientName, " +
               "     mr.DoctorId, " +
               "     d.Name AS DoctorName, " +
+              "     pr.DepartmentId, " +
+              "     dept.DepartmentName, " +
               "     mr.ProcedureId, " +
               "     pr.ProcedureName, " +
               "     mr.DateAndTime, " +
@@ -154,6 +161,7 @@ namespace Hospital.DatabaseServices
               "JOIN Users p ON mr.PatientId = p.UserId " +
               "JOIN Users d ON mr.DoctorId = d.UserId " +
               "JOIN Procedures pr ON mr.ProcedureId = pr.ProcedureId " +
+              "JOIN Departments dept ON pr.DepartmentId = dept.DepartmentId " +
               "WHERE MedicalRecordId = @MedicalRecordId";
             try
             {
@@ -180,10 +188,12 @@ namespace Hospital.DatabaseServices
                         result.GetString(2),    // PatientName
                         result.GetInt32(3),     // DoctorId
                         result.GetString(4),    // DoctorName
-                        result.GetInt32(5),     // ProcedureId
-                        result.GetString(6),    // ProcedureName
-                        result.GetDateTime(7),  // Date
-                        result.GetString(8)     // Conclusion
+                        result.GetInt32(5),     // DepartmentId
+                        result.GetString(6),    // DepartmentName
+                        result.GetInt32(7),     // ProcedureId
+                        result.GetString(8),    // ProcedureName
+                        result.GetDateTime(9),  // Date
+                        result.GetString(10)     // Conclusion
                     );
                 }
                 if (medicalRecord == null)
@@ -207,7 +217,24 @@ namespace Hospital.DatabaseServices
         public async Task<List<MedicalRecordJointModel>> GetMedicalRecordsForDoctor(int DoctorId)
         {
             const string queryGetMedicalRecordsForDoctor =
-              "SELECT * FROM MedicalRecord WHERE DoctorId = @DoctorId";
+              "SELECT " +
+              "     mr.MedicalRecordId, " +
+              "     mr.PatientId, " +
+              "     p.Name AS PatientName, " +
+              "     mr.DoctorId, " +
+              "     d.Name AS DoctorName, " +
+              "     pr.DepartmentId, " +
+              "     dept.DepartmentName, " +
+              "     mr.ProcedureId, " +
+              "     pr.ProcedureName, " +
+              "     mr.DateAndTime, " +
+              "     mr.Conclusion " +
+              "FROM MedicalRecords mr " +
+              "JOIN Users p ON mr.PatientId = p.UserId " +
+              "JOIN Users d ON mr.DoctorId = d.UserId " +
+              "JOIN Procedures pr ON mr.ProcedureId = pr.ProcedureId " +
+              "JOIN Departments dept ON pr.DepartmentId = dept.DepartmentId " +
+              "WHERE DoctorId = @DoctorId";
             try
             {
                 using var connection = new SqlConnection(_config.DatabaseConnection);
@@ -224,15 +251,17 @@ namespace Hospital.DatabaseServices
                 while (await result.ReadAsync().ConfigureAwait(false))
                 {
                     medicalRecords.Add(new MedicalRecordJointModel(
-                        result.GetInt32(0),
-                        result.GetInt32(1),
-                        result.GetString(2),
-                        result.GetInt32(3),
-                        result.GetString(4),
-                        result.GetInt32(5),
-                        result.GetString(6),
-                        result.GetDateTime(7),
-                        result.GetString(8)
+                        result.GetInt32(0),     // MedicalRecordId
+                        result.GetInt32(1),     // PatientId
+                        result.GetString(2),    // PatientName
+                        result.GetInt32(3),     // DoctorId
+                        result.GetString(4),    // DoctorName
+                        result.GetInt32(5),     // DepartmentId
+                        result.GetString(6),    // DepartmentName
+                        result.GetInt32(7),     // ProcedureId
+                        result.GetString(8),    // ProcedureName
+                        result.GetDateTime(9),  // Date
+                        result.GetString(10)    // Conclusion
                     ));
                 }
                 if (medicalRecords.Count == 0)

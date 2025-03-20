@@ -8,6 +8,43 @@
     mc:Ignorable="d"
     Title="Upcoming Appointments">
 
-    <Grid>       
+    <Grid Background="White">
+        <StackPanel Orientation="Vertical" Padding="20">
+            <!-- Calendar View -->
+            <CalendarView x:Name="AppointmentsCalendar"
+                          SelectionMode="Single"
+                          SelectedDatesChanged="AppointmentsCalendar_SelectedDatesChanged"
+                          HorizontalAlignment="Stretch"
+                          VerticalAlignment="Top"
+                          BorderBrush="Green"
+                          BorderThickness="2"/>
+
+            <!-- Daily Schedule Label -->
+            <TextBlock Text="Daily Schedule" FontSize="20" FontWeight="Bold"
+                       Foreground="Green" Margin="10,20,10,5"/>
+
+            <!-- ListView to Show Time Slots -->
+            <ScrollViewer VerticalScrollBarVisibility="Auto" Height="400">
+                <ListView x:Name="DailyScheduleList" Background="White" BorderBrush="Green" BorderThickness="1"
+              ScrollViewer.VerticalScrollBarVisibility="Auto">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Margin="5">
+                                <!-- Time Slot -->
+                                <TextBlock Text="{Binding Time}" FontSize="18" Foreground="Black" Width="100" VerticalAlignment="Center"/>
+
+                                <!-- Appointment Block with Background Color -->
+                                <Border Background="{Binding HighlightColor}" Padding="5" CornerRadius="5"
+                            MinWidth="100" HorizontalAlignment="Left" Visibility="{Binding AppointmentVisibility}">
+                                    <TextBlock Text="{Binding Appointment}" FontSize="18" FontWeight="Bold" Foreground="White"/>
+                                </Border>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </ScrollViewer>
+
+
+        </StackPanel>
     </Grid>
 </Window>

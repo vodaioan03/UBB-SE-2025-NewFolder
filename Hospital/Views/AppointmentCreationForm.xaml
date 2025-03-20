@@ -58,15 +58,22 @@ Title="Register an appointment">
             </ComboBox>
 
             <TextBlock Text="Date"/>
-            <CalendarDatePicker MinWidth="200" MaxWidth="850" HorizontalAlignment="Stretch" 
-                                        x:Name="CalendarDatePicker"/>
+
+            <CalendarDatePicker x:Name="CalendarDatePicker" DisplayMode="{Binding SelectedCalendarDate, Mode=OneTime}" Date="{Binding SelectedCalendarDate, Mode=TwoWay}" 
+                        MinWidth="200" MaxWidth="850" HorizontalAlignment="Stretch" PlaceholderText="Select a date" />
 
             <TextBlock Text="Time"/>
-            <ComboBox x:Name="HourComboBox" MinWidth="200" MaxWidth="850" HorizontalAlignment="Stretch" PlaceholderText="Select time"/>
-
+            <ComboBox x:Name="HourComboBox" 
+              ItemsSource="{Binding HoursList}" 
+              SelectedItem="{Binding SelectedHour, Mode=TwoWay}"
+              MinWidth="200" 
+              MaxWidth="850" 
+              HorizontalAlignment="Stretch" 
+              PlaceholderText="Select time"/>
+            
             <StackPanel Orientation="Horizontal" Spacing="20" HorizontalAlignment="Center" Margin="0, 100, 0, 0">
-                <Button x:Name="CancelButton" Content="Cancel" Background="Red" Foreground="White" MinWidth="80" MaxWidth="120"/>
-                <Button x:Name="ConfirmButton" Content="Confirm" Background="Green" Foreground="White" MinWidth="80" MaxWidth="120"/>
+                <Button x:Name="CancelButton" Click="CancelButton_Click" Content="Cancel" Background="Red" Foreground="White" MinWidth="80" MaxWidth="120"/>
+                <Button x:Name="ConfirmButton" Click="ConfirmButton_Click" Content="Confirm" Background="Green" Foreground="White" MinWidth="80" MaxWidth="120"/>
             </StackPanel>
         </StackPanel>
     </Viewbox>

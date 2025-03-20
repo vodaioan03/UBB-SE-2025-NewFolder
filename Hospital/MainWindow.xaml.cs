@@ -72,7 +72,14 @@ namespace Hospital
 
         private void Doctor1_Click(object sender, RoutedEventArgs e)
         {
-            //test ui of feature Patient3 here
+            DoctorScheduleView doctorScheduleView = new DoctorScheduleView(AppointmentManager, ShiftManager);
+            var window = new Window
+            {
+                Title = "Doctor Schedule",
+                Content = doctorScheduleView
+            };
+
+            window.Activate();
         }
 
         private void Doctor2_Click(object sender, RoutedEventArgs e)
@@ -98,6 +105,13 @@ namespace Hospital
             AppointmentManager = new AppointmentManagerModel(appointmentService);
             MedicalRecordManager = new MedicalRecordManagerModel(medicalRecordsDatabaseService);
         }
+
+        private void PatientScheduleButton_Click(object sender, RoutedEventArgs e)
+        {
+            PatientScheduleView patientScheduleView = new PatientScheduleView();
+            patientScheduleView.Activate();
+        }
+
 
 
 
