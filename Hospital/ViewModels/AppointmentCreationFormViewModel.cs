@@ -1,6 +1,8 @@
 ﻿using Hospital.Commands;
+using Hospital.Configs;
 using Hospital.DatabaseServices;
 using Hospital.Exceptions;
+using Hospital.Helpers;
 using Hospital.Managers;
 using Hospital.Models;
 using Microsoft.UI.Xaml;
@@ -48,10 +50,9 @@ namespace Hospital.ViewModels
         public Department? SelectedDepartment { get; set; }
         public Procedure? SelectedProcedure { get; set; }
         public DoctorJointModel? SelectedDoctor { get; set; }
-        public DateTime? SelectedDate { get; set; }
         public TimeSpan? SelectedTime { get; set; }
 
-        private DateTimeOffset? _selectedCalendarDate;
+        private DateTimeOffset? _selectedCalendarDate = null;
         public DateTimeOffset? SelectedCalendarDate
         {
             get => _selectedCalendarDate;
@@ -59,6 +60,7 @@ namespace Hospital.ViewModels
             {
                 _selectedCalendarDate = value;
                 OnPropertyChanged(nameof(SelectedCalendarDate));
+                LoadAvailableTimeSlots();
             }
         }
 
@@ -113,16 +115,6 @@ namespace Hospital.ViewModels
             //set calendar dates
             MinDate = DateTimeOffset.Now;
             MaxDate = MinDate.AddMonths(1);
-
-
-            // HERE YOU WILL POPULATE WITH DOCTOR'S SHIFTS
-            /*DateTime start = DateTime.Today.AddHours(8);
-            DateTime end = DateTime.Today.AddHours(20);
-            while (start <= end)
-            {
-                HoursList.Add(start.ToString("HH:mm"));
-                start = start.AddMinutes(30);
-            }*/
         }
 
         private async void LoadDepartments()
@@ -201,11 +193,8 @@ namespace Hospital.ViewModels
             TimeSpan start = shift.StartTime;
             TimeSpan end = shift.EndTime;
 
-            // Round procedure duration to the nearest 30-minute multiple
-            TimeSpan procedureDuration = SelectedProcedure.Duration;
-            int totalMinutes = (int)procedureDuration.TotalMinutes;
-            int roundedMinutes = (int)Math.Round(totalMinutes / 30.0) * 30; // Round to nearest multiple of 30
-            procedureDuration = TimeSpan.FromMinutes(roundedMinutes); // Convert back to TimeSpan
+            // Round procedure duration to the nearest slot duration multiple
+            TimeSpan procedureDuration = TimeRounder.RoundProcedureDuration(SelectedProcedure.Duration);
 
             //generate the time slots
             TimeSpan currentTime = start;
@@ -215,11 +204,14 @@ namespace Hospital.ViewModels
                 TimeSpan appointmentStartTime = appointment.Date.TimeOfDay;
                 TimeSpan appointmentEndTime = appointmentStartTime.Add(appointment.ProcedureDuration);
 
+                //Round the appointment start time to the nearest 30-minute multiple after the current time
+                appointmentEndTime = TimeRounder.RoundProcedureDuration(appointmentEndTime);
+
                 // Check for available slots before the next appointment starts
                 while (currentTime + procedureDuration <= appointmentStartTime)
                 {
                     availableTimeSlots.Add(currentTime.ToString(@"hh\:mm")); // Format as HH:mm
-                    currentTime = currentTime.Add(procedureDuration); // Move to the next possible slot
+                    currentTime = currentTime.Add(TimeSpan.FromMinutes(Config.GetInstance().SlotDuration));// Move to the next possible slot
                 }
 
                 // Move past the current appointment
@@ -230,7 +222,9 @@ namespace Hospital.ViewModels
             while (currentTime + procedureDuration <= end)
             {
                 availableTimeSlots.Add(currentTime.ToString(@"hh\:mm"));
-                currentTime = currentTime.Add(procedureDuration);
+
+                // Move to the next possible slot (slot duration minutes later)
+                currentTime = currentTime.Add(TimeSpan.FromMinutes(Config.GetInstance().SlotDuration));
             }
 
             // Update the list of available time slots
@@ -251,7 +245,7 @@ namespace Hospital.ViewModels
             var newAppointment = new Models.Appointment(
                 0,                           // Appointment ID (0 so SQL Server auto-generates it)
                 SelectedDoctor.DoctorId,
-                1,                           // Patient ID (adjust as needed)
+                Config.GetInstance().patientId,                           // Patient ID (adjust as needed)
                 actualDateTime,       
                 false,                       // Finished (initially false)
                 SelectedProcedure.ProcedureId

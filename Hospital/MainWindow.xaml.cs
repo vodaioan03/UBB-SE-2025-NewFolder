@@ -59,11 +59,6 @@ namespace Hospital
             appointmentCreationForm.Activate();
         }
 
-        private void Patient2_Click(object sender, RoutedEventArgs e)
-        {
-            //test ui of feature Patient2 here
-        }
-
 
         private void Patient3_Click(object sender, RoutedEventArgs e)
         {

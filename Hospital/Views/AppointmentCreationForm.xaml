@@ -63,11 +63,10 @@ Title="Register an appointment">
 
             <TextBlock Text="Date"/>
 
-            <CalendarDatePicker x:Name="CalendarDatePicker" DisplayMode="{Binding SelectedCalendarDate}" 
-                                Date="{Binding SelectedCalendarDate, Mode=TwoWay}"
+            <CalendarDatePicker x:Name="CalendarDatePicker"
+                                Date="{x:Bind _viewModel.SelectedCalendarDate, Mode=TwoWay}"
                                 MinDate="{Binding MinDate}"
                                 MaxDate="{Binding MaxDate}"
-                                DateChanged="CalendarDatePicker_DateChanged"
                         MinWidth="200" MaxWidth="850" HorizontalAlignment="Stretch" PlaceholderText="Select a date" />
 
             <TextBlock Text="Time"/>

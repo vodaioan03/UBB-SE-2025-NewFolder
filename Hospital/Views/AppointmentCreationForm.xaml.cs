@@ -158,14 +158,5 @@ namespace Hospital.Views
         {
             _viewModel.LoadAvailableTimeSlots();
         }
-        private void CalendarDatePicker_DateChanged(CalendarDatePicker sender, CalendarDatePickerDateChangedEventArgs args)
-        {
-            if(_viewModel == null)
-            {
-                return;
-            }
-            _viewModel.LoadAvailableTimeSlots();
-        }
-
     }
 }
