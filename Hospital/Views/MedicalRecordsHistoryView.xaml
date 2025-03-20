@@ -17,7 +17,7 @@
         <ListView ItemsSource="{Binding MedicalRecords}" Width="400">
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="local1:MedicalRecordJointModel">
-                    <StackPanel Padding="10" BorderBrush="Gray" BorderThickness="1">
+                    <StackPanel Padding="10" BorderBrush="Gray" BorderThickness="1"  Background="LightGreen" CornerRadius="20" Margin="10">
                         <!-- TODO replace DoctorName with DepartmentName after adding it to MedicalRecordJointModel -->
                         <TextBlock Text="{x:Bind DoctorName}" FontWeight="Bold"/>
                         <TextBlock Text="{x:Bind Date}"/>
