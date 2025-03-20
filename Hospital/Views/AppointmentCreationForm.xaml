@@ -67,6 +67,7 @@ Title="Register an appointment">
                                 Date="{x:Bind _viewModel.SelectedCalendarDate, Mode=TwoWay}"
                                 MinDate="{Binding MinDate}"
                                 MaxDate="{Binding MaxDate}"
+                                CalendarViewDayItemChanging="CalendarView_DayItemChanging"
                         MinWidth="200" MaxWidth="850" HorizontalAlignment="Stretch" PlaceholderText="Select a date" />
 
             <TextBlock Text="Time"/>

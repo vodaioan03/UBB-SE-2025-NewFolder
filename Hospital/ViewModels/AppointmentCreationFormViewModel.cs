@@ -28,6 +28,7 @@ namespace Hospital.ViewModels
         private List<Shift>? shiftsList { get; set; }
         private List<AppointmentJointModel>? AppointmentsList { get; set; }
         public ObservableCollection<string> HoursList { get; set; } = new ObservableCollection<string>();
+        public ObservableCollection<DateTimeOffset> HighlightedDates { get; set; } = new ObservableCollection<DateTimeOffset>();
 
         //Calendar Dates
         public DateTimeOffset MinDate { get; set; }
@@ -148,21 +149,44 @@ namespace Hospital.ViewModels
             }
         }
 
-        public async void LoadAvailableTimeSlots()
+        public async void LoadDoctorSchedule()
         {
-            //checl for all necessary fields
-            if (SelectedDoctor == null || SelectedCalendarDate == null || SelectedProcedure == null)
+            HighlightedDates.Clear();
+            if (SelectedDoctor == null)
             {
                 return;
             }
 
-            //load the shifts
-            await _shiftManager.LoadShifts(SelectedDoctor.DoctorId);
+            await _shiftManager.LoadUpcomingDoctorDayshifts(SelectedDoctor.DoctorId);
             shiftsList = _shiftManager.GetShifts();
+
+            if (shiftsList == null)
+            {
+                HighlightedDates.Clear();
+                HoursList.Clear();
+                return;
+            }
+
+            HighlightedDates.Clear();
+            foreach (Shift shift in shiftsList)
+            {
+                HighlightedDates.Add(new DateTimeOffset(shift.DateTime));
+            }
+        }
+
+        public async void LoadAvailableTimeSlots()
+        {
+            //check for all necessary fields
+            if (SelectedDoctor == null || SelectedCalendarDate == null || SelectedProcedure == null)
+            {
+                HoursList.Clear();
+                return;
+            }
 
             //if there are no shifts return
             if (shiftsList == null)
             {
+                HighlightedDates.Clear();
                 HoursList.Clear();
                 return;
             }
@@ -191,7 +215,18 @@ namespace Hospital.ViewModels
 
             //get the start time
             TimeSpan start = shift.StartTime;
-            TimeSpan end = shift.EndTime;
+
+            
+            TimeSpan end;
+            //handle the 24h shift -- can be changed
+            if (shift.StartTime == shift.EndTime)
+            {
+                end = start.Add(TimeSpan.FromHours(12));
+            }
+            else
+            {
+                end = shift.EndTime;
+            }
 
             // Round procedure duration to the nearest slot duration multiple
             TimeSpan procedureDuration = TimeRounder.RoundProcedureDuration(SelectedProcedure.Duration);
