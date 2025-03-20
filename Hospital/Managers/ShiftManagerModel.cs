@@ -46,6 +46,18 @@ namespace Hospital.Managers
             return shift;
         }
 
+        public async Task LoadUpcomingDoctorDayshifts(int doctorID)
+        {
+            try
+            {
+                _shifts = await _shiftsDatabaseService.GetDoctorDayShifts(doctorID);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error loading upcoming shifts for doctor {doctorID}: {ex.Message}");
+            }
+        }
+
 
     }
 }

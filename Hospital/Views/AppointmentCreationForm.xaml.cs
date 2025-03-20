@@ -222,16 +222,25 @@ namespace Hospital.Views
 
         private void DoctorComboBox_SelectionChanged(object sender, object e)
         {
+            _viewModel.LoadDoctorSchedule();
             _viewModel.LoadAvailableTimeSlots();
+
+            //force a calendar reset in a dirty way can be left out
+            CalendarDatePicker.MinDate = DateTime.Today.AddDays(1);
+            CalendarDatePicker.MinDate = DateTime.Today;
         }
-        private void CalendarDatePicker_DateChanged(CalendarDatePicker sender, CalendarDatePickerDateChangedEventArgs args)
+
+        private void CalendarView_DayItemChanging(CalendarView sender, CalendarViewDayItemChangingEventArgs args)
         {
-            if(_viewModel == null)
+           DateTimeOffset date = args.Item.Date.Date;
+            if (_viewModel.HighlightedDates.Any(d => d.Date == date))
             {
-                return;
+
+                args.Item.Background = new SolidColorBrush(Microsoft.UI.Colors.LightGreen); // Highlight date
+                args.Item.Foreground = new SolidColorBrush(Microsoft.UI.Colors.Black);      // Ensure text is readable
             }
-            _viewModel.LoadAvailableTimeSlots();
         }
+
 
     }
 }

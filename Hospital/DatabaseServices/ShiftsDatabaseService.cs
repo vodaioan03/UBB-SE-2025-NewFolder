@@ -128,6 +128,50 @@ namespace Hospital.DatabaseServices
 
             return shifts;
         }
+
+        public async Task<List<Shift>> GetDoctorDayShifts(int doctorId)
+        {
+            const string GetShiftByDoctorIdQuery = @"
+            SELECT s.ShiftId, s.Date, s.StartTime, s.EndTime
+            FROM Shifts s
+            JOIN Schedules sch ON s.ShiftId = sch.ShiftId
+            WHERE sch.DoctorId = @DoctorId AND s.StartTime < '20:00:00'
+            AND CAST(s.Date AS DATE) >= CAST(GETDATE() AS DATE)";
+
+            List<Shift> shifts = new List<Shift>();
+
+            try
+            {
+                using SqlConnection conn = new SqlConnection(_config.DatabaseConnection);
+                await conn.OpenAsync();
+
+                using SqlCommand cmd = new SqlCommand(GetShiftByDoctorIdQuery, conn);
+                cmd.Parameters.AddWithValue("@DoctorId", doctorId);
+
+                using SqlDataReader reader = await cmd.ExecuteReaderAsync();
+                while (await reader.ReadAsync())
+                {
+                    shifts.Add(new Shift(
+                        reader.GetInt32(0),
+                        reader.GetDateTime(1),
+                        reader.GetTimeSpan(2),
+                        reader.GetTimeSpan(3)
+                    ));
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                Console.WriteLine($"SQL Error: {sqlEx.Message}");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"General Error: {ex.Message}");
+                throw;
+            }
+
+            return shifts;
+        }
     }
 
 
