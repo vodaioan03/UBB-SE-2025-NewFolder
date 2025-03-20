@@ -142,17 +142,30 @@ namespace Hospital.Views
             m_TitleBar.InactiveBackgroundColor = Colors.SeaGreen;
             m_TitleBar.ButtonInactiveForegroundColor = Colors.Gainsboro;
             m_TitleBar.ButtonInactiveBackgroundColor = Colors.SeaGreen;
-
-
-            CalendarDatePicker.MinDate = DateTime.Today;
-            CalendarDatePicker.Date = DateTime.Today;
-            CalendarDatePicker.MaxDate = DateTime.Today.AddMonths(1);
-
         }
 
         private void DepartmentComboBox_DropDownClosed(object sender, object e)
         {
             _viewModel.LoadProceduresAndDoctorsOfSelectedDepartment();
         }
+
+        private void ProcedureComboBox_SelectionChanged(object sender, object e)
+        {
+            _viewModel.LoadAvailableTimeSlots();
+        }
+
+        private void DoctorComboBox_SelectionChanged(object sender, object e)
+        {
+            _viewModel.LoadAvailableTimeSlots();
+        }
+        private void CalendarDatePicker_DateChanged(CalendarDatePicker sender, CalendarDatePickerDateChangedEventArgs args)
+        {
+            if(_viewModel == null)
+            {
+                return;
+            }
+            _viewModel.LoadAvailableTimeSlots();
+        }
+
     }
 }

@@ -75,7 +75,8 @@ namespace Hospital.ViewModels
         {
             try
             {
-                Shifts = await _shiftManager.LoadShifts(doctorId); 
+                await _shiftManager.LoadShifts(doctorId); 
+                Shifts = _shiftManager.GetShifts();
             }
             catch (Exception ex)
             {

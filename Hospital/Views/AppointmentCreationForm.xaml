@@ -16,7 +16,9 @@ Title="Register an appointment">
 
             <TextBlock Text="Department"/>
             <ComboBox x:Name="DepartmentsComboBox" ItemsSource="{Binding DepartmentsList}" 
-                      SelectedItem="{Binding SelectedDepartment, Mode=TwoWay}" DropDownClosed="DepartmentComboBox_DropDownClosed" MinWidth="200" Width="500" 
+                      SelectedItem="{Binding SelectedDepartment, Mode=TwoWay}" 
+                      DropDownClosed="DepartmentComboBox_DropDownClosed" 
+                      MinWidth="200" Width="500" 
                       MaxWidth="850" HorizontalAlignment="Stretch" PlaceholderText="Select department">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
@@ -29,6 +31,7 @@ Title="Register an appointment">
             <ComboBox x:Name="ProceduresComboBox" MinWidth="200" 
                       MaxWidth="850" ItemsSource="{Binding ProceduresList}" 
                       SelectedItem="{Binding SelectedProcedure, Mode=TwoWay}"
+                      SelectionChanged="ProcedureComboBox_SelectionChanged"
                       HorizontalAlignment="Stretch" PlaceholderText="Select procedure">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
@@ -40,6 +43,7 @@ Title="Register an appointment">
             <TextBlock Text="Doctor"/>
             <ComboBox x:Name="DoctorsComboBox" ItemsSource="{Binding DoctorsList}" 
                       SelectedItem="{Binding SelectedDoctor, Mode=TwoWay}"
+                      SelectionChanged="DoctorComboBox_SelectionChanged"
                       MinWidth="200" MaxWidth="850" HorizontalAlignment="Stretch" PlaceholderText="Select doctor">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
@@ -59,7 +63,11 @@ Title="Register an appointment">
 
             <TextBlock Text="Date"/>
 
-            <CalendarDatePicker x:Name="CalendarDatePicker" DisplayMode="{Binding SelectedCalendarDate, Mode=OneTime}" Date="{Binding SelectedCalendarDate, Mode=TwoWay}" 
+            <CalendarDatePicker x:Name="CalendarDatePicker" DisplayMode="{Binding SelectedCalendarDate}" 
+                                Date="{Binding SelectedCalendarDate, Mode=TwoWay}"
+                                MinDate="{Binding MinDate}"
+                                MaxDate="{Binding MaxDate}"
+                                DateChanged="CalendarDatePicker_DateChanged"
                         MinWidth="200" MaxWidth="850" HorizontalAlignment="Stretch" PlaceholderText="Select a date" />
 
             <TextBlock Text="Time"/>

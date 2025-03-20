@@ -64,11 +64,19 @@ namespace Hospital
             //test ui of feature Patient2 here
         }
 
-            private void Patient3_Click(object sender, RoutedEventArgs e)
-            {
-                MedicalRecordsHistoryView medicalRecordsHistoryView = new MedicalRecordsHistoryView(MedicalRecordManager);
-                medicalRecordsHistoryView.Activate();
-            }
+
+        private void Patient3_Click(object sender, RoutedEventArgs e)
+        {
+            MedicalRecordsDatabaseService medicalRecordsDatabaseService = new MedicalRecordsDatabaseService();
+            MedicalRecordManagerModel medicalRecordManagerModel = new MedicalRecordManagerModel(medicalRecordsDatabaseService);
+            // After login is implemented, the patient id will be passed as a parameter
+            int loggedInUserId = 1;
+            medicalRecordManagerModel.LoadMedicalRecordsForPatient(loggedInUserId).Wait();
+            MedicalRecordsHistoryViewModel medicalRecordsHistoryViewModel = new MedicalRecordsHistoryViewModel(medicalRecordManagerModel);
+            MedicalRecordsHistoryView medicalRecordsHistoryView = new MedicalRecordsHistoryView(medicalRecordsHistoryViewModel);
+            medicalRecordsHistoryView.Activate();
+        }
+
 
         private void Doctor1_Click(object sender, RoutedEventArgs e)
         {

@@ -20,12 +20,11 @@ namespace Hospital.Managers
             _shifts = new List<Shift>();
         }
 
-        public async Task<List<Shift>> LoadShifts(int doctorID)
+        public async Task LoadShifts(int doctorID)
         {
             try
             {
                 _shifts = await _shiftsDatabaseService.GetShiftsByDoctorId(doctorID);
-                return _shifts;
             }
             catch (Exception ex)
             {
@@ -41,7 +40,7 @@ namespace Hospital.Managers
 
         public Shift GetShiftByDay(DateTime day)
         {
-            Shift shift = _shifts.FirstOrDefault(s => s.DateTime == day);
+            Shift shift = _shifts.FirstOrDefault(s => s.DateTime.Day == day.Day);
             if (shift == null)
                 throw new ShiftNotFoundException(string.Format("Shift not found for date {0}", day.ToString()));
             return shift;
