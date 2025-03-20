@@ -313,3 +313,21 @@ SELECT * FROM MedicalRecords;
 -- JOIN Patients p ON a.PatientId = p.PatientId
 -- JOIN Procedures pr ON a.ProcedureId = pr.ProcedureId
 -- ORDER BY a.AppointmentId;
+
+SELECT 
+    mr.MedicalRecordId,
+    mr.PatientId, 
+    p.Name AS PatientName,
+    mr.DoctorId,
+    d.Name AS DoctorName,
+    pr.DepartmentId,                                            -- new
+    dept.DepartmentName,                                        -- new
+    mr.ProcedureId, 
+    pr.ProcedureName, 
+    mr.DateAndTime, 
+    mr.Conclusion 
+FROM MedicalRecords mr 
+JOIN Users p ON mr.PatientId = p.UserId 
+JOIN Users d ON mr.DoctorId = d.UserId 
+JOIN Procedures pr ON mr.ProcedureId = pr.ProcedureId
+JOIN Departments dept ON pr.DepartmentId = dept.DepartmentId;   -- new
