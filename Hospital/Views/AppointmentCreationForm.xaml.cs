@@ -16,6 +16,9 @@ using Microsoft.UI;
 using Microsoft.UI.Windowing;
 using Hospital.Managers;
 using Hospital.ViewModels;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using Windows.UI.Popups;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -33,7 +36,7 @@ namespace Hospital.Views
         private MedicalProcedureManagerModel _procedureManager;
         private DoctorManagerModel _doctorManager;
         private ShiftManagerModel _shiftManager;
-        private  AppointmentManagerModel _appointmentManager;
+        private AppointmentManagerModel _appointmentManager;
 
         private AppointmentCreationFormViewModel _viewModel;
 
@@ -54,13 +57,60 @@ namespace Hospital.Views
             this.AppointmentForm.DataContext = _viewModel;
             _viewModel.Root = this.Content.XamlRoot;
 
-
-            this.InitializeComponent();
-            this.StyleTitleBar();
-
             //resize
             this.AppWindow.Resize(new(1000, 1400));
+        }
 
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        private async void ConfirmButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Validate appointment input using the ViewModel method
+            if (!_viewModel.ValidateAppointment())
+            {
+                var dialog = new ContentDialog
+                {
+                    Title = "Error",
+                    Content = "Please fill all the fields!",
+                    CloseButtonText = "OK"
+                };
+
+                dialog.XamlRoot = this.Content.XamlRoot;
+
+                await dialog.ShowAsync();
+                return;
+            }
+
+            // Create new appointment and call the ViewModel method to add it to the database
+            bool result = await _viewModel.BookAppointment();
+            if (result) {
+                var dialog = new ContentDialog
+                {
+                    Title = "Success",
+                    Content = "Appointment created successfully!",
+                    CloseButtonText = "OK"
+                };
+
+                dialog.XamlRoot = this.Content.XamlRoot;
+                await dialog.ShowAsync();
+            }
+            else
+            {
+                var dialog = new ContentDialog
+                {
+                    Title = "Error",
+                    Content = "Error creating appointment!",
+                    CloseButtonText = "OK"
+                };
+
+                dialog.XamlRoot = this.Content.XamlRoot;
+                await dialog.ShowAsync();
+            }
+
+            this.Close();
         }
 
         //this method is used to style the title bar of the window
@@ -94,9 +144,9 @@ namespace Hospital.Views
             m_TitleBar.ButtonInactiveBackgroundColor = Colors.SeaGreen;
 
 
-            /*arrivalCalendarDatePicker.MinDate = DateTime.Today;
-            arrivalCalendarDatePicker.Date = DateTime.Today;
-            arrivalCalendarDatePicker.MaxDate = DateTime.Today.AddMonths(1);*/
+            CalendarDatePicker.MinDate = DateTime.Today;
+            CalendarDatePicker.Date = DateTime.Today;
+            CalendarDatePicker.MaxDate = DateTime.Today.AddMonths(1);
 
         }
 
