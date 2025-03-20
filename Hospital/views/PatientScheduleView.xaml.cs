@@ -5,43 +5,31 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Hospital.Managers;
 using Hospital.Models;
-using System.Threading.Tasks;
+using System.Diagnostics;
 using Microsoft.UI.Xaml.Media;
 using Windows.UI;
+using System.Collections.Generic;
 using Microsoft.UI;
-using System.Diagnostics;
 
 namespace Hospital.Views
 {
     public sealed partial class PatientScheduleView : Window
     {
         private readonly AppointmentManagerModel _appointmentManager;
-        public ObservableCollection<DateTimeOffset> Appointments { get; private set; }
-        private CalendarView AppointmentsCalendar;
+        public ObservableCollection<TimeSlotModel> DailyAppointments { get; private set; }
+        private ObservableCollection<DateTimeOffset> HighlightedDates;
 
         public PatientScheduleView()
         {
             this.ExtendsContentIntoTitleBar = false;
-
-            //Log that the window is being initialized
             Debug.WriteLine("PatientScheduleView initialized.");
+            this.InitializeComponent();
 
-            // Create the root layout
-            var rootGrid = new Grid();
-            AppointmentsCalendar = new CalendarView
-            {
-                HorizontalAlignment = HorizontalAlignment.Stretch,
-                VerticalAlignment = VerticalAlignment.Stretch,
-                SelectionMode = CalendarViewSelectionMode.Multiple
-            };
-
-            rootGrid.Children.Add(AppointmentsCalendar);
-            this.Content = rootGrid; // Set window content
-
-            // Initialize Data & Events
             _appointmentManager = new AppointmentManagerModel(new DatabaseServices.AppointmentsDatabaseService());
-            Appointments = new ObservableCollection<DateTimeOffset>();
+            DailyAppointments = new ObservableCollection<TimeSlotModel>();
+            HighlightedDates = new ObservableCollection<DateTimeOffset>();
 
+            DailyScheduleList.ItemsSource = DailyAppointments;
             AppointmentsCalendar.CalendarViewDayItemChanging += CalendarView_DayItemChanging;
 
             LoadAppointmentsForPatient(1); // Replace with actual patient ID
@@ -52,33 +40,90 @@ namespace Hospital.Views
             Debug.WriteLine($"Fetching appointments for patient ID: {patientId}...");
 
             await _appointmentManager.LoadAppointmentsForPatient(patientId);
-            Appointments.Clear();
 
-            if (_appointmentManager.s_appointmentList.Count == 0)
-            {
-                Debug.WriteLine("No appointments found.");
-            }
-
+            HighlightedDates.Clear();
             foreach (var appointment in _appointmentManager.s_appointmentList)
             {
-                Debug.WriteLine($"Appointment found: {appointment.Date}");
-                Appointments.Add(new DateTimeOffset(appointment.Date));
+                HighlightedDates.Add(new DateTimeOffset(appointment.Date.Date)); // Highlight days
             }
 
-            Debug.WriteLine($"Total Appointments Loaded: {Appointments.Count}");
+            AppointmentsCalendar.InvalidateMeasure(); // Refresh calendar UI
+        }
+
+        private void AppointmentsCalendar_SelectedDatesChanged(CalendarView sender, CalendarViewSelectedDatesChangedEventArgs args)
+        {
+            if (args.AddedDates.Count > 0)
+            {
+                DateTime selectedDate = args.AddedDates[0].DateTime.Date;
+                Debug.WriteLine($"Selected Date: {selectedDate}");
+
+                DailyAppointments.Clear();
+                List<TimeSlotModel> timeSlots = GenerateTimeSlots(selectedDate);
+
+                var selectedAppointments = _appointmentManager.s_appointmentList
+                    .Where(a => a.Date.Date == selectedDate)
+                    .OrderBy(a => a.Date.TimeOfDay)
+                    .ToList();
+
+                foreach (var appointment in selectedAppointments)
+                {
+                    DateTime appointmentStart = appointment.Date;
+                    DateTime appointmentEnd = appointmentStart.Add(appointment.ProcedureDuration);
+
+                    foreach (var slot in timeSlots)
+                    {
+                        if (slot.TimeSlot >= appointmentStart && slot.TimeSlot < appointmentEnd)
+                        {
+                            slot.Appointment = appointment.ProcedureName;
+                            slot.HighlightColor = new SolidColorBrush(Colors.Green);
+                        }
+                    }
+                }
+
+                foreach (var slot in timeSlots)
+                {
+                    DailyAppointments.Add(slot);
+                }
+            }
+        }
+
+        private List<TimeSlotModel> GenerateTimeSlots(DateTime date)
+        {
+            List<TimeSlotModel> slots = new List<TimeSlotModel>();
+            DateTime startTime = date.Date;
+            DateTime endTime = startTime.AddHours(24);
+
+            while (startTime < endTime)
+            {
+                slots.Add(new TimeSlotModel
+                {
+                    TimeSlot = startTime,
+                    Time = startTime.ToString("hh:mm tt"),
+                    Appointment = "",
+                    HighlightColor = new SolidColorBrush(Colors.Transparent)
+                });
+
+                startTime = startTime.AddMinutes(30);
+            }
+
+            return slots;
         }
 
         private void CalendarView_DayItemChanging(CalendarView sender, CalendarViewDayItemChangingEventArgs args)
         {
-            var date = args.Item.Date;
-            Debug.WriteLine($"Checking date: {date}");
-
-            // Highlight dates with appointments
-            if (Appointments.Any(a => a.Date == date.Date))
+            var date = args.Item.Date.Date;
+            if (HighlightedDates.Any(a => a.Date == date))
             {
-                Debug.WriteLine($"Highlighting appointment date: {date}");
-                args.Item.Background = new SolidColorBrush(Colors.LightPink);
+                args.Item.Background = new SolidColorBrush(Colors.LightGreen);
             }
         }
+    }
+
+    public class TimeSlotModel
+    {
+        public DateTime TimeSlot { get; set; }
+        public string Time { get; set; }
+        public string Appointment { get; set; }
+        public SolidColorBrush HighlightColor { get; set; }
     }
 }

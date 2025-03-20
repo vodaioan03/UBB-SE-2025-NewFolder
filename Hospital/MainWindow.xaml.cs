@@ -92,6 +92,13 @@ namespace Hospital
             AppointmentManager = new AppointmentManagerModel(appointmentService);
         }
 
+        private void PatientScheduleButton_Click(object sender, RoutedEventArgs e)
+        {
+            PatientScheduleView patientScheduleView = new PatientScheduleView();
+            patientScheduleView.Activate();
+        }
+
+
 
 
     }
