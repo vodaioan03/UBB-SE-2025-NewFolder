@@ -67,13 +67,7 @@ namespace Hospital
 
         private void Patient3_Click(object sender, RoutedEventArgs e)
         {
-            MedicalRecordsDatabaseService medicalRecordsDatabaseService = new MedicalRecordsDatabaseService();
-            MedicalRecordManagerModel medicalRecordManagerModel = new MedicalRecordManagerModel(medicalRecordsDatabaseService);
-            // After login is implemented, the patient id will be passed as a parameter
-            int loggedInUserId = 1;
-            medicalRecordManagerModel.LoadMedicalRecordsForPatient(loggedInUserId).Wait();
-            MedicalRecordsHistoryViewModel medicalRecordsHistoryViewModel = new MedicalRecordsHistoryViewModel(medicalRecordManagerModel);
-            MedicalRecordsHistoryView medicalRecordsHistoryView = new MedicalRecordsHistoryView(medicalRecordsHistoryViewModel);
+            MedicalRecordsHistoryView medicalRecordsHistoryView = new MedicalRecordsHistoryView(MedicalRecordManager);
             medicalRecordsHistoryView.Activate();
         }
 
