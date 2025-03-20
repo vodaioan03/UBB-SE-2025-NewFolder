@@ -15,6 +15,7 @@
         <Button x:Name="Patient3" Click="Patient3_Click">View Past Medical Records</Button>
         <Button x:Name="Doctor1" Click="Doctor1_Click">Doctor1</Button>
         <Button x:Name="Doctor2" Click="Doctor2_Click">Doctor2</Button>
+        <Button x:Name="PatientScheduleButton" Click="PatientScheduleButton_Click">View Patient Schedule</Button>
 
     </StackPanel>
 </Window>
