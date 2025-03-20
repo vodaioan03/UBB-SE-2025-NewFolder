@@ -22,7 +22,7 @@ namespace Hospital.Managers
             s_appointmentList = new List<AppointmentJointModel>();
         }
 
-        public async Task<List<AppointmentJointModel>> GetAppointments()
+        public List<AppointmentJointModel> GetAppointments()
         {
           return s_appointmentList;
         }

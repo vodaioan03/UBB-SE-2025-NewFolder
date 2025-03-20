@@ -1,5 +1,6 @@
 ﻿using Hospital.Commands;
 using Hospital.DatabaseServices;
+using Hospital.Exceptions;
 using Hospital.Managers;
 using Hospital.Models;
 using Microsoft.UI.Xaml;
@@ -20,12 +21,15 @@ namespace Hospital.ViewModels
     {
         // List Properties
         public ObservableCollection<Department>? DepartmentsList { get; set; }
-
         public ObservableCollection<Procedure>? ProceduresList { get; set; }
         public ObservableCollection<DoctorJointModel>? DoctorsList { get; set; }
         private List<Shift>? shiftsList { get; set; }
-        private ObservableCollection<AppointmentJointModel>? AppointmentsList { get; set; }
+        private List<AppointmentJointModel>? AppointmentsList { get; set; }
         public ObservableCollection<string> HoursList { get; set; } = new ObservableCollection<string>();
+
+        //Calendar Dates
+        public DateTimeOffset MinDate { get; set; }
+        public DateTimeOffset MaxDate { get; set; }
 
         //Manager Models
         private DepartmentManagerModel _departmentManager;
@@ -106,14 +110,19 @@ namespace Hospital.ViewModels
             //load data
             LoadDepartments();
 
+            //set calendar dates
+            MinDate = DateTimeOffset.Now;
+            MaxDate = MinDate.AddMonths(1);
+
+
             // HERE YOU WILL POPULATE WITH DOCTOR'S SHIFTS
-            DateTime start = DateTime.Today.AddHours(8);
+            /*DateTime start = DateTime.Today.AddHours(8);
             DateTime end = DateTime.Today.AddHours(20);
             while (start <= end)
             {
                 HoursList.Add(start.ToString("HH:mm"));
                 start = start.AddMinutes(30);
-            }
+            }*/
         }
 
         private async void LoadDepartments()
@@ -144,6 +153,91 @@ namespace Hospital.ViewModels
             foreach (DoctorJointModel doc in _doctorManager.GetDoctorsWithRatings())
             {
                 DoctorsList?.Add(doc);
+            }
+        }
+
+        public async void LoadAvailableTimeSlots()
+        {
+            //checl for all necessary fields
+            if (SelectedDoctor == null || SelectedCalendarDate == null || SelectedProcedure == null)
+            {
+                return;
+            }
+
+            //load the shifts
+            await _shiftManager.LoadShifts(SelectedDoctor.DoctorId);
+            shiftsList = _shiftManager.GetShifts();
+
+            //if there are no shifts return
+            if (shiftsList == null)
+            {
+                HoursList.Clear();
+                return;
+            }
+
+            //get shift for the selected date
+            Shift shift;
+            try
+            {
+                shift = _shiftManager.GetShiftByDay(SelectedCalendarDate.Value.Date);
+            }
+            catch (ShiftNotFoundException ex)
+            {
+                //if there is no shift for the selected date return
+                HoursList.Clear();
+                return;
+            }
+
+            //get appointments for the selected doctor on the selected date
+            await _appointmentManager.LoadDoctorAppointmentsOnDate(SelectedDoctor.DoctorId, SelectedCalendarDate.Value.Date);
+
+            //get the appointments
+            AppointmentsList = _appointmentManager.GetAppointments();
+
+            //compute available time slots
+            List<string> availableTimeSlots = new List<string>();
+
+            //get the start time
+            TimeSpan start = shift.StartTime;
+            TimeSpan end = shift.EndTime;
+
+            // Round procedure duration to the nearest 30-minute multiple
+            TimeSpan procedureDuration = SelectedProcedure.Duration;
+            int totalMinutes = (int)procedureDuration.TotalMinutes;
+            int roundedMinutes = (int)Math.Round(totalMinutes / 30.0) * 30; // Round to nearest multiple of 30
+            procedureDuration = TimeSpan.FromMinutes(roundedMinutes); // Convert back to TimeSpan
+
+            //generate the time slots
+            TimeSpan currentTime = start;
+
+            foreach (var appointment in AppointmentsList)
+            {
+                TimeSpan appointmentStartTime = appointment.Date.TimeOfDay;
+                TimeSpan appointmentEndTime = appointmentStartTime.Add(appointment.ProcedureDuration);
+
+                // Check for available slots before the next appointment starts
+                while (currentTime + procedureDuration <= appointmentStartTime)
+                {
+                    availableTimeSlots.Add(currentTime.ToString(@"hh\:mm")); // Format as HH:mm
+                    currentTime = currentTime.Add(procedureDuration); // Move to the next possible slot
+                }
+
+                // Move past the current appointment
+                currentTime = appointmentEndTime;
+            }
+
+            // Check remaining time after the last appointment
+            while (currentTime + procedureDuration <= end)
+            {
+                availableTimeSlots.Add(currentTime.ToString(@"hh\:mm"));
+                currentTime = currentTime.Add(procedureDuration);
+            }
+
+            // Update the list of available time slots
+            HoursList.Clear();
+            foreach (string timeSlot in availableTimeSlots)
+            {
+                HoursList.Add(timeSlot);
             }
         }
 
