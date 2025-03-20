@@ -21,6 +21,9 @@ namespace Hospital.ViewModels
         public MedicalRecordsHistoryViewModel(MedicalRecordManagerModel medicalRecordManager)
         {
             _medicalRecordManager = medicalRecordManager;
+            // patient id will be substituted with the logged in user's id after login is implemented
+            int patientId = 2;
+            _medicalRecordManager.LoadMedicalRecordsForPatient(patientId).Wait();
             MedicalRecords = medicalRecordManager.s_medicalRecordList;
             ViewDetails = new RelayCommand(ShowMedicalRecordDetails);
         }
