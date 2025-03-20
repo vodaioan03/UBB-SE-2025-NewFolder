@@ -19,6 +19,7 @@ using Hospital.ViewModels;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Windows.UI.Popups;
+using System.Security.AccessControl;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -71,47 +72,112 @@ namespace Hospital.Views
             // Validate appointment input using the ViewModel method
             if (!_viewModel.ValidateAppointment())
             {
-                var dialog = new ContentDialog
+                var validationDialog = new ContentDialog
                 {
                     Title = "Error",
                     Content = "Please fill all the fields!",
                     CloseButtonText = "OK"
                 };
-
-                dialog.XamlRoot = this.Content.XamlRoot;
-
-                await dialog.ShowAsync();
+                validationDialog.XamlRoot = this.Content.XamlRoot;
+                await validationDialog.ShowAsync();
                 return;
             }
 
-            // Create new appointment and call the ViewModel method to add it to the database
-            bool result = await _viewModel.BookAppointment();
-            if (result) {
-                var dialog = new ContentDialog
-                {
-                    Title = "Success",
-                    Content = "Appointment created successfully!",
-                    CloseButtonText = "OK"
-                };
+            // --------------------------------------------------------------
 
-                dialog.XamlRoot = this.Content.XamlRoot;
-                await dialog.ShowAsync();
-            }
-            else
+            // Create a dialog to show all the details of the appointment
+            var dialogContent = new StackPanel
             {
-                var dialog = new ContentDialog
+                Spacing = 15
+            };
+
+            // Department with formatting
+            dialogContent.Children.Add(new TextBlock
+            {
+                Text = $"Department: {_viewModel.SelectedDepartment.Name}",
+                FontSize = 18
+            });
+
+            // Procedure with formatting
+            dialogContent.Children.Add(new TextBlock
+            {
+                Text = $"Procedure: {_viewModel.SelectedProcedure.Name}",
+                FontSize = 18
+            });
+
+            // Doctor with formatting
+            dialogContent.Children.Add(new TextBlock
+            {
+                Text = $"Doctor: {_viewModel.SelectedDoctor?.DoctorName}",
+                FontSize = 18
+            });
+
+            // Date with formatting
+            dialogContent.Children.Add(new TextBlock
+            {
+                Text = $"Date: {_viewModel.SelectedCalendarDate?.ToString("MMMM dd, yyyy")}",
+                FontSize = 18
+            });
+
+            // Time with formatting
+            dialogContent.Children.Add(new TextBlock
+            {
+                Text = $"Time: {_viewModel.SelectedTime.ToString()}",
+                FontSize = 18
+            });
+
+            // Style the confirmation dialog
+            var confirmationDialog = new ContentDialog
+            {
+                Title = "Confirm Appointment",
+                Content = dialogContent,
+                CloseButtonText = "Cancel",
+                PrimaryButtonText = "Confirm",
+            };
+
+            // Setting the dialog's XamlRoot for better visual performance
+            confirmationDialog.XamlRoot = this.Content.XamlRoot;
+
+            // Show the dialog and capture the result
+            var result = await confirmationDialog.ShowAsync();
+
+            // ------------------------------------------------------------------
+
+
+            if (result == ContentDialogResult.Primary)
+            {
+                // User confirmed, now attempt to book the appointment
+                bool bookingResult = await _viewModel.BookAppointment();
+
+                // Show appropriate dialog based on the result of booking the appointment
+                ContentDialog successDialog;
+
+                if (bookingResult)
                 {
-                    Title = "Error",
-                    Content = "Error creating appointment!",
-                    CloseButtonText = "OK"
-                };
+                    successDialog = new ContentDialog
+                    {
+                        Title = "Success",
+                        Content = "Appointment created successfully!",
+                        CloseButtonText = "OK"
+                    };
+                }
+                else
+                {
+                    successDialog = new ContentDialog
+                    {
+                        Title = "Error",
+                        Content = "Error creating appointment!",
+                        CloseButtonText = "OK"
+                    };
+                }
 
-                dialog.XamlRoot = this.Content.XamlRoot;
-                await dialog.ShowAsync();
+                successDialog.XamlRoot = this.Content.XamlRoot;
+                await successDialog.ShowAsync();
+
+                this.Close(); // Close the current window after showing success/error
             }
-
-            this.Close();
         }
+
 
         //this method is used to style the title bar of the window
         private void StyleTitleBar()
