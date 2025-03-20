@@ -36,6 +36,7 @@ namespace Hospital
         private DoctorsDatabaseService? doctorService;
         private ShiftsDatabaseService? shiftService;
         private AppointmentsDatabaseService? appointmentService;
+        private MedicalRecordsDatabaseService? medicalRecordsDatabaseService;
 
         //ManagerModels 
         private DepartmentManagerModel? DepartmentManager;
@@ -43,6 +44,7 @@ namespace Hospital
         private DoctorManagerModel? DoctorManager;
         private ShiftManagerModel? ShiftManager;
         private AppointmentManagerModel? AppointmentManager;
+        private MedicalRecordManagerModel? MedicalRecordManager;
 
 
         public MainWindow()
@@ -62,6 +64,7 @@ namespace Hospital
             //test ui of feature Patient2 here
         }
 
+
         private void Patient3_Click(object sender, RoutedEventArgs e)
         {
             MedicalRecordsDatabaseService medicalRecordsDatabaseService = new MedicalRecordsDatabaseService();
@@ -73,6 +76,7 @@ namespace Hospital
             MedicalRecordsHistoryView medicalRecordsHistoryView = new MedicalRecordsHistoryView(medicalRecordsHistoryViewModel);
             medicalRecordsHistoryView.Activate();
         }
+
 
         private void Doctor1_Click(object sender, RoutedEventArgs e)
         {
@@ -99,6 +103,7 @@ namespace Hospital
             doctorService = new DoctorsDatabaseService();
             shiftService = new ShiftsDatabaseService();
             appointmentService = new AppointmentsDatabaseService();
+            medicalRecordsDatabaseService = new MedicalRecordsDatabaseService();
 
             //setup manager models here
             DepartmentManager = new DepartmentManagerModel(departmentService);
@@ -106,6 +111,7 @@ namespace Hospital
             DoctorManager = new DoctorManagerModel(doctorService);
             ShiftManager = new ShiftManagerModel(shiftService);
             AppointmentManager = new AppointmentManagerModel(appointmentService);
+            MedicalRecordManager = new MedicalRecordManagerModel(medicalRecordsDatabaseService);
         }
 
         private void PatientScheduleButton_Click(object sender, RoutedEventArgs e)

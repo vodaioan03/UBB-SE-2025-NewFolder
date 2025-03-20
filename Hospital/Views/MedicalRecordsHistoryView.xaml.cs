@@ -1,3 +1,4 @@
+using Hospital.Managers;
 using Hospital.ViewModels;
 using Microsoft.UI;
 using Microsoft.UI.Windowing;
@@ -12,13 +13,13 @@ namespace Hospital.Views
     {
         private MedicalRecordsHistoryViewModel _viewModel;
 
-        public MedicalRecordsHistoryView(MedicalRecordsHistoryViewModel medicalRecordsHistoryViewModel)
+        public MedicalRecordsHistoryView(MedicalRecordManagerModel medicalRecordManager)
         {
             this.InitializeComponent();
             this.AppWindow.Resize(new(800, 600));
             this.StyleTitleBar();
 
-            _viewModel = medicalRecordsHistoryViewModel;
+            _viewModel = new MedicalRecordsHistoryViewModel(medicalRecordManager);
             this.MedicalRecordsPanel.DataContext = _viewModel;
         }
 
