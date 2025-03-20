@@ -68,7 +68,13 @@ namespace Hospital
         private void Doctor1_Click(object sender, RoutedEventArgs e)
         {
             DoctorScheduleView doctorScheduleView = new DoctorScheduleView(AppointmentManager, ShiftManager);
-            doctorScheduleView.Activate();
+            var window = new Window
+            {
+                Title = "Doctor Schedule",
+                Content = doctorScheduleView
+            };
+
+            window.Activate();
         }
 
         private void Doctor2_Click(object sender, RoutedEventArgs e)
