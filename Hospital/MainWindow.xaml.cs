@@ -36,6 +36,7 @@ namespace Hospital
         private DoctorsDatabaseService? doctorService;
         private ShiftsDatabaseService? shiftService;
         private AppointmentsDatabaseService? appointmentService;
+        private MedicalRecordsDatabaseService? medicalRecordsDatabaseService;
 
         //ManagerModels 
         private DepartmentManagerModel? DepartmentManager;
@@ -43,6 +44,7 @@ namespace Hospital
         private DoctorManagerModel? DoctorManager;
         private ShiftManagerModel? ShiftManager;
         private AppointmentManagerModel? AppointmentManager;
+        private MedicalRecordManagerModel? MedicalRecordManager;
 
 
         public MainWindow()
@@ -64,13 +66,7 @@ namespace Hospital
 
             private void Patient3_Click(object sender, RoutedEventArgs e)
             {
-                MedicalRecordsDatabaseService medicalRecordsDatabaseService = new MedicalRecordsDatabaseService();
-                MedicalRecordManagerModel medicalRecordManagerModel = new MedicalRecordManagerModel(medicalRecordsDatabaseService);
-                // After login is implemented, the patient id will be passed as a parameter
-                int loggedInUserId = 1;
-                medicalRecordManagerModel.LoadMedicalRecordsForPatient(loggedInUserId).Wait();
-                MedicalRecordsHistoryViewModel medicalRecordsHistoryViewModel = new MedicalRecordsHistoryViewModel(medicalRecordManagerModel);
-                MedicalRecordsHistoryView medicalRecordsHistoryView = new MedicalRecordsHistoryView(medicalRecordsHistoryViewModel);
+                MedicalRecordsHistoryView medicalRecordsHistoryView = new MedicalRecordsHistoryView(MedicalRecordManager);
                 medicalRecordsHistoryView.Activate();
             }
 
@@ -92,6 +88,7 @@ namespace Hospital
             doctorService = new DoctorsDatabaseService();
             shiftService = new ShiftsDatabaseService();
             appointmentService = new AppointmentsDatabaseService();
+            medicalRecordsDatabaseService = new MedicalRecordsDatabaseService();
 
             //setup manager models here
             DepartmentManager = new DepartmentManagerModel(departmentService);
@@ -99,6 +96,7 @@ namespace Hospital
             DoctorManager = new DoctorManagerModel(doctorService);
             ShiftManager = new ShiftManagerModel(shiftService);
             AppointmentManager = new AppointmentManagerModel(appointmentService);
+            MedicalRecordManager = new MedicalRecordManagerModel(medicalRecordsDatabaseService);
         }
 
 
