@@ -132,6 +132,70 @@ namespace Hospital.ViewModels
             }
         }
 
+        public async Task OnDateSelected(DateTime date)
+        {
+            try
+            {
+                await _appointmentManager.LoadDoctorAppointmentsOnDate(DoctorId, date);
+                Appointments = _appointmentManager.s_appointmentList;
+
+                DailySchedule.Clear();
+
+                foreach (var slot in GenerateTimeSlots(date))
+                {
+                    DailySchedule.Add(slot);
+                }
+
+                OnPropertyChanged(nameof(DailySchedule));
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error selecting date: {e.Message}");
+            }
+        }
+
+        private List<TimeSlotModel> GenerateTimeSlots(DateTime date)
+        {
+            List<TimeSlotModel> slots = new List<TimeSlotModel>();
+            DateTime startTime = date.Date.AddHours(0); 
+            DateTime endTime = date.Date.AddHours(24);
+
+            var selectedAppointments = Appointments
+                .Where(a => a.Date.Date == date.Date)
+                .OrderBy(a => a.Date.TimeOfDay)
+                .ToList();
+
+            while (startTime < endTime)
+            {
+                var slot = new TimeSlotModel
+                {
+                    TimeSlot = startTime,
+                    Time = startTime.ToString("hh:mm tt"),
+                    Appointment = "",
+                    HighlightColor = new SolidColorBrush(Colors.Transparent) 
+                };
+
+                foreach (var appointment in selectedAppointments)
+                {
+                    DateTime appointmentStart = appointment.Date;
+                    DateTime appointmentEnd = appointmentStart.Add(appointment.ProcedureDuration);
+
+                    if (startTime >= appointmentStart && startTime < appointmentEnd)
+                    {
+                        slot.Appointment = appointment.ProcedureName;
+                        slot.HighlightColor = new SolidColorBrush(Colors.Green); 
+                        break;
+                    }
+                }
+
+                slots.Add(slot);
+                startTime = startTime.AddMinutes(30);
+            }
+
+            return slots;
+        }
+
+
 
     }
 }

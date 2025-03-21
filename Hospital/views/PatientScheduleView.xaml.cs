@@ -119,6 +119,7 @@ namespace Hospital.Views
                 args.Item.Background = new SolidColorBrush(Colors.LightGreen);
             }
         }
+
         private void DailyScheduleList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count > 0)
