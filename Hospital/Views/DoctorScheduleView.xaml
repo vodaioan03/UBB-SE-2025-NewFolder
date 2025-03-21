@@ -1,14 +1,26 @@
-<UserControl
-    x:Class="Hospital.Views.DoctorScheduleView"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Hospital.Views"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+<Window
+	x:Class="Hospital.Views.DoctorScheduleView"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:local="using:Hospital.Views"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	mc:Ignorable="d"
+	Title="Doctor Schedule">
 
-	<Grid>
-		<!-- Empty grid, content will be added programmatically -->
+	<Grid Background ="White">
+		<StackPanel Orientation="Vertical" Padding="20">
+			<CalendarView x:Name="DoctorSchedule"
+						  SelectionMode="Single"
+                          SelectedDatesChanged="DoctorSchedule_SelectedDatesChanged"
+                          HorizontalAlignment="Stretch"
+                          VerticalAlignment="Top"
+                          BorderBrush="Green"
+                          BorderThickness="2"
+						  />
+			<TextBlock Text="Daily Schedule" FontSize="20" FontWeight="Bold"
+                       Foreground="Green" Margin="10,20,10,5"/>
+		</StackPanel>
 	</Grid>
-
-</UserControl>
+	
+</Window>
