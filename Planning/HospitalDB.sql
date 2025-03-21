@@ -1,23 +1,32 @@
 -------------------------------------
--- Clean up existing tables (optional)
+-- Clean up existing tables (if any)
 -------------------------------------
-IF OBJECT_ID('dbo.Appointments', 'U') IS NOT NULL
-    DROP TABLE dbo.Appointments;
+IF OBJECT_ID('dbo.Schedules', 'U') IS NOT NULL
+    DROP TABLE dbo.Schedules;
+
+IF OBJECT_ID('dbo.Shifts', 'U') IS NOT NULL
+    DROP TABLE dbo.Shifts;
+
+IF OBJECT_ID('dbo.Documents', 'U') IS NOT NULL
+    DROP TABLE dbo.Documents;
 
 IF OBJECT_ID('dbo.MedicalRecords', 'U') IS NOT NULL
     DROP TABLE dbo.MedicalRecords;
 
-IF OBJECT_ID('dbo.Doctors', 'U') IS NOT NULL
-    DROP TABLE dbo.Doctors;
+IF OBJECT_ID('dbo.Appointments', 'U') IS NOT NULL
+    DROP TABLE dbo.Appointments;
+
+IF OBJECT_ID('dbo.Procedures', 'U') IS NOT NULL
+    DROP TABLE dbo.Procedures;
 
 IF OBJECT_ID('dbo.Patients', 'U') IS NOT NULL
     DROP TABLE dbo.Patients;
 
+IF OBJECT_ID('dbo.Doctors', 'U') IS NOT NULL
+    DROP TABLE dbo.Doctors;
+
 IF OBJECT_ID('dbo.Users', 'U') IS NOT NULL
     DROP TABLE dbo.Users;
-
-IF OBJECT_ID('dbo.Procedures', 'U') IS NOT NULL
-    DROP TABLE dbo.Procedures;
 
 IF OBJECT_ID('dbo.Departments', 'U') IS NOT NULL
     DROP TABLE dbo.Departments;
@@ -31,6 +40,9 @@ CREATE TABLE Departments (
 );
 
 
+-------------------------------------
+-- Create Users
+-------------------------------------
 CREATE TABLE Users (
     UserId INT IDENTITY(1,1) PRIMARY KEY, -- Auto-incrementing primary key
     Username NVARCHAR(50) NOT NULL UNIQUE, -- Unique username
@@ -62,7 +74,6 @@ CREATE TABLE Doctors (
 );
 
 
-
 -------------------------------------
 -- Create Patients
 -------------------------------------
@@ -91,6 +102,7 @@ CREATE TABLE Procedures (
         FOREIGN KEY (DepartmentId) REFERENCES Departments(DepartmentId)
 );
 
+
 -------------------------------------
 -- Create Appointments
 -------------------------------------
@@ -110,6 +122,9 @@ CREATE TABLE Appointments (
 );
 
 
+-------------------------------------
+-- Create MedicalRecords
+-------------------------------------
 CREATE TABLE MedicalRecords (
     MedicalRecordId INT IDENTITY(1,1) PRIMARY KEY,
     PatientId INT NOT NULL,
@@ -126,6 +141,57 @@ CREATE TABLE MedicalRecords (
 );
 
 
+-------------------------------------
+-- Create Documents 
+-------------------------------------
+CREATE TABLE Documents (
+    DocumentId INT IDENTITY(1,1) PRIMARY KEY,
+	MedicalRecordId INT NOT NULL,
+	CONSTRAINT FK_Documents_MedicalRecords
+		FOREIGN KEY (MedicalRecordId) REFERENCES MedicalRecords(MedicalRecordID),
+    Files VARCHAR(100),
+);
+
+
+-------------------------------------
+-- Create Shifts
+-------------------------------------
+CREATE TABLE Shifts(
+	ShiftId INT IDENTITY(1,1) PRIMARY KEY,
+	Date DATETIME NOT NULL,
+	StartTime TIME NOT NULL,
+	EndTime Time NOT NULL
+)
+
+
+-------------------------------------
+-- Create Schedules
+-------------------------------------
+CREATE TABLE Schedules(
+	DoctorId INT,
+	ShiftId INT,
+	PRIMARY KEY(DoctorId, ShiftId),
+	CONSTRAINT FK_Schedule_DoctorId
+		FOREIGN KEY (DoctorId) REFERENCES Doctors(DoctorId),
+	CONSTRAINT FK_Schedule_ShiftId
+		FOREIGN KEY (ShiftId) REFERENCES Shifts(ShiftId)
+	
+)
+
+
+
+-------------------------------------
+-- Insert Departments
+-------------------------------------
+INSERT INTO Departments (DepartmentName)
+VALUES
+    ('Cardiology'),      -- DepartmentId = 1
+    ('Neurology'),       -- DepartmentId = 2
+    ('Pediatrics');      -- DepartmentId = 3
+
+-------------------------------------
+-- Insert Users (Doctors and Patients)
+-------------------------------------
 INSERT INTO Users (Username, Password, Mail, Role, Name, BirthDate, Cnp, Address, PhoneNumber)
 VALUES 
 ('john_doe', 'hashed_password_1', 'john@example.com', 'Doctor', 'John Doe', '1990-05-15', '1234567890123', '123 Main St', '123-456-7890'),
@@ -140,18 +206,8 @@ VALUES
 ('sarah_miller', 'hashed_password_7', 'sarah@example.com', 'Patient', 'Sarah Miller', '1995-12-05', '3756789012345', '789 Pine St', '987-123-4567');
 
 
-
 -------------------------------------
--- Insert Sample Departments
--------------------------------------
-INSERT INTO Departments (DepartmentName)
-VALUES
-    ('Cardiology'),      -- DepartmentId = 1
-    ('Neurology'),       -- DepartmentId = 2
-    ('Pediatrics');      -- DepartmentId = 3
-
--------------------------------------
--- Insert Sample Doctors
+-- Insert Doctors
 -------------------------------------
 INSERT INTO Doctors (UserId, DepartmentId, LicenseNumber)
 VALUES
@@ -160,8 +216,9 @@ VALUES
     (3, 2, '231231'), -- DoctorId = 3, Dept = Neurology
     (4, 3, '124211');   -- DoctorId = 4, Dept = Pediatrics
 
+
 -------------------------------------
--- Insert Sample Patients
+-- Insert Patients
 -------------------------------------
 INSERT INTO Patients (UserId, BloodType, EmergencyContact, Allergies, Weight, Height)
 VALUES 
@@ -171,7 +228,7 @@ VALUES
 
 
 -------------------------------------
--- Insert Sample Procedures
+-- Insert Procedures
 -------------------------------------
 INSERT INTO Procedures (ProcedureName, ProcedureDuration, DepartmentId)
 VALUES
@@ -180,8 +237,9 @@ VALUES
     ('Child Checkup', '00:20:00', 3), -- ProcedureId = 3, Pediatrics
     ('Stress Test', '00:45:00', 1);   -- ProcedureId = 4, Cardiology
 
+
 -------------------------------------
--- Insert Sample Appointments
+-- Insert Appointments
 -------------------------------------
 INSERT INTO Appointments (PatientId, DoctorId, DateAndTime, ProcedureId, Finished)
 VALUES
@@ -192,8 +250,9 @@ VALUES
     (3, 1, '2023-03-19T14:45:00', 1, 1), -- Sarah Miller w/ Dr. John Smith (Cardiology)
     (3, 2, '2023-03-20T15:00:00', 4, 0); -- Sarah Miller w/ Dr. Alice Brown (Cardiology)
 
+
 -------------------------------------
--- Insert Sample Medical Records
+-- Insert MedicalRecords
 -------------------------------------
 INSERT INTO MedicalRecords (PatientId, DoctorId, DateAndTime, ProcedureId, Conclusion)
 VALUES
@@ -204,11 +263,58 @@ VALUES
     (3, 1, '2023-03-19T15:30:00', 1, 'ECG results pending'), -- Sarah Miller w/ Dr. John Smith (Cardiology)
     (3, 2, '2023-03-20T16:00:00', 4, 'Stress test results normal'); -- Sarah Miller w/ Dr. Alice Brown (Cardiology)
 
+
+-------------------------------------
+-- Insert Documents
+-------------------------------------
+INSERT INTO Documents (MedicalRecordId, Files)
+VALUES
+    (1, 'C:\Users\Cristi\Desktop\file1.docx'),      -- DocumentId = 1
+    (2,'C:\Users\Cristi\Desktop\file1.docx'),       -- DocumentId = 2
+    (3,'C:\Users\Cristi\Desktop\file1.docx');      -- DocumentId = 3
+
+
+-------------------------------------
+-- Insert Shifts (!make sure to add them in the future!)
+-------------------------------------
+INSERT INTO Shifts (Date, StartTime, EndTime)
+VALUES
+    ('2025-03-21', '08:00:00', '12:00:00'),
+    ('2025-03-21', '12:00:00', '16:00:00'),
+    ('2025-03-21', '16:00:00', '20:00:00'),
+    ('2025-03-22', '08:00:00', '12:00:00'),
+    ('2025-03-22', '12:00:00', '16:00:00'),
+    ('2025-03-22', '16:00:00', '20:00:00'),
+    ('2025-03-23', '08:00:00', '12:00:00'),
+    ('2025-03-23', '12:00:00', '16:00:00'),
+    ('2025-03-23', '16:00:00', '20:00:00');
+
+
+-------------------------------------
+-- Insert Schedules
+-------------------------------------
+INSERT INTO Schedules (DoctorId, ShiftId)
+VALUES
+    (1, 1),  -- Dr. John Doe assigned to morning shift on March 21
+    (1, 2),  -- Dr. John Doe assigned to afternoon shift on March 21
+    (2, 3),  -- Dr. Jane Doe assigned to evening shift on March 21
+    (2, 4),  -- Dr. Jane Doe assigned to morning shift on March 22
+    (3, 5),  -- Dr. Alice Smith assigned to afternoon shift on March 22
+    (3, 6),  -- Dr. Alice Smith assigned to evening shift on March 22
+    (4, 7),  -- Dr. Bob Johnson assigned to morning shift on March 23
+    (4, 8),  -- Dr. Bob Johnson assigned to afternoon shift on March 23
+    (1, 9);  -- Dr. John Doe assigned to evening shift on March 23
+
+
+
 -------------------------------------
 -- Verify Data
 -------------------------------------
--- All Appointments
-SELECT * FROM Appointments;
+-- All Departments
+SELECT * FROM Departments;
+
+-- All Users
+SELECT * FROM Users;
 
 -- All Doctors
 SELECT * FROM Doctors;
@@ -219,109 +325,137 @@ SELECT * FROM Patients;
 -- All Procedures
 SELECT * FROM Procedures;
 
--- All Departments
-SELECT * FROM Departments;
+-- All Appointments
+SELECT * FROM Appointments;
 
--- All Medical Records
+-- All MedicalRecords
 SELECT * FROM MedicalRecords;
 
+-- All Documents
+SELECT * FROM Documents;
+
+--All Shifts
+SELECT * FROM Shifts;
+
+--All Schedules
+SELECT * FROM Schedules
+
+
+
 -------------------------------------
--- Example Join to produce AppointmentJointModel fields
+-- AppointmentJointModel Query
 -------------------------------------
--- SELECT 
---     a.AppointmentId,
---     a.Finished,
---     a.DateAndTime,
---     d.DepartmentId,
---     d.DepartmentName,
---     doc.DoctorId,
---     doc.DoctorName,
---     p.PatientId,
---     p.PatientName,
---     pr.ProcedureId,
---     pr.ProcedureName,
---     pr.ProcedureDuration
--- FROM Appointments a
--- JOIN Doctors doc ON a.DoctorId = doc.DoctorId
--- JOIN Departments d ON doc.DepartmentId = d.DepartmentId
--- JOIN Patients p ON a.PatientId = p.PatientId
--- JOIN Procedures pr ON a.ProcedureId = pr.ProcedureId
--- ORDER BY a.AppointmentId;
+SELECT 
+    a.AppointmentId,
+    a.Finished,
+    a.DateAndTime,
+    d.DepartmentId,
+    d.DepartmentName,
+    doc.DoctorId,
+    u1.Name AS DoctorName,
+    p.PatientId,
+    u2.Name AS PatientName,
+    pr.ProcedureId,
+    pr.ProcedureName,
+    pr.ProcedureDuration
+FROM Appointments a
+JOIN Doctors doc ON a.DoctorId = doc.DoctorId
+JOIN Users u1 ON doc.UserId = u1.UserId
+JOIN Departments d ON doc.DepartmentId = d.DepartmentId
+JOIN Patients p ON a.PatientId = p.PatientId
+JOIN Users u2 ON p.UserId = u2.UserId
+JOIN Procedures pr ON a.ProcedureId = pr.ProcedureId
+ORDER BY a.AppointmentId;
 
--- GetAppointmentsByDoctorAndDate
--- SELECT 
---     a.AppointmentId,
---     a.Finished,
---     a.DateAndTime,
---     d.DepartmentId,
---     d.DepartmentName,
---     doc.DoctorId,
---     doc.DoctorName,
---     p.PatientId,
---     p.PatientName,
---     pr.ProcedureId,
---     pr.ProcedureName,
---     pr.ProcedureDuration
--- FROM Appointments a
--- JOIN Doctors doc ON a.DoctorId = doc.DoctorId
--- JOIN Departments d ON doc.DepartmentId = d.DepartmentId
--- JOIN Patients p ON a.PatientId = p.PatientId
--- JOIN Procedures pr ON a.ProcedureId = pr.ProcedureId
--- WHERE a.DoctorId = 1
---   AND CONVERT(DATE, a.DateAndTime) = '2023-03-17'
--- ORDER BY a.DateAndTime;
+-------------------------------------
+-- GetAppointmentsByDoctorAndDate Query
+-------------------------------------
+SELECT 
+    a.AppointmentId,
+    a.Finished,
+    a.DateAndTime,
+    d.DepartmentId,
+    d.DepartmentName,
+    doc.DoctorId,
+    u1.Name AS DoctorName,
+    p.PatientId,
+    u2.Name AS PatientName,
+    pr.ProcedureId,
+    pr.ProcedureName,
+    pr.ProcedureDuration
+FROM Appointments a
+JOIN Doctors doc ON a.DoctorId = doc.DoctorId
+JOIN Users u1 ON doc.UserId = u1.UserId
+JOIN Departments d ON doc.DepartmentId = d.DepartmentId
+JOIN Patients p ON a.PatientId = p.PatientId
+JOIN Users u2 ON p.UserId = u2.UserId
+JOIN Procedures pr ON a.ProcedureId = pr.ProcedureId
+WHERE a.DoctorId = 1
+  AND CONVERT(DATE, a.DateAndTime) = '2023-03-17'
+ORDER BY a.DateAndTime;
 
--- GetAppointmentsForDoctor
--- SELECT 
---     a.AppointmentId,
---     a.Finished,
---     a.DateAndTime,
---     d.DepartmentId,
---     d.DepartmentName,
---     doc.DoctorId,
---     doc.DoctorName,
---     p.PatientId,
---     p.PatientName,
---     pr.ProcedureId,
---     pr.ProcedureName,
---     pr.ProcedureDuration
--- FROM Appointments a
--- JOIN Doctors doc ON a.DoctorId = doc.DoctorId
--- JOIN Departments d ON doc.DepartmentId = d.DepartmentId
--- JOIN Patients p ON a.PatientId = p.PatientId
--- JOIN Procedures pr ON a.ProcedureId = pr.ProcedureId
--- WHERE a.DoctorId = 2
--- ORDER BY a.DateAndTime;
+-------------------------------------
+-- GetAppointmentsForDoctor Query
+-------------------------------------
+SELECT 
+    a.AppointmentId,
+    a.Finished,
+    a.DateAndTime,
+    d.DepartmentId,
+    d.DepartmentName,
+    doc.DoctorId,
+    u1.Name AS DoctorName,
+    p.PatientId,
+    u2.Name AS PatientName,
+    pr.ProcedureId,
+    pr.ProcedureName,
+    pr.ProcedureDuration
+FROM Appointments a
+JOIN Doctors doc ON a.DoctorId = doc.DoctorId
+JOIN Users u1 ON doc.UserId = u1.UserId
+JOIN Departments d ON doc.DepartmentId = d.DepartmentId
+JOIN Patients p ON a.PatientId = p.PatientId
+JOIN Users u2 ON p.UserId = u2.UserId
+JOIN Procedures pr ON a.ProcedureId = pr.ProcedureId
+WHERE a.DoctorId = 2
+ORDER BY a.DateAndTime;
 
--- GetAppointments
--- SELECT 
---     a.AppointmentId,
---     a.Finished,
---     a.DateAndTime,
---     d.DepartmentId,
---     d.DepartmentName,
---     doc.DoctorId,
---     doc.DoctorName,
---     p.PatientId,
---     p.PatientName,
---     pr.ProcedureId,
---     pr.ProcedureName,
---     pr.ProcedureDuration
--- FROM Appointments a
--- JOIN Doctors doc ON a.DoctorId = doc.DoctorId
--- JOIN Departments d ON doc.DepartmentId = d.DepartmentId
--- JOIN Patients p ON a.PatientId = p.PatientId
--- JOIN Procedures pr ON a.ProcedureId = pr.ProcedureId
--- ORDER BY a.AppointmentId;
+-------------------------------------
+-- GetAppointments Query
+-------------------------------------
+SELECT 
+    a.AppointmentId,
+    a.Finished,
+    a.DateAndTime,
+    d.DepartmentId,
+    d.DepartmentName,
+    doc.DoctorId,
+    u1.Name AS DoctorName,
+    p.PatientId,
+    u2.Name AS PatientName,
+    pr.ProcedureId,
+    pr.ProcedureName,
+    pr.ProcedureDuration
+FROM Appointments a
+JOIN Doctors doc ON a.DoctorId = doc.DoctorId
+JOIN Users u1 ON doc.UserId = u1.UserId
+JOIN Departments d ON doc.DepartmentId = d.DepartmentId
+JOIN Patients p ON a.PatientId = p.PatientId
+JOIN Users u2 ON p.UserId = u2.UserId
+JOIN Procedures pr ON a.ProcedureId = pr.ProcedureId
+ORDER BY a.AppointmentId;
 
+-------------------------------------
+-- GetMedicalRecords Query
+-------------------------------------
 SELECT 
     mr.MedicalRecordId,
     mr.PatientId, 
     p.Name AS PatientName,
     mr.DoctorId,
     d.Name AS DoctorName,
-    pr.DepartmentId,                                            -- new
-    dept.DepartmentName,                                        -- new
+    pr.DepartmentId,
+    dept.DepartmentName,
     mr.ProcedureId, 
     pr.ProcedureName, 
     mr.DateAndTime, 
@@ -330,4 +464,4 @@ FROM MedicalRecords mr
 JOIN Users p ON mr.PatientId = p.UserId 
 JOIN Users d ON mr.DoctorId = d.UserId 
 JOIN Procedures pr ON mr.ProcedureId = pr.ProcedureId
-JOIN Departments dept ON pr.DepartmentId = dept.DepartmentId;   -- new
+JOIN Departments dept ON pr.DepartmentId = dept.DepartmentId;
