@@ -31,6 +31,7 @@
 						  BorderBrush="Green" 
 						  BorderThickness="1"
 						  ItemsSource="{x:Bind ViewModel.DailySchedule}"
+                          SelectionChanged="DailyScheduleList_SelectionChanged"
 						  ScrollViewer.VerticalScrollBarVisibility="Auto">
                     <ListView.ItemTemplate>
                         <DataTemplate>

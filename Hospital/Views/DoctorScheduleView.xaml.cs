@@ -10,6 +10,8 @@ using Microsoft.UI.Xaml.Media;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Appointments;
+using Hospital.Models;
 
 namespace Hospital.Views
 {
@@ -17,15 +19,17 @@ namespace Hospital.Views
     {
         public DoctorScheduleViewModel ViewModel => _viewModel;
         private readonly DoctorScheduleViewModel _viewModel;
+        public ObservableCollection<TimeSlotModel> _dailySchedule { get; private set; }
 
         public DoctorScheduleView(AppointmentManagerModel appointmentManagerModel, ShiftManagerModel shiftManagerModel)
         {
             _viewModel = new DoctorScheduleViewModel(appointmentManagerModel, shiftManagerModel);
+            _dailySchedule = new ObservableCollection<TimeSlotModel>();
 
             LoadInitialCalendarRange();
             this.InitializeComponent();
             ((FrameworkElement)this.Content).DataContext = _viewModel;
-            DailyScheduleList.ItemsSource = _viewModel.DailySchedule;
+            DailyScheduleList.ItemsSource = _dailySchedule;
             DoctorSchedule.CalendarViewDayItemChanging += CalendarView_DayItemChanging;
             LoadShiftsAndRefreshCalendar();
         }
@@ -56,9 +60,7 @@ namespace Hospital.Views
         {
             try
             {
-                CalendarContainer.Children.Clear();
-
-                var newCalendar = new CalendarView
+                CalendarView newCalendar = new CalendarView
                 {
                     MinDate = _viewModel.MinDate.DateTime,
                     MaxDate = _viewModel.MaxDate.DateTime,
@@ -72,16 +74,16 @@ namespace Hospital.Views
                 newCalendar.CalendarViewDayItemChanging += CalendarView_DayItemChanging;
                 newCalendar.SelectedDatesChanged += CalendarView_SelectedDatesChanged;
 
+                CalendarContainer.Children.Remove(DoctorSchedule);
                 DoctorSchedule = newCalendar;
-                CalendarContainer.Children.Insert(0, newCalendar);
+                CalendarContainer.Children.Insert(0, DoctorSchedule);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Console.WriteLine($"Failed to recreate calendar view: {e.Message}");
-                await ShowErrorDialog("Failed to recreate calendar view.");
+                Console.WriteLine("Error recreating calendar: " + ex.Message);
+                await ShowErrorDialog("Calendar failed to reload.");
             }
         }
-
 
         private void LoadInitialCalendarRange()
         {
@@ -92,10 +94,17 @@ namespace Hospital.Views
 
         private async void CalendarView_SelectedDatesChanged(CalendarView sender, CalendarViewSelectedDatesChangedEventArgs args)
         {
-            if (args.AddedDates.Count > 0)
+            try
             {
-                var selectedDate = args.AddedDates[0].DateTime.Date;
-                return;
+                if (args.AddedDates.Count > 0)
+                {
+                    DateTime selectedDate = args.AddedDates[0].DateTime.Date;
+                    await _viewModel.OnDateSelected(selectedDate);
+                }
+            }
+            catch (Exception e)
+            {
+                await ShowErrorDialog($"Error selecting date: {e.Message}");
             }
         }
 
@@ -139,6 +148,14 @@ namespace Hospital.Views
                 Console.WriteLine($"Critical error while showing error dialog: {ex.Message}");
             }
         }
+
+
+        private void DailyScheduleList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            return;
+            
+        }
+
     }
 
 }

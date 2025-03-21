@@ -106,6 +106,7 @@ namespace Hospital.ViewModels
                 throw new Exception($"Error loading appointments: {ex.Message}");
             }
         }
+
         public async Task LoadShiftsForDoctor()
         {
             try
@@ -120,10 +121,7 @@ namespace Hospital.ViewModels
                     var shiftDate = shift.DateTime.Date;
                     ShiftDates.Add(new DateTimeOffset(shiftDate, TimeSpan.Zero));
                 }
-
-
                 OnPropertyChanged(nameof(ShiftDates));
-
             }
             catch (Exception ex)
             {
@@ -131,6 +129,71 @@ namespace Hospital.ViewModels
                 throw new Exception($"Error loading shifts: {ex.Message}");
             }
         }
+
+        public async Task OnDateSelected(DateTime date)
+        {
+            DailySchedule.Clear();
+            try
+            {
+                await _appointmentManager.LoadDoctorAppointmentsOnDate(DoctorId, date);
+                await _shiftManager.LoadShifts(DoctorId);
+                var slots = GenerateTimeSlots(date);
+                foreach (var slot in slots)
+                {
+                    DailySchedule.Add(slot);
+                }
+
+                OnPropertyChanged(nameof(DailySchedule));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Database access failed: {ex.Message}");
+            }
+          
+        }
+
+
+        private List<TimeSlotModel> GenerateTimeSlots(DateTime date)
+        {
+            List<TimeSlotModel> slots = new List<TimeSlotModel>();
+            DateTime startTime = date.Date.AddHours(0); 
+            DateTime endTime = date.Date.AddHours(24);
+
+            var selectedAppointments = Appointments
+                .Where(a => a.Date.Date == date.Date)
+                .OrderBy(a => a.Date.TimeOfDay)
+                .ToList();
+
+            while (startTime < endTime)
+            {
+                var slot = new TimeSlotModel
+                {
+                    TimeSlot = startTime,
+                    Time = startTime.ToString("hh:mm tt"),
+                    Appointment = "",
+                    HighlightColor = new SolidColorBrush(Colors.Transparent) 
+                };
+
+                foreach (var appointment in selectedAppointments)
+                {
+                    DateTime appointmentStart = appointment.Date;
+                    DateTime appointmentEnd = appointmentStart.Add(appointment.ProcedureDuration);
+
+                    if (startTime >= appointmentStart && startTime < appointmentEnd)
+                    {
+                        slot.Appointment = appointment.ProcedureName;
+                        slot.HighlightColor = new SolidColorBrush(Colors.Green); 
+                        break;
+                    }
+                }
+
+                slots.Add(slot);
+                startTime = startTime.AddMinutes(30);
+            }
+
+            return slots;
+        }
+
 
 
     }
