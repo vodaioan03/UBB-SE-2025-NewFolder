@@ -39,7 +39,17 @@ namespace Hospital.Views
             this.StyleTitleBar();
 
             _viewModel = new MedicalRecordDetailsViewModel(medicalRecordJointModel, documentManagerModel);
-            this.MedicalRecordDetailsGrid.DataContext = _viewModel;
+            this.MedicalRecordDetailsPanel.DataContext = _viewModel;
+        }
+
+        private async void DownloadButton_Click(object sender, RoutedEventArgs e)
+        {
+            _viewModel.OnDownloadButtonClicked();
+        }
+
+        private async void FeedbackButton_Click(object sender, RoutedEventArgs e)
+        {
+            Debug.WriteLine("Feedback button clicked");
         }
 
         private void StyleTitleBar()
