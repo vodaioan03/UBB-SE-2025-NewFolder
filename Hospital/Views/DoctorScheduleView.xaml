@@ -8,37 +8,45 @@
 	mc:Ignorable="d"
 	Title="Doctor Schedule">
 
-	<Grid Background ="White">
-		<StackPanel Orientation="Vertical" Padding="20">
-			<CalendarView x:Name="DoctorSchedule"
+    <Grid Background ="White">
+        <StackPanel x:Name="CalendarContainer" Orientation="Vertical" Padding="20">
+            <CalendarView x:Name="DoctorSchedule"
 						  SelectionMode="Single"
-                          SelectedDatesChanged="DoctorSchedule_SelectedDatesChanged"
+                          SelectedDatesChanged="CalendarView_SelectedDatesChanged"
+						  CalendarViewDayItemChanging="CalendarView_DayItemChanging"
                           HorizontalAlignment="Stretch"
                           VerticalAlignment="Top"
                           BorderBrush="Green"
                           BorderThickness="2"
+						  MinDate="{x:Bind ViewModel.MinDate}"
+						  MaxDate="{x:Bind ViewModel.MaxDate}"
+
 						  />
-			<TextBlock Text="Daily Schedule" FontSize="20" FontWeight="Bold"
+            <TextBlock Text="Daily Schedule" FontSize="20" FontWeight="Bold"
                        Foreground="Green" Margin="10,20,10,5"/>
 
-			<ScrollViewer VerticalScrollBarVisibility="Auto" Height="400">
-				<ListView x:Name="DailyScheduleList" Background="White" BorderBrush="Green" BorderThickness="1"
-              ScrollViewer.VerticalScrollBarVisibility="Auto">
-					<ListView.ItemTemplate>
-						<DataTemplate>
-							<StackPanel Orientation="Horizontal" Margin="5">
-								<TextBlock Text="{Binding Time}" FontSize="18" Foreground="Black" Width="100" VerticalAlignment="Center"/>
-								<Border Background="{Binding HighlightColor}" Padding="5" CornerRadius="5"
+            <ScrollViewer VerticalScrollBarVisibility="Auto" Height="400">
+                <ListView x:Name="DailyScheduleList" 
+						  Background="White" 
+						  BorderBrush="Green" 
+						  BorderThickness="1"
+						  ItemsSource="{x:Bind ViewModel.DailySchedule}"
+						  ScrollViewer.VerticalScrollBarVisibility="Auto">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Margin="5">
+                                <TextBlock Text="{Binding Time}" FontSize="18" Foreground="Black" Width="100" VerticalAlignment="Center"/>
+                                <Border Background="{Binding HighlightColor}" Padding="5" CornerRadius="5"
                             MinWidth="100" HorizontalAlignment="Left">
-									<TextBlock  FontSize="18" FontWeight="Bold" Foreground="White"/>
-								</Border>
-							</StackPanel>
-						</DataTemplate>
-					</ListView.ItemTemplate>
-				</ListView>
-			</ScrollViewer>
-			
-		</StackPanel>
-	</Grid>
-	
+                                    <TextBlock  FontSize="18" FontWeight="Bold" Foreground="White"/>
+                                </Border>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </ScrollViewer>
+
+        </StackPanel>
+    </Grid>
+
 </Window>

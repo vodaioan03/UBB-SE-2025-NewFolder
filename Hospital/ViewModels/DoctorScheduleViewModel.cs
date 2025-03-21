@@ -9,18 +9,62 @@ using Hospital.Managers;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Hospital.Commands;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using Hospital.Views;
+using Microsoft.UI.Xaml.Media;
+using Microsoft.UI;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml;
 
 namespace Hospital.ViewModels
 {
-    public class DoctorScheduleViewModel
+    public class DoctorScheduleViewModel : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void OnPropertyChanged([CallerMemberName] string propertyName = "")
+            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+        //Mangers
         private readonly AppointmentManagerModel _appointmentManager;
         private readonly ShiftManagerModel _shiftManager;
 
+        //Observable Collections
+        public ObservableCollection<TimeSlotModel> DailySchedule { get; set; } = new();
+        public ObservableCollection<DateTimeOffset> ShiftDates { get; set; }
+
         public List<AppointmentJointModel> Appointments { get; set; }
-        public List<Shift> Shifts { get; set; }  
+        public List<Shift> Shifts { get; set; }
 
         public ICommand OpenDetailsCommand { get; set; }
+
+        public int DoctorId { get; set; } = 1; // default for testing
+
+        //Setting the calendar to show only the current month
+        private DateTimeOffset _minDate;
+        public DateTimeOffset MinDate
+        {
+            get => _minDate;
+            set
+            {
+                _minDate = value;
+                OnPropertyChanged();
+            }
+        }
+
+        //Setting the calendar to not allow navigation to other months
+        private DateTimeOffset _maxDate;
+        public DateTimeOffset MaxDate
+        {
+            get => _maxDate;
+            set
+            {
+                _maxDate = value;
+                OnPropertyChanged();
+            }
+        }
+
 
         public DoctorScheduleViewModel(AppointmentManagerModel appointmentManager, ShiftManagerModel shiftManager)
         {
@@ -28,20 +72,11 @@ namespace Hospital.ViewModels
             _shiftManager = shiftManager;
             Appointments = new List<AppointmentJointModel>();
             Shifts = new List<Shift>();
+            ShiftDates = new ObservableCollection<DateTimeOffset>();
 
             OpenDetailsCommand = new RelayCommand(OpenDetails);
         }
 
-        public DoctorScheduleViewModel()
-        {
-            AppointmentsDatabaseService appointmentDatabaseService = new AppointmentsDatabaseService();
-            _appointmentManager = new AppointmentManagerModel(appointmentDatabaseService);
-            ShiftsDatabaseService shiftDatabaseService = new ShiftsDatabaseService();
-            _shiftManager = new ShiftManagerModel(shiftDatabaseService);
-            Appointments = new List<AppointmentJointModel>();
-            Shifts = new List<Shift>();
-            OpenDetailsCommand = new RelayCommand(OpenDetails);
-        }
 
         private void OpenDetails(object obj)
         {
@@ -68,20 +103,35 @@ namespace Hospital.ViewModels
             catch (Exception ex)
             {
                 Console.WriteLine($"Error loading appointments: {ex.Message}");
+                throw new Exception($"Error loading appointments: {ex.Message}");
             }
         }
-
-        public async Task LoadShiftsForDoctor(int doctorId)
+        public async Task LoadShiftsForDoctor()
         {
             try
             {
-                await _shiftManager.LoadShifts(doctorId); 
+                await _shiftManager.LoadShifts(this.DoctorId);
                 Shifts = _shiftManager.GetShifts();
+
+                ShiftDates.Clear();
+
+                foreach (var shift in Shifts)
+                {
+                    var shiftDate = shift.DateTime.Date;
+                    ShiftDates.Add(new DateTimeOffset(shiftDate, TimeSpan.Zero));
+                }
+
+
+                OnPropertyChanged(nameof(ShiftDates));
+
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error loading shifts: {ex.Message}");
+                throw new Exception($"Error loading shifts: {ex.Message}");
             }
         }
+
+
     }
 }
