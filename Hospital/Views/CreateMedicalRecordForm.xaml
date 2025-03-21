@@ -102,30 +102,32 @@
                  Margin="0,0,0,10"
                  IsReadOnly="True"/>
 
-        <!-- Upload Files -->
-        <TextBlock Grid.Row="6" Grid.Column="0"
-           Text="Upload Files:"
-           VerticalAlignment="Center"
-           FontWeight="Bold"
-           Margin="0,0,10,10"/>
-        <StackPanel Grid.Row="6" Grid.Column="1"
-            Margin="0,0,0,10">
+        <!-- Upload Files Section -->
+        <StackPanel Grid.Row="6" Grid.Column="0"
+            Orientation="Vertical"
+            Margin="0,0,10,10">
+            <TextBlock Text="Upload Files:"
+               VerticalAlignment="Center"
+               FontWeight="Bold"/>
             <Button Content="Select File(s)"
             Click="UploadFiles_Click"
             HorizontalAlignment="Left"
-            Margin="0,0,0,5"/>
-            <ListBox ItemsSource="{Binding DocumentPaths}"
-             Height="100"
-             BorderThickness="1"
-             BorderBrush="Gray">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding}"
-                           Margin="5"/>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+            Margin="0,10,0,0"/>
         </StackPanel>
+
+        <ListBox Grid.Row="6" Grid.Column="1"
+         ItemsSource="{Binding DocumentPaths}"
+         Margin="0,0,0,10"
+         Height="100"
+         BorderThickness="1"
+         BorderBrush="Gray">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding}"
+                       Margin="5"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
 
         <!-- Conclusions label -->
         <TextBlock Grid.Row="7" Grid.Column="0"
