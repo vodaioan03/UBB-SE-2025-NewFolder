@@ -8,6 +8,7 @@ using Microsoft.UI.Windowing;
 using Microsoft.UI;
 using WinRT.Interop;
 using Windows.Graphics;
+using Hospital.Exceptions;
 
 
 namespace Hospital.Views
@@ -16,15 +17,14 @@ namespace Hospital.Views
     {
         private readonly AppointmentDetailsViewModel _viewModel;
 
-        public AppointmentDetailsView(AppointmentJointModel appointment, AppointmentManagerModel appointmentManager)
+        public AppointmentDetailsView(AppointmentJointModel appointment, AppointmentManagerModel appointmentManager, Action refreshAppointments)
         {
             this.InitializeComponent();
             this.Activate();
 
-            _viewModel = new AppointmentDetailsViewModel(appointment, appointmentManager, CloseWindow);
+            _viewModel = new AppointmentDetailsViewModel(appointment, appointmentManager, CloseWindow, refreshAppointments);
 
             BindUI();
-
             ResizeAndCenterWindow(550, 475);
         }
 
@@ -68,12 +68,12 @@ namespace Hospital.Views
             this.Close();
         }
 
-        private async void RemoveAppointment_Click(object sender, RoutedEventArgs e)
+        private async void CancelAppointment_Click(object sender, RoutedEventArgs e)
         {
             ContentDialog confirmationDialog = new ContentDialog
             {
                 Title = "Confirm Cancellation",
-                Content = "Are you sure you want to remove this appointment?",
+                Content = "Are you sure you want to cancel this appointment?",
                 PrimaryButtonText = "Yes",
                 CloseButtonText = "No",
                 DefaultButton = ContentDialogButton.Close,
@@ -83,9 +83,25 @@ namespace Hospital.Views
             ContentDialogResult result = await confirmationDialog.ShowAsync();
             if (result == ContentDialogResult.Primary)
             {
-                _viewModel.RemoveAppointmentCommand.Execute(_viewModel);
+                try
+                {
+                    _viewModel.CancelAppointmentCommand.Execute(null);
+                }
+                catch (CancellationNotAllowedException ex)
+                {
+                    ContentDialog errorDialog = new ContentDialog
+                    {
+                        Title = "Cancellation Failed",
+                        Content = ex.Message,
+                        CloseButtonText = "OK",
+                        XamlRoot = this.Content.XamlRoot
+                    };
+
+                    await errorDialog.ShowAsync();
+                }
             }
         }
+
 
         private void CloseWindow()
         {

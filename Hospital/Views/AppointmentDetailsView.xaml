@@ -31,8 +31,12 @@
             <!-- Buttons -->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="20" Margin="20">
                 <Button Content="Go Back" Width="120" Height="40" Background="Green" Foreground="White"
-                        Click="GoBack_Click"/>
+            Click="GoBack_Click"/>
+                <Button x:Name="CancelAppointmentButton" Content="Cancel Appointment"
+            Width="160" Height="40" Background="Red" Foreground="White"
+            Click="CancelAppointment_Click" IsEnabled="{Binding CanCancelAppointment}"/>
             </StackPanel>
+
         </StackPanel>
     </Grid>
 </Window>
