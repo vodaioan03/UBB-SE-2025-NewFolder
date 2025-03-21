@@ -3,6 +3,7 @@ using Hospital.Exceptions;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Document = Hospital.Models.Document;
 
@@ -82,9 +83,9 @@ namespace Hospital.DatabaseServices
                 {
                     // Create a new Document object with the values from the row
                     Document document = new Document(
-                        reader.GetInt32(reader.GetOrdinal("DocumentId")),
-                        reader.GetInt32(reader.GetOrdinal("MedicalRecordId")),
-                        reader.GetString(reader.GetOrdinal("File"))
+                        reader.GetInt32(0),
+                        reader.GetInt32(1),
+                        reader.GetString(2)
                     );
                     // Add the document to the list
                     documents.Add(document);
@@ -92,10 +93,6 @@ namespace Hospital.DatabaseServices
                 // Close DB Connection
                 connection.Close();
 
-                if (documents.Count == 0)
-                {
-                    throw new DocumentNotFoundException("No documents found for the medical record with the given ID.");
-                }
                 // Return the list of Document objects
                 return documents;
             }

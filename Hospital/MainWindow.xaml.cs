@@ -18,6 +18,7 @@ using Hospital.Managers;
 using Hospital.ViewModels;
 using System.Diagnostics;
 using Windows.ApplicationModel.Appointments;
+using Hospital.Exceptions;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -37,6 +38,7 @@ namespace Hospital
         private ShiftsDatabaseService? shiftService;
         private AppointmentsDatabaseService? appointmentService;
         private MedicalRecordsDatabaseService? medicalRecordsDatabaseService;
+        private DocumentDatabaseService? DocumentDatabaseService;
 
         //ManagerModels 
         private DepartmentManagerModel? DepartmentManager;
@@ -45,6 +47,7 @@ namespace Hospital
         private ShiftManagerModel? ShiftManager;
         private AppointmentManagerModel? AppointmentManager;
         private MedicalRecordManagerModel? MedicalRecordManager;
+        private DocumentManagerModel? DocumentManager;
 
 
         public MainWindow()
@@ -62,7 +65,7 @@ namespace Hospital
 
         private void Patient3_Click(object sender, RoutedEventArgs e)
         {
-            MedicalRecordsHistoryView medicalRecordsHistoryView = new MedicalRecordsHistoryView(MedicalRecordManager);
+            MedicalRecordsHistoryView medicalRecordsHistoryView = new MedicalRecordsHistoryView(MedicalRecordManager, DocumentManager);
             medicalRecordsHistoryView.Activate();
         }
 
@@ -87,6 +90,7 @@ namespace Hospital
             shiftService = new ShiftsDatabaseService();
             appointmentService = new AppointmentsDatabaseService();
             medicalRecordsDatabaseService = new MedicalRecordsDatabaseService();
+            DocumentDatabaseService = new DocumentDatabaseService();
 
             //setup manager models here
             DepartmentManager = new DepartmentManagerModel(departmentService);
@@ -95,6 +99,7 @@ namespace Hospital
             ShiftManager = new ShiftManagerModel(shiftService);
             AppointmentManager = new AppointmentManagerModel(appointmentService);
             MedicalRecordManager = new MedicalRecordManagerModel(medicalRecordsDatabaseService);
+            DocumentManager = new DocumentManagerModel(DocumentDatabaseService);
         }
 
         private void PatientScheduleButton_Click(object sender, RoutedEventArgs e)

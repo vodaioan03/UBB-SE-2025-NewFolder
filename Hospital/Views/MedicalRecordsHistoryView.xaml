@@ -14,7 +14,11 @@
     <StackPanel x:Name="MedicalRecordsPanel" Padding="20">
         <TextBlock Text="Medical Records" FontSize="24" Margin="0,0,0,10" HorizontalAlignment="Center" />
 
-        <ListView ItemsSource="{Binding MedicalRecords}" Width="400">
+        <TextBlock Text="Select Medical Record for which you want to display the details." FontSize="16" Margin="0,0,0,10" HorizontalAlignment="Center" />
+        <ListView 
+            x:Name="MedicalRecordsListView"
+            ItemsSource="{Binding MedicalRecords}" 
+            Width="400">
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="local1:MedicalRecordJointModel">
                     <StackPanel Padding="10" BorderBrush="Gray" BorderThickness="1"  Background="LightGreen" CornerRadius="20" Margin="10">
@@ -25,5 +29,6 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+        <Button Content="Show Details" Click="ShowMedicalRecordDetails" Margin="0,10,0,0" HorizontalAlignment="Center"/>
     </StackPanel>
 </Window>

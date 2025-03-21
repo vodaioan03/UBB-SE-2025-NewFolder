@@ -18,13 +18,25 @@ namespace Hospital.ViewModels
         public ICommand downloadDocuments { get; private set; }
         public ObservableCollection<Document> Documents { get; private set; }
 
+        // list of document.file
+        public string DocumentsDisplay => string.Join(", ", ListDocuments());
+
+        private List<String> ListDocuments()
+        {
+            List<String> documentList = new List<String>();
+            foreach (Document document in Documents)
+            {
+                documentList.Add(document.File);
+            }
+            return documentList;
+        }
+
         public MedicalRecordDetailsViewModel(MedicalRecordJointModel medicalRecord, DocumentManagerModel documentManager)
         {
             MedicalRecord = medicalRecord;
             _documentManager = documentManager;
-            _documentManager.LoadDocuments(MedicalRecord.MedicalRecordId).ConfigureAwait(false);
-            List<Document> documents = _documentManager.GetDocuments().ConfigureAwait(false).GetAwaiter().GetResult();
-            Documents = new ObservableCollection<Document>(documents);
+            _documentManager.LoadDocuments(MedicalRecord.MedicalRecordId);
+            Documents = new ObservableCollection<Document>(_documentManager.s_documentList);
             downloadDocuments = new RelayCommand(DownloadDocuments);
         }
 

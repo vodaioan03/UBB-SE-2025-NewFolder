@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window
+    x:Class="Hospital.Views.MedicalRecordDetailsView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:Hospital.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="MedicalRecordDetailsView">
+
+    <Grid 
+        Padding="30"
+        x:Name="MedicalRecordDetailsGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Text="Medical Record" FontSize="22" FontWeight="Bold" Foreground="#2C3E50" Grid.Row="0" Grid.ColumnSpan="2" Margin="0,0,0,10"/>
+
+        <TextBlock Text="Procedure:" FontWeight="Bold" Foreground="#34495E" Grid.Row="1" Grid.Column="0" />
+        <TextBlock Text="{Binding MedicalRecord.ProcedureName}" Foreground="#2C3E50" Grid.Row="1" Grid.Column="1" />
+
+        <TextBlock Text="Department Name:" FontWeight="Bold" Foreground="#34495E" Grid.Row="2" Grid.Column="0" />
+        <TextBlock Text="{Binding MedicalRecord.DepartmentName}" Foreground="#2C3E50" Grid.Row="2" Grid.Column="1" />
+
+        <TextBlock Text="Doctor Name:" FontWeight="Bold" Foreground="#34495E" Grid.Row="3" Grid.Column="0" />
+        <TextBlock Text="{Binding MedicalRecord.DoctorName}" Foreground="#2C3E50" Grid.Row="3" Grid.Column="1" />
+
+        <TextBlock Text="Date:" FontWeight="Bold" Foreground="#34495E" Grid.Row="4" Grid.Column="0" />
+        <TextBlock Text="{Binding MedicalRecord.Date}" Foreground="#2C3E50" Grid.Row="4" Grid.Column="1" />
+
+        <TextBlock Text="Conclusion:" FontWeight="Bold" Foreground="#34495E" Grid.Row="5" Grid.Column="0" />
+        <TextBlock Text="{Binding MedicalRecord.Conclusion}" TextWrapping="Wrap" Foreground="#2C3E50" Grid.Row="5" Grid.Column="1" />
+
+        <TextBlock Text="Documents:" FontWeight="Bold" Foreground="#34495E" Grid.Row="6" Grid.Column="0" />
+        <TextBlock Text="{Binding DocumentsDisplay}" TextWrapping="Wrap" Foreground="#2C3E50" Grid.Row="6" Grid.Column="1" />
+
+        <StackPanel Orientation="Horizontal" Grid.Row="7" Grid.Column="1" Margin="0,15,0,0" HorizontalAlignment="Right">
+            <Button Content="Download" x:Name="DownloadButton" Width="120" Background="#3498DB" Foreground="White" FontWeight="Bold" Margin="0,0,10,0" />
+            <Button Content="Feedback" x:Name="FeedbackButton" Width="120" Background="#2ECC71" Foreground="White" FontWeight="Bold" />
+        </StackPanel>
+    </Grid>
+</Window>

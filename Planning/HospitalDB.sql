@@ -271,7 +271,8 @@ INSERT INTO Documents (MedicalRecordId, Files)
 VALUES
     (1, 'C:\Users\Cristi\Desktop\file1.docx'),      -- DocumentId = 1
     (2,'C:\Users\Cristi\Desktop\file1.docx'),       -- DocumentId = 2
-    (3,'C:\Users\Cristi\Desktop\file1.docx');      -- DocumentId = 3
+    (3,'C:\Users\Cristi\Desktop\file1.docx'),      -- DocumentId = 3
+    (3,'C:\Users\Cristi\Desktop\file2.docx');      -- DocumentId = 4
 
 
 -------------------------------------
