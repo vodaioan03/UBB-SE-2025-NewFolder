@@ -15,21 +15,56 @@ namespace Hospital.Views
     public sealed partial class DoctorScheduleView : Window
     {
         public DoctorScheduleViewModel ViewModel => _viewModel;
-
         private readonly DoctorScheduleViewModel _viewModel;
 
         public DoctorScheduleView(AppointmentManagerModel appointmentManagerModel, ShiftManagerModel shiftManagerModel)
         {
-            this.InitializeComponent();
-
             _viewModel = new DoctorScheduleViewModel(appointmentManagerModel, shiftManagerModel);
-            _viewModel.DoctorId = 1;
-            ((FrameworkElement)this.Content).DataContext = _viewModel;
-
 
             LoadInitialCalendarRange();
-            _viewModel.LoadShiftsForDoctor(_viewModel.DoctorId);
+            this.InitializeComponent();
+            ((FrameworkElement)this.Content).DataContext = _viewModel;
+            DailyScheduleList.ItemsSource = _viewModel.DailySchedule;
+            DoctorSchedule.CalendarViewDayItemChanging += CalendarView_DayItemChanging;
+            LoadShiftsAndRefreshCalendar();
         }
+
+        private async void LoadShiftsAndRefreshCalendar()
+        {
+            await _viewModel.LoadShiftsForDoctor();
+
+            if (_viewModel.Shifts == null || !_viewModel.Shifts.Any()) return;
+
+            DoctorSchedule.SelectedDates.Clear();
+            DoctorSchedule.InvalidateArrange();
+            DoctorSchedule.InvalidateMeasure();
+            DoctorSchedule.UpdateLayout();
+
+            RecreateCalendarView();
+        }
+
+        private void RecreateCalendarView()
+        {
+            CalendarContainer.Children.Clear();
+
+            var newCalendar = new CalendarView
+            {
+                MinDate = _viewModel.MinDate.DateTime,
+                MaxDate = _viewModel.MaxDate.DateTime,
+                SelectionMode = CalendarViewSelectionMode.Single,
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                VerticalAlignment = VerticalAlignment.Top,
+                BorderBrush = new SolidColorBrush(Colors.Green),
+                BorderThickness = new Thickness(2)
+            };
+
+            newCalendar.CalendarViewDayItemChanging += CalendarView_DayItemChanging;
+            newCalendar.SelectedDatesChanged += CalendarView_SelectedDatesChanged;
+
+            DoctorSchedule = newCalendar;
+            CalendarContainer.Children.Insert(0, newCalendar); 
+        }
+
 
         private void LoadInitialCalendarRange()
         {
@@ -49,9 +84,12 @@ namespace Hospital.Views
 
         private void CalendarView_DayItemChanging(CalendarView sender, CalendarViewDayItemChangingEventArgs args)
         {
-            if (_viewModel.ShiftDates.Any(d => d.Date == args.Item.Date.Date))
+            if (_viewModel.ShiftDates == null || !_viewModel.ShiftDates.Any()) return;
+            var date = args.Item.Date.Date;
+
+            if (_viewModel.ShiftDates.Any(d => d.Date == date.Date))
             {
-                args.Item.SetDensityColors(new List<Windows.UI.Color> { Microsoft.UI.Colors.Green });
+                args.Item.Background = new SolidColorBrush(Colors.LightGreen);
             }
         }
     }

@@ -14,6 +14,7 @@ using System.Runtime.CompilerServices;
 using Hospital.Views;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Hospital.ViewModels
 {
@@ -23,19 +24,22 @@ namespace Hospital.ViewModels
         private void OnPropertyChanged([CallerMemberName] string propertyName = "")
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
+        //Mangers
         private readonly AppointmentManagerModel _appointmentManager;
         private readonly ShiftManagerModel _shiftManager;
 
+        //Observable Collections
         public ObservableCollection<TimeSlotModel> DailySchedule { get; set; } = new();
-        public ObservableCollection<DateTimeOffset> ShiftDates { get; set; } = new();
+        public ObservableCollection<DateTimeOffset> ShiftDates { get; set; }
 
         public List<AppointmentJointModel> Appointments { get; set; }
-        public List<Shift> Shifts { get; set; }  
+        public List<Shift> Shifts { get; set; }
 
         public ICommand OpenDetailsCommand { get; set; }
 
         public int DoctorId { get; set; } = 1; // default for testing
 
+        //Setting the calendar to show only the current month
         private DateTimeOffset _minDate;
         public DateTimeOffset MinDate
         {
@@ -47,6 +51,7 @@ namespace Hospital.ViewModels
             }
         }
 
+        //Setting the calendar to not allow navigation to other months
         private DateTimeOffset _maxDate;
         public DateTimeOffset MaxDate
         {
@@ -65,20 +70,11 @@ namespace Hospital.ViewModels
             _shiftManager = shiftManager;
             Appointments = new List<AppointmentJointModel>();
             Shifts = new List<Shift>();
+            ShiftDates = new ObservableCollection<DateTimeOffset>();
 
             OpenDetailsCommand = new RelayCommand(OpenDetails);
         }
 
-        public DoctorScheduleViewModel()
-        {
-            AppointmentsDatabaseService appointmentDatabaseService = new AppointmentsDatabaseService();
-            _appointmentManager = new AppointmentManagerModel(appointmentDatabaseService);
-            ShiftsDatabaseService shiftDatabaseService = new ShiftsDatabaseService();
-            _shiftManager = new ShiftManagerModel(shiftDatabaseService);
-            Appointments = new List<AppointmentJointModel>();
-            Shifts = new List<Shift>();
-            OpenDetailsCommand = new RelayCommand(OpenDetails);
-        }
 
         private void OpenDetails(object obj)
         {
@@ -108,27 +104,33 @@ namespace Hospital.ViewModels
             }
         }
 
-        public async Task LoadShiftsForDoctor(int doctorId)
+        public static string GetDateFromDateTime(DateTime datevalue)
+        {
+            return datevalue.ToShortDateString();
+        }
+
+        public async Task LoadShiftsForDoctor()
         {
             try
             {
-                await _shiftManager.LoadShifts(doctorId);
+                await _shiftManager.LoadShifts(this.DoctorId);
                 Shifts = _shiftManager.GetShifts();
 
-                ShiftDates.Clear(); 
+                ShiftDates.Clear();
 
                 foreach (var shift in Shifts)
                 {
-                    var shiftDate = new DateTimeOffset(shift.DateTime.Date); 
-                    if (!ShiftDates.Contains(shiftDate))
-                        ShiftDates.Add(shiftDate);
+                    var shiftDate = shift.DateTime.Date;
+                    ShiftDates.Add(new DateTimeOffset(shiftDate, TimeSpan.Zero));
                 }
 
-                OnPropertyChanged(nameof(ShiftDates)); 
+
+                OnPropertyChanged(nameof(ShiftDates));
+
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error loading shifts: {ex.Message}");
+                Console.WriteLine($"❌ Error loading shifts: {ex.Message}");
             }
         }
 
@@ -139,7 +141,8 @@ namespace Hospital.ViewModels
             await _shiftManager.LoadShifts(DoctorId);
 
             DailySchedule.Clear();
-       
+
+
         }
 
 
