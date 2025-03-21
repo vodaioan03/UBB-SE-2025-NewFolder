@@ -6,50 +6,74 @@
     xmlns:local="clr-namespace:Hospital.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local1="using:Hospital.Models"
     mc:Ignorable="d"
-    Title="MedicalRecordDetailsView">
+    Title="Medical Record Details"
+    >
+    <StackPanel x:Name="MedicalRecordDetailsPanel">
+        <TextBlock Text="Medical Record Details" FontSize="28" FontWeight="Bold" Foreground="#2C3E50" HorizontalAlignment="Center" Margin="0,0,0,20" Padding="20"/>
+        <Grid Padding="20" HorizontalAlignment="Center" ColumnSpacing="10" RowSpacing="10" Background="LightGreen" CornerRadius="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
 
-    <Grid 
-        Padding="30"
-        x:Name="MedicalRecordDetailsGrid">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
 
-        <TextBlock Text="Medical Record" FontSize="22" FontWeight="Bold" Foreground="#2C3E50" Grid.Row="0" Grid.ColumnSpan="2" Margin="0,0,0,10"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-        <TextBlock Text="Procedure:" FontWeight="Bold" Foreground="#34495E" Grid.Row="1" Grid.Column="0" />
-        <TextBlock Text="{Binding MedicalRecord.ProcedureName}" Foreground="#2C3E50" Grid.Row="1" Grid.Column="1" />
+            <TextBlock Text="Procedure:" FontWeight="Bold" Foreground="#34495E" Grid.Row="0" Grid.Column="0" />
+            <TextBlock Text="{Binding MedicalRecord.ProcedureName}" Foreground="#2C3E50" Grid.Row="0" Grid.Column="1" />
 
-        <TextBlock Text="Department Name:" FontWeight="Bold" Foreground="#34495E" Grid.Row="2" Grid.Column="0" />
-        <TextBlock Text="{Binding MedicalRecord.DepartmentName}" Foreground="#2C3E50" Grid.Row="2" Grid.Column="1" />
+            <TextBlock Text="Department Name:" FontWeight="Bold" Foreground="#34495E" Grid.Row="1" Grid.Column="0" />
+            <TextBlock Text="{Binding MedicalRecord.DepartmentName}" Foreground="#2C3E50" Grid.Row="1" Grid.Column="1" />
 
-        <TextBlock Text="Doctor Name:" FontWeight="Bold" Foreground="#34495E" Grid.Row="3" Grid.Column="0" />
-        <TextBlock Text="{Binding MedicalRecord.DoctorName}" Foreground="#2C3E50" Grid.Row="3" Grid.Column="1" />
+            <TextBlock Text="Doctor Name:" FontWeight="Bold" Foreground="#34495E" Grid.Row="2" Grid.Column="0" />
+            <TextBlock Text="{Binding MedicalRecord.DoctorName}" Foreground="#2C3E50" Grid.Row="2" Grid.Column="1" />
 
-        <TextBlock Text="Date:" FontWeight="Bold" Foreground="#34495E" Grid.Row="4" Grid.Column="0" />
-        <TextBlock Text="{Binding MedicalRecord.Date}" Foreground="#2C3E50" Grid.Row="4" Grid.Column="1" />
+            <TextBlock Text="Date:" FontWeight="Bold" Foreground="#34495E" Grid.Row="3" Grid.Column="0" />
+            <TextBlock Text="{Binding MedicalRecord.Date}" Foreground="#2C3E50" Grid.Row="3" Grid.Column="1" />
 
-        <TextBlock Text="Conclusion:" FontWeight="Bold" Foreground="#34495E" Grid.Row="5" Grid.Column="0" />
-        <TextBlock Text="{Binding MedicalRecord.Conclusion}" TextWrapping="Wrap" Foreground="#2C3E50" Grid.Row="5" Grid.Column="1" />
+            <TextBlock Text="Conclusion:" FontWeight="Bold" Foreground="#34495E" Grid.Row="4" Grid.Column="0" />
+            <TextBlock Text="{Binding MedicalRecord.Conclusion}" TextWrapping="Wrap" Foreground="#2C3E50" Grid.Row="4" Grid.Column="1" />
 
-        <TextBlock Text="Documents:" FontWeight="Bold" Foreground="#34495E" Grid.Row="6" Grid.Column="0" />
-        <TextBlock Text="{Binding DocumentsDisplay}" TextWrapping="Wrap" Foreground="#2C3E50" Grid.Row="6" Grid.Column="1" />
-
-        <StackPanel Orientation="Horizontal" Grid.Row="7" Grid.Column="1" Margin="0,15,0,0" HorizontalAlignment="Right">
-            <Button Content="Download" x:Name="DownloadButton" Width="120" Background="#3498DB" Foreground="White" FontWeight="Bold" Margin="0,0,10,0" />
-            <Button Content="Feedback" x:Name="FeedbackButton" Width="120" Background="#2ECC71" Foreground="White" FontWeight="Bold" />
-        </StackPanel>
-    </Grid>
+        </Grid>
+        <Button 
+            Content="Feedback" 
+            x:Name="FeedbackButton" 
+            Click="FeedbackButton_Click"
+            Width="120"
+            FontWeight="Bold" 
+            Margin="10" 
+            HorizontalAlignment="Center"/>
+        <Border Background="LightBlue" Padding="2" Margin="0,20,0,0" >
+            <TextBlock Text="Attached files" FontSize="20" FontWeight="Bold" Foreground="#34495E" HorizontalAlignment="Center"/>
+        </Border>
+        <ListView 
+            ItemsSource="{Binding Documents}" 
+            Width="400" 
+            SelectionMode="None"
+            Margin="10">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="local1:Document">
+                    <StackPanel Padding="10" BorderBrush="LightGreen" BorderThickness="2" CornerRadius="20" Margin="2">
+                        <TextBlock Text="{x:Bind File}" FontWeight="Bold"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <Button 
+            Content="Download" 
+            x:Name="DownloadButton" 
+            Click="DownloadButton_Click"
+            Width="120" 
+            FontWeight="Bold" 
+            Margin="10" 
+            HorizontalAlignment="Center" />
+    </StackPanel>
 </Window>
