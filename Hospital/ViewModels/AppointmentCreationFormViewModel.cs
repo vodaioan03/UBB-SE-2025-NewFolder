@@ -61,7 +61,7 @@ namespace Hospital.ViewModels
             {
                 _selectedCalendarDate = value;
                 OnPropertyChanged(nameof(SelectedCalendarDate));
-                LoadAvailableTimeSlots();
+                Task task = LoadAvailableTimeSlots();
             }
         }
 
@@ -97,7 +97,7 @@ namespace Hospital.ViewModels
         //XAML Root
         public XamlRoot? Root { get; set; }
 
-        public AppointmentCreationFormViewModel(DepartmentManagerModel departmentManagerModel, MedicalProcedureManagerModel procedureManagerModel, DoctorManagerModel doctorManagerModel, ShiftManagerModel shiftManagerModel, AppointmentManagerModel appointmentManagerModel)
+        private AppointmentCreationFormViewModel(DepartmentManagerModel departmentManagerModel, MedicalProcedureManagerModel procedureManagerModel, DoctorManagerModel doctorManagerModel, ShiftManagerModel shiftManagerModel, AppointmentManagerModel appointmentManagerModel)
         {
             _departmentManager = departmentManagerModel;
             _procedureManager = procedureManagerModel;
@@ -110,29 +110,36 @@ namespace Hospital.ViewModels
             ProceduresList = new ObservableCollection<Procedure>();
             DoctorsList = new ObservableCollection<DoctorJointModel>();
 
-            //load data
-            LoadDepartments();
-
             //set calendar dates
             MinDate = DateTimeOffset.Now;
             MaxDate = MinDate.AddMonths(1);
         }
 
-        private async void LoadDepartments()
+        public static async Task<AppointmentCreationFormViewModel> CreateViewModel(DepartmentManagerModel departmentManagerModel, MedicalProcedureManagerModel procedureManagerModel, DoctorManagerModel doctorManagerModel, ShiftManagerModel shiftManagerModel, AppointmentManagerModel appointmentManagerModel)
         {
-            DepartmentsList.Clear();
+            var viewModel = new AppointmentCreationFormViewModel(departmentManagerModel, procedureManagerModel, doctorManagerModel, shiftManagerModel, appointmentManagerModel);
+            await viewModel.LoadDepartments();
+            return viewModel;
+        }
+
+        private async Task LoadDepartments()
+        {
+            if (DepartmentsList != null)
+                DepartmentsList.Clear();
             await _departmentManager.LoadDepartments();
-            foreach(Department dept in _departmentManager.GetDepartments())
+            foreach (Department dept in _departmentManager.GetDepartments())
             {
                 DepartmentsList?.Add(dept);
             }
         }
 
-        public async void LoadProceduresAndDoctorsOfSelectedDepartment()
+        public async Task LoadProceduresAndDoctorsOfSelectedDepartment()
         {
             //clear the list
-            ProceduresList.Clear();
-            DoctorsList.Clear();
+            if(ProceduresList != null)
+                ProceduresList.Clear();
+            if (DoctorsList != null)
+                DoctorsList.Clear();
 
             //load the procedures
             await _procedureManager.LoadProceduresByDepartmentId(SelectedDepartment.DepartmentId);
@@ -149,7 +156,7 @@ namespace Hospital.ViewModels
             }
         }
 
-        public async void LoadDoctorSchedule()
+        public async Task LoadDoctorSchedule()
         {
             HighlightedDates.Clear();
             if (SelectedDoctor == null)
@@ -174,7 +181,7 @@ namespace Hospital.ViewModels
             }
         }
 
-        public async void LoadAvailableTimeSlots()
+        public async Task LoadAvailableTimeSlots()
         {
             //check for all necessary fields
             if (SelectedDoctor == null || SelectedCalendarDate == null || SelectedProcedure == null)

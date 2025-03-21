@@ -41,7 +41,7 @@ namespace Hospital.Views
 
         private AppointmentCreationFormViewModel _viewModel;
 
-        public AppointmentCreationForm(DepartmentManagerModel departmentManagerModel, MedicalProcedureManagerModel procedureManagerModel, DoctorManagerModel doctorManagerModel, ShiftManagerModel shiftManagerModel, AppointmentManagerModel appointmentManagerModel)
+        private AppointmentCreationForm(DepartmentManagerModel departmentManagerModel, MedicalProcedureManagerModel procedureManagerModel, DoctorManagerModel doctorManagerModel, ShiftManagerModel shiftManagerModel, AppointmentManagerModel appointmentManagerModel)
         {
             this.InitializeComponent();
             this.StyleTitleBar();
@@ -52,14 +52,24 @@ namespace Hospital.Views
             _doctorManager = doctorManagerModel;
             _shiftManager = shiftManagerModel;
             _appointmentManager = appointmentManagerModel;
-            _viewModel = new AppointmentCreationFormViewModel(_departmentManager, _procedureManager, _doctorManager, _shiftManager, _appointmentManager);
-
-            //set data context
-            this.AppointmentForm.DataContext = _viewModel;
-            _viewModel.Root = this.Content.XamlRoot;
 
             //resize
             this.AppWindow.Resize(new(1000, 1400));
+        }
+
+        public static async Task<AppointmentCreationForm> CreateAppointmentCreationForm(DepartmentManagerModel departmentManagerModel, MedicalProcedureManagerModel procedureManagerModel, DoctorManagerModel doctorManagerModel, ShiftManagerModel shiftManagerModel, AppointmentManagerModel appointmentManagerModel)
+        {
+            AppointmentCreationForm form = new AppointmentCreationForm(departmentManagerModel, procedureManagerModel, doctorManagerModel, shiftManagerModel, appointmentManagerModel);
+
+
+            form._viewModel = await AppointmentCreationFormViewModel.CreateViewModel(form._departmentManager, form._procedureManager, form._doctorManager, form._shiftManager, form._appointmentManager);
+
+            //set data context
+            form.AppointmentForm.DataContext = form._viewModel;
+            form._viewModel.Root = form.Content.XamlRoot;
+
+            //return value
+            return form;
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
@@ -210,24 +220,68 @@ namespace Hospital.Views
             m_TitleBar.ButtonInactiveBackgroundColor = Colors.SeaGreen;
         }
 
-        private void DepartmentComboBox_DropDownClosed(object sender, object e)
+        private async void DepartmentComboBox_DropDownClosed(object sender, object e)
         {
-            _viewModel.LoadProceduresAndDoctorsOfSelectedDepartment();
+            try
+            {
+                _viewModel.LoadProceduresAndDoctorsOfSelectedDepartment();
+            }
+            catch(Exception ex)
+            {
+                ContentDialog errorDialog = new ContentDialog
+                {
+                    Title = "Error",
+                    Content = ex.Message,
+                    CloseButtonText = "OK"
+                };
+                errorDialog.XamlRoot = this.Content.XamlRoot;
+                await errorDialog.ShowAsync();
+            }
+            
         }
 
-        private void ProcedureComboBox_SelectionChanged(object sender, object e)
+        private async void ProcedureComboBox_SelectionChanged(object sender, object e)
         {
-            _viewModel.LoadAvailableTimeSlots();
+            try
+            {
+                _viewModel.LoadAvailableTimeSlots();
+            }
+            catch (Exception ex)
+            {
+                ContentDialog errorDialog = new ContentDialog
+                {
+                    Title = "Error",
+                    Content = ex.Message,
+                    CloseButtonText = "OK"
+                };
+                errorDialog.XamlRoot = this.Content.XamlRoot;
+                await errorDialog.ShowAsync();
+            }
         }
 
-        private void DoctorComboBox_SelectionChanged(object sender, object e)
+        private async void DoctorComboBox_SelectionChanged(object sender, object e)
         {
-            _viewModel.LoadDoctorSchedule();
-            _viewModel.LoadAvailableTimeSlots();
+            try
+            {
+                await _viewModel.LoadDoctorSchedule();
+                await _viewModel.LoadAvailableTimeSlots();
 
-            //force a calendar reset in a dirty way can be left out
-            CalendarDatePicker.MinDate = DateTime.Today.AddDays(1);
-            CalendarDatePicker.MinDate = DateTime.Today;
+                //force a calendar reset in a dirty way can be left out
+                CalendarDatePicker.MinDate = DateTime.Today.AddDays(1);
+                CalendarDatePicker.MinDate = DateTime.Today;
+            }
+            catch (Exception ex)
+            {
+                ContentDialog errorDialog = new ContentDialog
+                {
+                    Title = "Error",
+                    Content = ex.Message,
+                    CloseButtonText = "OK"
+                };
+                errorDialog.XamlRoot = this.Content.XamlRoot;
+                await errorDialog.ShowAsync();
+            }
+
         }
 
         private void CalendarView_DayItemChanging(CalendarView sender, CalendarViewDayItemChangingEventArgs args)

@@ -22,14 +22,7 @@ namespace Hospital.Managers
 
         public async Task LoadShifts(int doctorID)
         {
-            try
-            {
-                _shifts = await _shiftsDatabaseService.GetShiftsByDoctorId(doctorID);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Error loading shifts for doctor {doctorID}: {ex.Message}");
-            }
+            _shifts = await _shiftsDatabaseService.GetShiftsByDoctorId(doctorID);
         }
 
 
@@ -48,14 +41,9 @@ namespace Hospital.Managers
 
         public async Task LoadUpcomingDoctorDayshifts(int doctorID)
         {
-            try
-            {
-                _shifts = await _shiftsDatabaseService.GetDoctorDayShifts(doctorID);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Error loading upcoming shifts for doctor {doctorID}: {ex.Message}");
-            }
+
+            _shifts = await _shiftsDatabaseService.GetDoctorDayShifts(doctorID);
+
         }
 
 

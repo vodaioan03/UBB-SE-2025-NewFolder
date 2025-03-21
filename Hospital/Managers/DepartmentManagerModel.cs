@@ -30,18 +30,12 @@ namespace Hospital.Managers
         // This method will be used to load the departments from the database into the in memory repository
         public async Task LoadDepartments()
         {
-            try
+
+            s_departmentList.Clear();
+            List<Department> departmentList = await _departmentDBService.GetDepartmentsFromDB().ConfigureAwait(false);
+            foreach(Department dep in departmentList)
             {
-                s_departmentList.Clear();
-                List<Department> departmentList = await _departmentDBService.GetDepartmentsFromDB().ConfigureAwait(false);
-                foreach(Department dep in departmentList)
-                {
-                    s_departmentList.Add(dep);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error loading departments: {ex.Message}");
+                s_departmentList.Add(dep);
             }
         }
 

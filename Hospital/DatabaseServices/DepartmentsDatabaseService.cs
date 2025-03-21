@@ -48,13 +48,11 @@ namespace Hospital.DatabaseServices
             }
             catch(SqlException e)
             {
-                Console.WriteLine($"SQL Exception: {e.Message}");
-                return new List<Department>();
+                throw new Exception($"SQL Exception: {e.Message}");
             }
             catch (Exception e)
             {
-                Console.WriteLine($"General Exception: {e.Message}");
-                return new List<Department>();
+                throw new Exception($"Error loading departments: {e.Message}");
             }
         }
     }
