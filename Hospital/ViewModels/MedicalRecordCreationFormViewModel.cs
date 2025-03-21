@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Hospital.Managers;
 using Hospital.Commands;
 using System.ComponentModel;
+using System.Diagnostics;
 
 namespace Hospital.ViewModels
 {
@@ -18,10 +19,30 @@ namespace Hospital.ViewModels
 
         private string _patientName;
         private string _doctorName;
-        private DateTime _appointmentDate;
+        //private DateTime _appointmentDate;
         private string _appointmentTime;
         private string _department;
         private string _conclusion;
+        public ObservableCollection<string> DocumentPaths { get; private set; } = new ObservableCollection<string>();
+
+        public void AddDocument(string path)
+        {
+            DocumentPaths.Add(path);
+        }
+
+        private DateTime _appointmentDate;
+        public DateTimeOffset? AppointmentDateOffset
+        {
+            get => new DateTimeOffset(_appointmentDate);
+            set
+            {
+                if (value.HasValue)
+                {
+                    _appointmentDate = value.Value.DateTime;
+                    OnPropertyChanged(nameof(AppointmentDateOffset));
+                }
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -52,7 +73,8 @@ namespace Hospital.ViewModels
                 detailedAppointment.Date = DateTime.Now;
                 
 
-                int medicalRecordId = await _medicalRecordManager.CreateMedicalRecord(detailedAppointment);
+                int medicalRecordId = await _medicalRecordManager.CreateMedicalRecord(detailedAppointment, conclusion);
+               
                 return medicalRecordId;
             }
             catch (Exception ex)
@@ -68,7 +90,7 @@ namespace Hospital.ViewModels
             if (Documents.Count < maxDocs)
             {
                 Documents.Add(path);
-                _documentManager.AddDocumentToMedicalRecord(doc);
+                _ = _documentManager.AddDocumentToMedicalRecord(doc);
             }
         }
 
