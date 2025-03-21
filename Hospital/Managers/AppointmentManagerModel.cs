@@ -176,5 +176,10 @@ namespace Hospital.Managers
                 throw;
             }
         }
+
+        internal static async Task MarkAppointmentAsCompletedInDB(int appointmentId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

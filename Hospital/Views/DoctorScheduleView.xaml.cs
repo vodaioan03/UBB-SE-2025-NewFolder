@@ -8,103 +8,154 @@ using System.Collections.ObjectModel;
 using System.Runtime.CompilerServices;
 using Microsoft.UI.Xaml.Media;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Windows.ApplicationModel.Appointments;
+using Hospital.Models;
 
 namespace Hospital.Views
 {
     public sealed partial class DoctorScheduleView : Window
     {
-        private readonly AppointmentManagerModel _appointmentManager;
-        private readonly ShiftManagerModel _shiftManager;
-        private ObservableCollection<DateTimeOffset> _shiftsDates;
-        public ObservableCollection<TimeSlotModel> DailySchedule { get; private set; } 
-        private int _doctorId = 1;//Just for testing
+        public DoctorScheduleViewModel ViewModel => _viewModel;
+        private readonly DoctorScheduleViewModel _viewModel;
+        public ObservableCollection<TimeSlotModel> _dailySchedule { get; private set; }
 
         public DoctorScheduleView(AppointmentManagerModel appointmentManagerModel, ShiftManagerModel shiftManagerModel)
         {
+            _viewModel = new DoctorScheduleViewModel(appointmentManagerModel, shiftManagerModel);
+            _dailySchedule = new ObservableCollection<TimeSlotModel>();
+
+            LoadInitialCalendarRange();
             this.InitializeComponent();
-
-            _appointmentManager = appointmentManagerModel;
-            _shiftManager = shiftManagerModel;
-            _shiftsDates = new ObservableCollection<DateTimeOffset>();
-            DailySchedule = new ObservableCollection<TimeSlotModel>();
-            DailyScheduleList.ItemsSource = DailySchedule;
-
-            DateTime today = DateTime.Today;
-            DateTime firstDayOfMonth = new DateTime(today.Year, today.Month, 1);
-            DateTime lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
-
-            DoctorSchedule.MinDate = firstDayOfMonth;
-            DoctorSchedule.MaxDate = lastDayOfMonth;
-
+            ((FrameworkElement)this.Content).DataContext = _viewModel;
+            DailyScheduleList.ItemsSource = _dailySchedule;
             DoctorSchedule.CalendarViewDayItemChanging += CalendarView_DayItemChanging;
-            LoadShiftsForDoctor(_doctorId);
+            LoadShiftsAndRefreshCalendar();
+        }
+
+        private async void LoadShiftsAndRefreshCalendar()
+        {
+            try
+            {
+                await _viewModel.LoadShiftsForDoctor();
+
+                if (_viewModel.Shifts == null || !_viewModel.Shifts.Any()) return;
+
+                DoctorSchedule.SelectedDates.Clear();
+                DoctorSchedule.InvalidateArrange();
+                DoctorSchedule.InvalidateMeasure();
+                DoctorSchedule.UpdateLayout();
+
+                await RecreateCalendarView();
+            }
+            catch (Exception e)
+            {
+                await ShowErrorDialog($"Failed to load doctor shifts.\n\n{e.Message}");
+            }
         }
 
 
-        private async void LoadShiftsForDoctor(int doctorID)
+        private async Task RecreateCalendarView()
         {
-            await _shiftManager.LoadShifts(doctorID);
-            _shiftsDates.Clear();
-            foreach (var shift in _shiftManager.GetShifts())
+            try
             {
-                _shiftsDates.Add(new DateTimeOffset(shift.DateTime.Date));
+                CalendarView newCalendar = new CalendarView
+                {
+                    MinDate = _viewModel.MinDate.DateTime,
+                    MaxDate = _viewModel.MaxDate.DateTime,
+                    SelectionMode = CalendarViewSelectionMode.Single,
+                    HorizontalAlignment = HorizontalAlignment.Stretch,
+                    VerticalAlignment = VerticalAlignment.Top,
+                    BorderBrush = new SolidColorBrush(Colors.Green),
+                    BorderThickness = new Thickness(2)
+                };
+
+                newCalendar.CalendarViewDayItemChanging += CalendarView_DayItemChanging;
+                newCalendar.SelectedDatesChanged += CalendarView_SelectedDatesChanged;
+
+                CalendarContainer.Children.Remove(DoctorSchedule);
+                DoctorSchedule = newCalendar;
+                CalendarContainer.Children.Insert(0, DoctorSchedule);
             }
-            DoctorSchedule.InvalidateMeasure();
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error recreating calendar: " + ex.Message);
+                await ShowErrorDialog("Calendar failed to reload.");
+            }
+        }
+
+        private void LoadInitialCalendarRange()
+        {
+            var today = DateTime.Today;
+            _viewModel.MinDate = new DateTimeOffset(new DateTime(today.Year, today.Month, 1));
+            _viewModel.MaxDate = _viewModel.MinDate.AddMonths(1).AddDays(-1);
+        }
+
+        private async void CalendarView_SelectedDatesChanged(CalendarView sender, CalendarViewSelectedDatesChangedEventArgs args)
+        {
+            try
+            {
+                if (args.AddedDates.Count > 0)
+                {
+                    DateTime selectedDate = args.AddedDates[0].DateTime.Date;
+                    await _viewModel.OnDateSelected(selectedDate);
+                }
+            }
+            catch (Exception e)
+            {
+                await ShowErrorDialog($"Error selecting date: {e.Message}");
+            }
         }
 
         private void CalendarView_DayItemChanging(CalendarView sender, CalendarViewDayItemChangingEventArgs args)
         {
-            DateTime date = args.Item.Date.Date;
+            if (_viewModel.ShiftDates == null || !_viewModel.ShiftDates.Any()) return;
+            var date = args.Item.Date.Date;
 
-            if (_shiftsDates.Contains(new DateTimeOffset(date)))
+            if (_viewModel.ShiftDates.Any(d => d.Date == date.Date))
             {
-                args.Item.SetDensityColors(new List<Windows.UI.Color> { Microsoft.UI.Colors.Green });
+                args.Item.Background = new SolidColorBrush(Colors.LightGreen);
             }
         }
 
-        private void DoctorSchedule_SelectedDatesChanged(CalendarView sender, CalendarViewSelectedDatesChangedEventArgs args)
+        private async Task ShowErrorDialog(string message)
         {
-            if (args.AddedDates.Count > 0)
+            try
             {
-                DateTime selectedDate = args.AddedDates[0].DateTime.Date;
-                _appointmentManager.LoadDoctorAppointmentsOnDate(_doctorId, selectedDate);
-                _shiftManager.LoadShifts(_doctorId);
-                DailySchedule.Clear();
-
-                List<TimeSlotModel> timeSlots = GenerateTimeSlots(selectedDate);
-                foreach (var slot in timeSlots)
+                ContentDialog errorDialog = new ContentDialog
                 {
-                    DailySchedule.Add(slot);
+                    Title = "Error",
+                    Content = message,
+                    CloseButtonText = "OK",
+                    RequestedTheme = ElementTheme.Default
+                };
+
+                if (this.Content is FrameworkElement rootElement)
+                {
+                    errorDialog.XamlRoot = rootElement.XamlRoot;
+                }
+                else
+                {
+                    Console.WriteLine("Error: Unable to find a valid XamlRoot.");
+                    return;
                 }
 
-
+                await errorDialog.ShowAsync();
             }
-        }
-
-        private List<TimeSlotModel> GenerateTimeSlots(DateTime date)
-        {
-            List<TimeSlotModel> slots = new List<TimeSlotModel>();
-            DateTime startTime = date.Date;
-            DateTime endTime = startTime.AddHours(24);
-
-            while (startTime < endTime)
+            catch (Exception ex)
             {
-                slots.Add(new TimeSlotModel
-                {
-                    TimeSlot = startTime,
-                    Time = startTime.ToString("hh:mm tt"),
-                    Appointment = "",
-                    HighlightColor = new SolidColorBrush(Colors.Transparent)
-                });
-
-                startTime = startTime.AddMinutes(30);
+                Console.WriteLine($"Critical error while showing error dialog: {ex.Message}");
             }
-
-            return slots;
         }
 
 
-
+        private void DailyScheduleList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            return;
+            
+        }
 
     }
+
 }

@@ -19,6 +19,7 @@ using Hospital.ViewModels;
 using System.Diagnostics;
 using Windows.ApplicationModel.Appointments;
 using Hospital.Exceptions;
+using Hospital.Models;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -38,7 +39,8 @@ namespace Hospital
         private ShiftsDatabaseService? shiftService;
         private AppointmentsDatabaseService? appointmentService;
         private MedicalRecordsDatabaseService? medicalRecordsDatabaseService;
-        private DocumentDatabaseService? DocumentDatabaseService;
+        private DocumentDatabaseService? documentService;
+
 
         //ManagerModels 
         private DepartmentManagerModel? DepartmentManager;
@@ -70,7 +72,7 @@ namespace Hospital
         }
 
 
-        private void Doctor1_Click(object sender, RoutedEventArgs e)
+        private void DoctorScheduleButton(object sender, RoutedEventArgs e)
         {
             DoctorScheduleView doctorScheduleView = new DoctorScheduleView(AppointmentManager, ShiftManager);
             doctorScheduleView.Activate();
@@ -78,8 +80,33 @@ namespace Hospital
 
         private void Doctor2_Click(object sender, RoutedEventArgs e)
         {
-            //test ui of feature Patient3 here
+            
+            if (MedicalRecordManager == null || DocumentManager == null) return;
+
+            // Create ViewModel with required dependencies
+            MedicalRecordCreationFormViewModel viewModel = new MedicalRecordCreationFormViewModel(MedicalRecordManager, DocumentManager);
+
+            // Create a mock appointment for testing
+            AppointmentJointModel mockAppointment = new AppointmentJointModel(
+                appointmentId: 123,
+                finished: false,
+                date: DateTime.Now,
+                departmentId: 2,
+                departmentName: "Cardiology",
+                doctorId: 45,
+                doctorName: "Dr. Jane Doe",
+                patientId: 678,
+                patientName: "John Doe",
+                procedureId: 12,
+                procedureName: "Heart Checkup",
+                procedureDuration: TimeSpan.FromMinutes(30)
+            );
+
+            // Create and show the MedicalRecordCreateView window
+            CreateMedicalRecordForm medicalRecordCreateView = new CreateMedicalRecordForm(viewModel, mockAppointment);
+            medicalRecordCreateView.Activate();
         }
+
 
         private void SetupDatabaseServices()
         {
@@ -90,7 +117,7 @@ namespace Hospital
             shiftService = new ShiftsDatabaseService();
             appointmentService = new AppointmentsDatabaseService();
             medicalRecordsDatabaseService = new MedicalRecordsDatabaseService();
-            DocumentDatabaseService = new DocumentDatabaseService();
+            documentService = new DocumentDatabaseService();
 
             //setup manager models here
             DepartmentManager = new DepartmentManagerModel(departmentService);
@@ -99,7 +126,8 @@ namespace Hospital
             ShiftManager = new ShiftManagerModel(shiftService);
             AppointmentManager = new AppointmentManagerModel(appointmentService);
             MedicalRecordManager = new MedicalRecordManagerModel(medicalRecordsDatabaseService);
-            DocumentManager = new DocumentManagerModel(DocumentDatabaseService);
+            DocumentManager = new DocumentManagerModel(documentService);
+
         }
 
         private void PatientScheduleButton_Click(object sender, RoutedEventArgs e)

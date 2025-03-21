@@ -7,13 +7,44 @@ using System.Text;
 using System.Threading.Tasks;
 using Hospital.Managers;
 using Hospital.Commands;
+using System.ComponentModel;
+using System.Diagnostics;
 
 namespace Hospital.ViewModels
 {
-    class MedicalRecordCreationFormViewModel
+    public class MedicalRecordCreationFormViewModel
     {
         private readonly MedicalRecordManagerModel _medicalRecordManager;
         private readonly DocumentManagerModel _documentManager;
+
+        private string _patientName;
+        private string _doctorName;
+        //private DateTime _appointmentDate;
+        private string _appointmentTime;
+        private string _department;
+        private string _conclusion;
+        public ObservableCollection<string> DocumentPaths { get; private set; } = new ObservableCollection<string>();
+
+        public void AddDocument(string path)
+        {
+            DocumentPaths.Add(path);
+        }
+
+        private DateTime _appointmentDate;
+        public DateTimeOffset? AppointmentDateOffset
+        {
+            get => new DateTimeOffset(_appointmentDate);
+            set
+            {
+                if (value.HasValue)
+                {
+                    _appointmentDate = value.Value.DateTime;
+                    OnPropertyChanged(nameof(AppointmentDateOffset));
+                }
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         int maxDocs = 10;
         public ObservableCollection<string> Documents { get; private set; }
@@ -26,15 +57,24 @@ namespace Hospital.ViewModels
             Documents = new ObservableCollection<string>();
         }
 
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
         public async Task<int> CreateMedicalRecord(AppointmentJointModel detailedAppointment, string conclusion)
         {
+            await Task.Delay(500);
+            return new Random().Next(1, 1000); // Returning a random record ID
+
             try
             {
                 detailedAppointment.Finished = true;
                 detailedAppointment.Date = DateTime.Now;
                 
 
-                int medicalRecordId = await _medicalRecordManager.CreateMedicalRecord(detailedAppointment);
+                int medicalRecordId = await _medicalRecordManager.CreateMedicalRecord(detailedAppointment, conclusion);
+               
                 return medicalRecordId;
             }
             catch (Exception ex)
@@ -50,8 +90,45 @@ namespace Hospital.ViewModels
             if (Documents.Count < maxDocs)
             {
                 Documents.Add(path);
-                _documentManager.AddDocumentToMedicalRecord(doc);
+                _ = _documentManager.AddDocumentToMedicalRecord(doc);
             }
+        }
+
+
+        public string PatientName
+        {
+            get => _patientName;
+            set { _patientName = value; OnPropertyChanged(nameof(PatientName)); }
+        }
+
+        public string DoctorName
+        {
+            get => _doctorName;
+            set { _doctorName = value; OnPropertyChanged(nameof(DoctorName)); }
+        }
+
+        public DateTime AppointmentDate
+        {
+            get => _appointmentDate;
+            set { _appointmentDate = value; OnPropertyChanged(nameof(AppointmentDate)); }
+        }
+
+        public string AppointmentTime
+        {
+            get => _appointmentTime;
+            set { _appointmentTime = value; OnPropertyChanged(nameof(AppointmentTime)); }
+        }
+
+        public string Department
+        {
+            get => _department;
+            set { _department = value; OnPropertyChanged(nameof(Department)); }
+        }
+
+        public string Conclusion
+        {
+            get => _conclusion;
+            set { _conclusion = value; OnPropertyChanged(nameof(Conclusion)); }
         }
     }
 }
