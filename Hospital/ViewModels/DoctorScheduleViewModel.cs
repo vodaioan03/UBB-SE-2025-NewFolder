@@ -103,12 +103,6 @@ namespace Hospital.ViewModels
                 Console.WriteLine($"Error loading appointments: {ex.Message}");
             }
         }
-
-        public static string GetDateFromDateTime(DateTime datevalue)
-        {
-            return datevalue.ToShortDateString();
-        }
-
         public async Task LoadShiftsForDoctor()
         {
             try
