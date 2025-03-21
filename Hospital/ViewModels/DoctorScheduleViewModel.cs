@@ -9,18 +9,55 @@ using Hospital.Managers;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Hospital.Commands;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using Hospital.Views;
+using Microsoft.UI.Xaml.Media;
+using Microsoft.UI;
 
 namespace Hospital.ViewModels
 {
-    public class DoctorScheduleViewModel
+    public class DoctorScheduleViewModel : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void OnPropertyChanged([CallerMemberName] string propertyName = "")
+            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
         private readonly AppointmentManagerModel _appointmentManager;
         private readonly ShiftManagerModel _shiftManager;
+
+        public ObservableCollection<TimeSlotModel> DailySchedule { get; set; } = new();
+        public ObservableCollection<DateTimeOffset> ShiftDates { get; set; } = new();
 
         public List<AppointmentJointModel> Appointments { get; set; }
         public List<Shift> Shifts { get; set; }  
 
         public ICommand OpenDetailsCommand { get; set; }
+
+        public int DoctorId { get; set; } = 1; // default for testing
+
+        private DateTimeOffset _minDate;
+        public DateTimeOffset MinDate
+        {
+            get => _minDate;
+            set
+            {
+                _minDate = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private DateTimeOffset _maxDate;
+        public DateTimeOffset MaxDate
+        {
+            get => _maxDate;
+            set
+            {
+                _maxDate = value;
+                OnPropertyChanged();
+            }
+        }
+
 
         public DoctorScheduleViewModel(AppointmentManagerModel appointmentManager, ShiftManagerModel shiftManager)
         {
@@ -75,13 +112,36 @@ namespace Hospital.ViewModels
         {
             try
             {
-                await _shiftManager.LoadShifts(doctorId); 
+                await _shiftManager.LoadShifts(doctorId);
                 Shifts = _shiftManager.GetShifts();
+
+                ShiftDates.Clear(); 
+
+                foreach (var shift in Shifts)
+                {
+                    var shiftDate = new DateTimeOffset(shift.DateTime.Date); 
+                    if (!ShiftDates.Contains(shiftDate))
+                        ShiftDates.Add(shiftDate);
+                }
+
+                OnPropertyChanged(nameof(ShiftDates)); 
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error loading shifts: {ex.Message}");
             }
         }
+
+
+        public async Task OnDateSelected(DateTime date)
+        {
+            await _appointmentManager.LoadDoctorAppointmentsOnDate(DoctorId, date);
+            await _shiftManager.LoadShifts(DoctorId);
+
+            DailySchedule.Clear();
+       
+        }
+
+
     }
 }

@@ -8,103 +8,52 @@ using System.Collections.ObjectModel;
 using System.Runtime.CompilerServices;
 using Microsoft.UI.Xaml.Media;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Hospital.Views
 {
     public sealed partial class DoctorScheduleView : Window
     {
-        private readonly AppointmentManagerModel _appointmentManager;
-        private readonly ShiftManagerModel _shiftManager;
-        private ObservableCollection<DateTimeOffset> _shiftsDates;
-        public ObservableCollection<TimeSlotModel> DailySchedule { get; private set; } 
-        private int _doctorId = 1;//Just for testing
+        public DoctorScheduleViewModel ViewModel => _viewModel;
+
+        private readonly DoctorScheduleViewModel _viewModel;
 
         public DoctorScheduleView(AppointmentManagerModel appointmentManagerModel, ShiftManagerModel shiftManagerModel)
         {
             this.InitializeComponent();
 
-            _appointmentManager = appointmentManagerModel;
-            _shiftManager = shiftManagerModel;
-            _shiftsDates = new ObservableCollection<DateTimeOffset>();
-            DailySchedule = new ObservableCollection<TimeSlotModel>();
-            DailyScheduleList.ItemsSource = DailySchedule;
+            _viewModel = new DoctorScheduleViewModel(appointmentManagerModel, shiftManagerModel);
+            _viewModel.DoctorId = 1;
+            ((FrameworkElement)this.Content).DataContext = _viewModel;
 
-            DateTime today = DateTime.Today;
-            DateTime firstDayOfMonth = new DateTime(today.Year, today.Month, 1);
-            DateTime lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
 
-            DoctorSchedule.MinDate = firstDayOfMonth;
-            DoctorSchedule.MaxDate = lastDayOfMonth;
-
-            DoctorSchedule.CalendarViewDayItemChanging += CalendarView_DayItemChanging;
-            LoadShiftsForDoctor(_doctorId);
+            LoadInitialCalendarRange();
+            _viewModel.LoadShiftsForDoctor(_viewModel.DoctorId);
         }
 
-
-        private async void LoadShiftsForDoctor(int doctorID)
+        private void LoadInitialCalendarRange()
         {
-            await _shiftManager.LoadShifts(doctorID);
-            _shiftsDates.Clear();
-            foreach (var shift in _shiftManager.GetShifts())
+            var today = DateTime.Today;
+            _viewModel.MinDate = new DateTimeOffset(new DateTime(today.Year, today.Month, 1));
+            _viewModel.MaxDate = _viewModel.MinDate.AddMonths(1).AddDays(-1);
+        }
+
+        private async void CalendarView_SelectedDatesChanged(CalendarView sender, CalendarViewSelectedDatesChangedEventArgs args)
+        {
+            if (args.AddedDates.Count > 0)
             {
-                _shiftsDates.Add(new DateTimeOffset(shift.DateTime.Date));
+                var selectedDate = args.AddedDates[0].DateTime.Date;
+                await _viewModel.OnDateSelected(selectedDate);
             }
-            DoctorSchedule.InvalidateMeasure();
         }
 
         private void CalendarView_DayItemChanging(CalendarView sender, CalendarViewDayItemChangingEventArgs args)
         {
-            DateTime date = args.Item.Date.Date;
-
-            if (_shiftsDates.Contains(new DateTimeOffset(date)))
+            if (_viewModel.ShiftDates.Any(d => d.Date == args.Item.Date.Date))
             {
                 args.Item.SetDensityColors(new List<Windows.UI.Color> { Microsoft.UI.Colors.Green });
             }
         }
-
-        private void DoctorSchedule_SelectedDatesChanged(CalendarView sender, CalendarViewSelectedDatesChangedEventArgs args)
-        {
-            if (args.AddedDates.Count > 0)
-            {
-                DateTime selectedDate = args.AddedDates[0].DateTime.Date;
-                _appointmentManager.LoadDoctorAppointmentsOnDate(_doctorId, selectedDate);
-                _shiftManager.LoadShifts(_doctorId);
-                DailySchedule.Clear();
-
-                List<TimeSlotModel> timeSlots = GenerateTimeSlots(selectedDate);
-                foreach (var slot in timeSlots)
-                {
-                    DailySchedule.Add(slot);
-                }
-
-
-            }
-        }
-
-        private List<TimeSlotModel> GenerateTimeSlots(DateTime date)
-        {
-            List<TimeSlotModel> slots = new List<TimeSlotModel>();
-            DateTime startTime = date.Date;
-            DateTime endTime = startTime.AddHours(24);
-
-            while (startTime < endTime)
-            {
-                slots.Add(new TimeSlotModel
-                {
-                    TimeSlot = startTime,
-                    Time = startTime.ToString("hh:mm tt"),
-                    Appointment = "",
-                    HighlightColor = new SolidColorBrush(Colors.Transparent)
-                });
-
-                startTime = startTime.AddMinutes(30);
-            }
-
-            return slots;
-        }
-
-
-
-
     }
+
 }
