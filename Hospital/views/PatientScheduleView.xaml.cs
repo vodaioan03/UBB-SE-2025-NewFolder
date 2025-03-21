@@ -10,6 +10,8 @@ using Microsoft.UI.Xaml.Media;
 using Windows.UI;
 using System.Collections.Generic;
 using Microsoft.UI;
+using Hospital.ViewModels;
+
 
 namespace Hospital.Views
 {
@@ -117,13 +119,32 @@ namespace Hospital.Views
                 args.Item.Background = new SolidColorBrush(Colors.LightGreen);
             }
         }
+        private void DailyScheduleList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count > 0)
+            {
+                var selectedSlot = (TimeSlotModel)e.AddedItems[0];
+
+                if (!string.IsNullOrEmpty(selectedSlot.Appointment))
+                {
+                    var selectedDate = AppointmentsCalendar.SelectedDates.Any()
+                        ? AppointmentsCalendar.SelectedDates.First().DateTime.Date
+                        : DateTime.MinValue;  // Default to MinValue if no date is selected
+
+                    var selectedAppointment = _appointmentManager.s_appointmentList
+                        .FirstOrDefault(a =>
+                            a.ProcedureName == selectedSlot.Appointment &&
+                            a.Date.Date == selectedDate);
+
+                    if (selectedAppointment != null)
+                    {
+                        AppointmentDetailsView detailsView = new AppointmentDetailsView(selectedAppointment, _appointmentManager);
+                        detailsView.Activate();
+                    }
+                }
+            }
+        }
+
     }
 
-    public class TimeSlotModel
-    {
-        public DateTime TimeSlot { get; set; }
-        public string Time { get; set; }
-        public string Appointment { get; set; }
-        public SolidColorBrush HighlightColor { get; set; }
-    }
 }
