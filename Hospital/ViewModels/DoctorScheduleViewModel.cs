@@ -112,9 +112,22 @@ namespace Hospital.ViewModels
                 ShiftDates.Clear();
                 foreach (var shift in Shifts)
                 {
-                    var shiftDate = shift.DateTime.Date;
-                    ShiftDates.Add(new DateTimeOffset(shiftDate, TimeSpan.Zero));
+                    var shiftStartDate = shift.DateTime.Date;
+                    var shiftEndDate = shift.DateTime.Date;
+
+                    if (shift.EndTime <= shift.StartTime)
+                    {
+                        shiftEndDate = shiftEndDate.AddDays(1); 
+                    }
+
+                    ShiftDates.Add(new DateTimeOffset(shiftStartDate, TimeSpan.Zero));
+
+                    if (shiftEndDate > shiftStartDate)
+                    {
+                        ShiftDates.Add(new DateTimeOffset(shiftEndDate, TimeSpan.Zero));
+                    }
                 }
+
                 OnPropertyChanged(nameof(ShiftDates));
             }
             catch (Exception ex)
