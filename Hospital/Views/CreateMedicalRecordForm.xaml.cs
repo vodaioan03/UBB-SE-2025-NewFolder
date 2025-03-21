@@ -21,14 +21,16 @@ namespace Hospital.Views
             this.InitializeComponent();
             _viewModel = viewModel;
             _appointment = appointment;
-            this.rootGrid.DataContext = _viewModel;
-            this.AppWindow.Resize(new(700, 700));
-            // Auto-fill fields
+
+            // Populate ViewModel from the Appointment
             _viewModel.PatientName = appointment.PatientName;
             _viewModel.DoctorName = appointment.DoctorName;
             _viewModel.AppointmentDate = appointment.Date;
             _viewModel.AppointmentTime = appointment.Date.ToString("hh:mm tt");
             _viewModel.Department = appointment.DepartmentName;
+
+            // Set the data context for binding
+            this.rootGrid.DataContext = _viewModel;
         }
 
         private async void SubmitButton_Click(object sender, RoutedEventArgs e)

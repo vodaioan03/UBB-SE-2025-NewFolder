@@ -63,33 +63,40 @@ namespace Hospital.Managers
             }
         }
 
-        public async Task<int> CreateMedicalRecord(AppointmentJointModel detailedAppointment)
+        public async Task<int> CreateMedicalRecord(AppointmentJointModel detailedAppointment, string conclusion)
         {
-            // Create a new record with a default ID (0 or another placeholder)
-            MedicalRecord medicalRecord = new MedicalRecord(
-                0, // default or placeholder ID
-                detailedAppointment.PatientId,
-                detailedAppointment.DoctorId,
-                detailedAppointment.ProcedureId,
-                string.Empty
-            );
-
-            // Insert the record into the database and get the new ID
-            int newMedicalRecordId = await _medicalRecordsDBService.AddMedicalRecord(medicalRecord)
-                                                  .ConfigureAwait(false);
-
-            // Optionally, update the record's ID property if you need to use the record further
-            if (newMedicalRecordId > 0)
+            try
             {
-                medicalRecord.MedicalRecordId = newMedicalRecordId;
-                // And if required, update the ObservableCollection accordingly:
-                // s_medicalRecordList.Add(new MedicalRecordJointModel(...));
+                // Create a new MedicalRecord instance with the provided conclusion.
+                MedicalRecord medicalRecord = new MedicalRecord(
+                    0, // Placeholder MedicalRecordId; the DB will generate the actual ID.
+                    detailedAppointment.PatientId,
+                    detailedAppointment.DoctorId,
+                    detailedAppointment.ProcedureId,
+                    conclusion
+                );
 
-                s_medicalRecordList.Add(GetMedicalRecordById(newMedicalRecordId));
+                // Insert the new record into the database and get the generated ID.
+                int newMedicalRecordId = await _medicalRecordsDBService.AddMedicalRecord(medicalRecord)
+                                                          .ConfigureAwait(false);
+
+                // If the record was successfully added, update the in-memory list.
+                if (newMedicalRecordId > 0)
+                {
+                    medicalRecord.MedicalRecordId = newMedicalRecordId;
+                    // Optionally, retrieve the full record from the database (with join data) and add it.
+                    s_medicalRecordList.Add(GetMedicalRecordById(newMedicalRecordId));
+                }
+
+                return newMedicalRecordId;
             }
-
-            return newMedicalRecordId;
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error creating medical record: {ex.Message}");
+                return -1;
+            }
         }
+
 
         public async Task LoadMedicalRecordsForDoctor(int doctorId)
         {

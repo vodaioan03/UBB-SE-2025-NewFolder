@@ -76,7 +76,7 @@
                    FontWeight="Bold"
                    Margin="0,0,10,10"/>
         <DatePicker Grid.Row="3" Grid.Column="1"
-                    SelectedDate="{Binding AppointmentDate}"
+                    SelectedDate="{Binding AppointmentDateOffset, Mode=TwoWay}"
                     IsEnabled="False"
                     Margin="0,0,0,10"/>
 
