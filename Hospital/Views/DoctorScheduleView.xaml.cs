@@ -9,6 +9,7 @@ using System.Runtime.CompilerServices;
 using Microsoft.UI.Xaml.Media;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Hospital.Views
 {
@@ -31,38 +32,53 @@ namespace Hospital.Views
 
         private async void LoadShiftsAndRefreshCalendar()
         {
-            await _viewModel.LoadShiftsForDoctor();
+            try
+            {
+                await _viewModel.LoadShiftsForDoctor();
 
-            if (_viewModel.Shifts == null || !_viewModel.Shifts.Any()) return;
+                if (_viewModel.Shifts == null || !_viewModel.Shifts.Any()) return;
 
-            DoctorSchedule.SelectedDates.Clear();
-            DoctorSchedule.InvalidateArrange();
-            DoctorSchedule.InvalidateMeasure();
-            DoctorSchedule.UpdateLayout();
+                DoctorSchedule.SelectedDates.Clear();
+                DoctorSchedule.InvalidateArrange();
+                DoctorSchedule.InvalidateMeasure();
+                DoctorSchedule.UpdateLayout();
 
-            RecreateCalendarView();
+                RecreateCalendarView();
+            }
+            catch (Exception e)
+            {
+                await ShowErrorDialog($"Failed to load doctor shifts.\n\n{e.Message}");
+            }
         }
 
-        private void RecreateCalendarView()
+        private async Task RecreateCalendarView()
         {
-            CalendarContainer.Children.Clear();
-
-            var newCalendar = new CalendarView
+            try
             {
-                MinDate = _viewModel.MinDate.DateTime,
-                MaxDate = _viewModel.MaxDate.DateTime,
-                SelectionMode = CalendarViewSelectionMode.Single,
-                HorizontalAlignment = HorizontalAlignment.Stretch,
-                VerticalAlignment = VerticalAlignment.Top,
-                BorderBrush = new SolidColorBrush(Colors.Green),
-                BorderThickness = new Thickness(2)
-            };
+                CalendarContainer.Children.Clear();
 
-            newCalendar.CalendarViewDayItemChanging += CalendarView_DayItemChanging;
-            newCalendar.SelectedDatesChanged += CalendarView_SelectedDatesChanged;
+                var newCalendar = new CalendarView
+                {
+                    MinDate = _viewModel.MinDate.DateTime,
+                    MaxDate = _viewModel.MaxDate.DateTime,
+                    SelectionMode = CalendarViewSelectionMode.Single,
+                    HorizontalAlignment = HorizontalAlignment.Stretch,
+                    VerticalAlignment = VerticalAlignment.Top,
+                    BorderBrush = new SolidColorBrush(Colors.Green),
+                    BorderThickness = new Thickness(2)
+                };
 
-            DoctorSchedule = newCalendar;
-            CalendarContainer.Children.Insert(0, newCalendar); 
+                newCalendar.CalendarViewDayItemChanging += CalendarView_DayItemChanging;
+                newCalendar.SelectedDatesChanged += CalendarView_SelectedDatesChanged;
+
+                DoctorSchedule = newCalendar;
+                CalendarContainer.Children.Insert(0, newCalendar);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Failed to recreate calendar view: {e.Message}");
+                await ShowErrorDialog("Failed to recreate calendar view.");
+            }
         }
 
 
@@ -92,6 +108,29 @@ namespace Hospital.Views
                 args.Item.Background = new SolidColorBrush(Colors.LightGreen);
             }
         }
+
+        private async Task ShowErrorDialog(string message)
+        {
+            ContentDialog errorDialog = new ContentDialog
+            {
+                Title = "Error",
+                Content = message,
+                CloseButtonText = "OK",
+                RequestedTheme = ElementTheme.Default
+            };
+
+            if (DoctorSchedule != null)
+            {
+                errorDialog.XamlRoot = DoctorSchedule.XamlRoot;
+            }
+            else
+            {
+                throw new InvalidOperationException("No valid XamlRoot found for the dialog.");
+            }
+
+            await errorDialog.ShowAsync();
+        }
+
     }
 
 }

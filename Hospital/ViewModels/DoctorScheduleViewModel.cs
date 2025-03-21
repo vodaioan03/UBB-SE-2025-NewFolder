@@ -101,6 +101,7 @@ namespace Hospital.ViewModels
             catch (Exception ex)
             {
                 Console.WriteLine($"Error loading appointments: {ex.Message}");
+                throw new Exception($"Error loading appointments: {ex.Message}");
             }
         }
         public async Task LoadShiftsForDoctor()
@@ -125,20 +126,26 @@ namespace Hospital.ViewModels
             catch (Exception ex)
             {
                 Console.WriteLine($"❌ Error loading shifts: {ex.Message}");
+                throw new Exception($"Error loading shifts: {ex.Message}");
             }
         }
 
 
         public async Task OnDateSelected(DateTime date)
         {
+            try { 
             await _appointmentManager.LoadDoctorAppointmentsOnDate(DoctorId, date);
             await _shiftManager.LoadShifts(DoctorId);
 
             DailySchedule.Clear();
-
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading appointments: {ex.Message}");
+                throw new Exception($"Error loading appointments: {ex.Message}");
+            }
 
         }
-
 
     }
 }
