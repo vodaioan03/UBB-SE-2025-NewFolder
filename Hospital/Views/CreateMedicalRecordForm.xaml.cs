@@ -7,6 +7,8 @@ using Microsoft.UI.Xaml.Controls;
 using Hospital.ViewModels;
 using Hospital.Models;
 using System.Threading.Tasks;
+using WinRT.Interop;
+using Microsoft.UI.Xaml;
 
 namespace Hospital.Views
 {
@@ -33,6 +35,31 @@ namespace Hospital.Views
             this.rootGrid.DataContext = _viewModel;
         }
 
+        
+
+        private async void UploadFiles_Click(object sender, RoutedEventArgs e)
+        {
+            var picker = new FileOpenPicker
+            {
+                ViewMode = PickerViewMode.Thumbnail,
+                FileTypeFilter = { ".jpg", ".png", ".pdf", ".docx" }
+            };
+
+            // Get the window's HWND
+            var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
+
+            // Initialize the picker with the window handle
+            WinRT.Interop.InitializeWithWindow.Initialize(picker, hwnd);
+
+            var files = await picker.PickMultipleFilesAsync();
+            if (files != null && files.Count > 0)
+            {
+                foreach (var file in files)
+                {
+                    _viewModel.AddDocument(file.Path);
+                }
+            }
+        }
         private async void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(_viewModel.Conclusion))
@@ -48,34 +75,29 @@ namespace Hospital.Views
 
             if (recordId > 0)
             {
-                this.Close(); // Close window if successful
+                await ShowSuccessDialog("Medical record created successfully!");
+                this.Close();
             }
             else
             {
                 await ShowErrorDialog("Failed to create medical record.");
             }
         }
-
-        private async void UploadFiles_Click(object sender, RoutedEventArgs e)
-        {
-            var picker = new FileOpenPicker
-            {
-                ViewMode = PickerViewMode.Thumbnail,
-                FileTypeFilter = { ".jpg", ".png", ".pdf", ".docx" }
-            };
-
-            var file = await picker.PickSingleFileAsync();
-            if (file != null)
-            {
-                _viewModel.AddDocument(_appointment.AppointmentId, file.Path);
-            }
-        }
-
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
-
+        private async Task ShowSuccessDialog(string message)
+        {
+            ContentDialog successDialog = new ContentDialog
+            {
+                Title = "Success",
+                Content = message,
+                CloseButtonText = "OK",
+                XamlRoot = this.Content.XamlRoot
+            };
+            await successDialog.ShowAsync();
+        }
         private async Task ShowErrorDialog(string message)
         {
             ContentDialog errorDialog = new ContentDialog

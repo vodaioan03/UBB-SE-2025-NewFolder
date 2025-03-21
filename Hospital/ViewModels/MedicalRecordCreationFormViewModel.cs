@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Hospital.Managers;
 using Hospital.Commands;
 using System.ComponentModel;
+using System.Diagnostics;
 
 namespace Hospital.ViewModels
 {
@@ -22,6 +23,12 @@ namespace Hospital.ViewModels
         private string _appointmentTime;
         private string _department;
         private string _conclusion;
+        public ObservableCollection<string> DocumentPaths { get; private set; } = new ObservableCollection<string>();
+
+        public void AddDocument(string path)
+        {
+            DocumentPaths.Add(path);
+        }
 
         private DateTime _appointmentDate;
         public DateTimeOffset? AppointmentDateOffset
@@ -67,6 +74,7 @@ namespace Hospital.ViewModels
                 
 
                 int medicalRecordId = await _medicalRecordManager.CreateMedicalRecord(detailedAppointment, conclusion);
+               
                 return medicalRecordId;
             }
             catch (Exception ex)

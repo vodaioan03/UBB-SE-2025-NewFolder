@@ -104,15 +104,28 @@
 
         <!-- Upload Files -->
         <TextBlock Grid.Row="6" Grid.Column="0"
-                   Text="Upload Files:"
-                   VerticalAlignment="Center"
-                   FontWeight="Bold"
-                   Margin="0,0,10,10"/>
-        <Button Grid.Row="6" Grid.Column="1"
-                Content="Select File(s)"
-                Click="UploadFiles_Click"
-                Margin="0,0,0,10"
-                HorizontalAlignment="Left"/>
+           Text="Upload Files:"
+           VerticalAlignment="Center"
+           FontWeight="Bold"
+           Margin="0,0,10,10"/>
+        <StackPanel Grid.Row="6" Grid.Column="1"
+            Margin="0,0,0,10">
+            <Button Content="Select File(s)"
+            Click="UploadFiles_Click"
+            HorizontalAlignment="Left"
+            Margin="0,0,0,5"/>
+            <ListBox ItemsSource="{Binding DocumentPaths}"
+             Height="100"
+             BorderThickness="1"
+             BorderBrush="Gray">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}"
+                           Margin="5"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </StackPanel>
 
         <!-- Conclusions label -->
         <TextBlock Grid.Row="7" Grid.Column="0"
