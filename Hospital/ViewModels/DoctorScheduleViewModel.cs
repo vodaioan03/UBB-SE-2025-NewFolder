@@ -162,9 +162,9 @@ namespace Hospital.ViewModels
 
         private List<TimeSlotModel> GenerateTimeSlots(DateTime date)
         {
-            List<TimeSlotModel> slots = new List<TimeSlotModel>();
+            List<TimeSlotModel> slots = new();
             DateTime startTime = date.Date;
-            DateTime endTime = startTime.AddDays(1);
+            DateTime endTime = startTime.AddDays(1); // Midnight next day
 
             var selectedAppointments = Appointments
                 .Where(a => a.Date.Date == date.Date)
@@ -175,8 +175,9 @@ namespace Hospital.ViewModels
                 {
                     var shiftStart = s.DateTime.Date + s.StartTime;
                     var shiftEnd = s.DateTime.Date + s.EndTime;
+
                     if (s.EndTime <= s.StartTime)
-                        shiftEnd = shiftEnd.AddDays(1);
+                        shiftEnd = shiftEnd.AddDays(1); // Night shift
 
                     return shiftStart < endTime && shiftEnd > startTime;
                 })
@@ -200,25 +201,21 @@ namespace Hospital.ViewModels
                     DateTime shiftEnd = s.DateTime.Date + s.EndTime;
                     if (s.EndTime <= s.StartTime)
                         shiftEnd = shiftEnd.AddDays(1);
+
                     return startTime >= shiftStart && startTime < shiftEnd;
                 });
 
-                if (isInShift)
-                {
-                    brush = new SolidColorBrush(Colors.Green);
-                }
-
                 var matchingAppointment = selectedAppointments.FirstOrDefault(a =>
-                    a.Date.Year == startTime.Year &&
-                    a.Date.Month == startTime.Month &&
-                    a.Date.Day == startTime.Day &&
-                    a.Date.Hour == startTime.Hour &&
-                    a.Date.Minute == startTime.Minute);
+                    a.Date == startTime && isInShift);
 
                 if (matchingAppointment != null)
                 {
                     slot.Appointment = matchingAppointment.ProcedureName;
                     brush = new SolidColorBrush(Colors.Orange);
+                }
+                else if (isInShift)
+                {
+                    brush = new SolidColorBrush(Colors.Green);
                 }
 
                 slot.HighlightColor = brush;
@@ -228,5 +225,6 @@ namespace Hospital.ViewModels
 
             return slots;
         }
+
     }
 }
