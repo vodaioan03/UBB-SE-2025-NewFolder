@@ -15,6 +15,8 @@ using Hospital.Views;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml;
 
 namespace Hospital.ViewModels
 {
@@ -125,27 +127,11 @@ namespace Hospital.ViewModels
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"❌ Error loading shifts: {ex.Message}");
+                Console.WriteLine($"Error loading shifts: {ex.Message}");
                 throw new Exception($"Error loading shifts: {ex.Message}");
             }
         }
 
-
-        public async Task OnDateSelected(DateTime date)
-        {
-            try { 
-            await _appointmentManager.LoadDoctorAppointmentsOnDate(DoctorId, date);
-            await _shiftManager.LoadShifts(DoctorId);
-
-            DailySchedule.Clear();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error loading appointments: {ex.Message}");
-                throw new Exception($"Error loading appointments: {ex.Message}");
-            }
-
-        }
 
     }
 }

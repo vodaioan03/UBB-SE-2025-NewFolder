@@ -43,13 +43,14 @@ namespace Hospital.Views
                 DoctorSchedule.InvalidateMeasure();
                 DoctorSchedule.UpdateLayout();
 
-                RecreateCalendarView();
+                await RecreateCalendarView();
             }
             catch (Exception e)
             {
                 await ShowErrorDialog($"Failed to load doctor shifts.\n\n{e.Message}");
             }
         }
+
 
         private async Task RecreateCalendarView()
         {
@@ -94,7 +95,7 @@ namespace Hospital.Views
             if (args.AddedDates.Count > 0)
             {
                 var selectedDate = args.AddedDates[0].DateTime.Date;
-                await _viewModel.OnDateSelected(selectedDate);
+                return;
             }
         }
 
@@ -111,26 +112,33 @@ namespace Hospital.Views
 
         private async Task ShowErrorDialog(string message)
         {
-            ContentDialog errorDialog = new ContentDialog
+            try
             {
-                Title = "Error",
-                Content = message,
-                CloseButtonText = "OK",
-                RequestedTheme = ElementTheme.Default
-            };
+                ContentDialog errorDialog = new ContentDialog
+                {
+                    Title = "Error",
+                    Content = message,
+                    CloseButtonText = "OK",
+                    RequestedTheme = ElementTheme.Default
+                };
 
-            if (DoctorSchedule != null)
-            {
-                errorDialog.XamlRoot = DoctorSchedule.XamlRoot;
-            }
-            else
-            {
-                throw new InvalidOperationException("No valid XamlRoot found for the dialog.");
-            }
+                if (this.Content is FrameworkElement rootElement)
+                {
+                    errorDialog.XamlRoot = rootElement.XamlRoot;
+                }
+                else
+                {
+                    Console.WriteLine("Error: Unable to find a valid XamlRoot.");
+                    return;
+                }
 
-            await errorDialog.ShowAsync();
+                await errorDialog.ShowAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Critical error while showing error dialog: {ex.Message}");
+            }
         }
-
     }
 
 }
