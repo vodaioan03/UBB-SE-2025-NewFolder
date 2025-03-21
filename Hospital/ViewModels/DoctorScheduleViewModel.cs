@@ -106,6 +106,7 @@ namespace Hospital.ViewModels
                 throw new Exception($"Error loading appointments: {ex.Message}");
             }
         }
+
         public async Task LoadShiftsForDoctor()
         {
             try
@@ -120,10 +121,7 @@ namespace Hospital.ViewModels
                     var shiftDate = shift.DateTime.Date;
                     ShiftDates.Add(new DateTimeOffset(shiftDate, TimeSpan.Zero));
                 }
-
-
                 OnPropertyChanged(nameof(ShiftDates));
-
             }
             catch (Exception ex)
             {
@@ -134,25 +132,26 @@ namespace Hospital.ViewModels
 
         public async Task OnDateSelected(DateTime date)
         {
+            DailySchedule.Clear();
             try
             {
                 await _appointmentManager.LoadDoctorAppointmentsOnDate(DoctorId, date);
-                Appointments = _appointmentManager.s_appointmentList;
-
-                DailySchedule.Clear();
-
-                foreach (var slot in GenerateTimeSlots(date))
+                await _shiftManager.LoadShifts(DoctorId);
+                var slots = GenerateTimeSlots(date);
+                foreach (var slot in slots)
                 {
                     DailySchedule.Add(slot);
                 }
 
                 OnPropertyChanged(nameof(DailySchedule));
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Console.WriteLine($"Error selecting date: {e.Message}");
+                Console.WriteLine($"Database access failed: {ex.Message}");
             }
+          
         }
+
 
         private List<TimeSlotModel> GenerateTimeSlots(DateTime date)
         {
