@@ -98,11 +98,11 @@ namespace Hospital.ViewModels
 
 
 
-        public async Task LoadAppointmentsForDoctor(int doctorId)
+        public async Task LoadAppointmentsForDoctor()
         {
             try
             {
-                await _appointmentManager.LoadAppointmentsForDoctor(doctorId);
+                await _appointmentManager.LoadAppointmentsForDoctor(DoctorId);
                 var appointments = _appointmentManager.s_appointmentList;
 
                 Appointments.Clear();
