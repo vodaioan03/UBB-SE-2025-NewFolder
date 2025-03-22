@@ -59,7 +59,6 @@ namespace Hospital.Views
             RefreshAppointments();
         }
 
-
         private async Task LoadAppointmentsForPatient(int patientId)
         {
             await _appointmentManager.LoadAppointmentsForPatient(patientId);
@@ -97,6 +96,8 @@ namespace Hospital.Views
                     .OrderBy(a => a.Date.TimeOfDay)
                     .ToList();
 
+                bool anyAppointments = false;
+
                 foreach (var appointment in selectedAppointments)
                 {
                     DateTime appointmentStart = appointment.Date;
@@ -108,6 +109,7 @@ namespace Hospital.Views
                         {
                             slot.Appointment = appointment.ProcedureName;
                             slot.HighlightColor = new SolidColorBrush(Colors.Green);
+                            anyAppointments = true;
                         }
                     }
                 }
@@ -116,14 +118,20 @@ namespace Hospital.Views
                 {
                     DailyAppointments.Add(slot);
                 }
+
+                NoAppointmentsText.Visibility = anyAppointments ? Visibility.Collapsed : Visibility.Visible;
             }
         }
 
         private List<TimeSlotModel> GenerateTimeSlots(DateTime date)
         {
             List<TimeSlotModel> slots = new List<TimeSlotModel>();
-            DateTime startTime = date.Date;
-            DateTime endTime = startTime.AddHours(24);
+
+            // Start at 8:00 AM
+            DateTime startTime = date.Date.AddHours(8);
+
+            // End at 6:00 PM (18:00)
+            DateTime endTime = date.Date.AddHours(18);
 
             while (startTime < endTime)
             {
@@ -140,6 +148,7 @@ namespace Hospital.Views
 
             return slots;
         }
+
 
         private void CalendarView_DayItemChanging(CalendarView sender, CalendarViewDayItemChangingEventArgs args)
         {
