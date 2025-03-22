@@ -34,7 +34,7 @@ namespace Hospital.ViewModels
             {
                 foreach (Document document in documents)
                 {
-                    Console.WriteLine($"Downloading document: {document.File}");
+                    Console.WriteLine($"Downloading document: {document.Files}");
                 }
             }
         }
