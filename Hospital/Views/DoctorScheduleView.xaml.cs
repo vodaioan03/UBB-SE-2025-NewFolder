@@ -109,7 +109,7 @@ namespace Hospital.Views
             }
         }
 
-        private async void CalendarView_DayItemChanging(CalendarView sender, CalendarViewDayItemChangingEventArgs args)
+        private void CalendarView_DayItemChanging(CalendarView sender, CalendarViewDayItemChangingEventArgs args)
         {
             if (_viewModel.ShiftDates == null || !_viewModel.ShiftDates.Any()) return;
             var date = args.Item.Date.Date;
@@ -149,19 +149,57 @@ namespace Hospital.Views
                 Console.WriteLine($"Critical error while showing error dialog: {ex.Message}");
             }
         }
+
+
         private void DailyScheduleList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             return;
+            
         }
 
-
-        private void TimeSlot_Tapped(object sender, TappedRoutedEventArgs e)
+        private async void TimeSlot_Tapped(object sender, TappedRoutedEventArgs e)
         {
             if (sender is StackPanel panel && panel.DataContext is TimeSlotModel slot)
             {
                 if (_viewModel.OpenDetailsCommand?.CanExecute(slot) == true)
                 {
                     _viewModel.OpenDetailsCommand.Execute(slot);
+
+                    var selected = _viewModel.SelectedSlot;
+                    if (selected != null)
+                    {
+                        string message;
+
+                        if (!string.IsNullOrEmpty(selected.Appointment))
+                        {
+                            var appointment = _viewModel.Appointments.FirstOrDefault(a => a.ProcedureName == selected.Appointment);
+                            message = $"Appointment: {appointment.ProcedureName}\n" +
+                                      $"Date: {appointment.Date}\n" +
+                                      $"Doctor: {appointment.DoctorName}\n" +
+                                      $"Patient: {appointment.PatientName}";
+                        }
+                        else if (selected.HighlightColor.Color == Colors.Green)
+                        {
+                            message = $"No appointments scheduled in this shift slot.\nTime: {selected.Time}";
+                        }
+                        else
+                        {
+                            return;
+                        }
+
+                        ContentDialog dialog = new ContentDialog
+                        {
+                            Title = "Appointment Info",
+                            Content = message,
+                            CloseButtonText = "OK",
+                            XamlRoot = this.Content.XamlRoot,
+                            RequestedTheme = ElementTheme.Default
+                        };
+
+                        await dialog.ShowAsync();
+
+                        _viewModel.SelectedSlot = null;
+                    }
                 }
             }
         }

@@ -17,8 +17,7 @@ using Microsoft.UI;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Input;
-using Windows.ApplicationModel.Appointments;
+using System.Reflection.Metadata;
 
 namespace Hospital.ViewModels
 {
@@ -65,6 +64,17 @@ namespace Hospital.ViewModels
             }
         }
 
+        private TimeSlotModel _selectedSlot;
+        public TimeSlotModel SelectedSlot
+        {
+            get => _selectedSlot;
+            set
+            {
+                _selectedSlot = value;
+                OnPropertyChanged();
+            }
+        }
+
         public DoctorScheduleViewModel(AppointmentManagerModel appointmentManager, ShiftManagerModel shiftManager)
         {
             _appointmentManager = appointmentManager;
@@ -76,26 +86,17 @@ namespace Hospital.ViewModels
             OpenDetailsCommand = new RelayCommand(OpenAppointmentForDoctor);
         }
 
-        public void OpenAppointmentForDoctor(object obj)
+        private void OpenAppointmentForDoctor(object obj)
         {
             if (obj is not TimeSlotModel selectedSlot) return;
 
-            if (!string.IsNullOrEmpty(selectedSlot.Appointment) && selectedSlot.HighlightColor.Color == Colors.Transparent)
-            {
+            if (string.IsNullOrEmpty(selectedSlot.Appointment) && selectedSlot.HighlightColor.Color == Colors.Transparent)
                 return;
-            }
 
-            if (!string.IsNullOrEmpty(selectedSlot.Appointment))
-            {
-                ShowMessageDialog("Appointments scheduled in this time slot");
-            }
-            else
-            {
-                ShowMessageDialog("No appointments scheduled in this time slot");
-            }
- 
-            return; 
+            SelectedSlot = selectedSlot;
         }
+
+
 
         public async Task LoadAppointmentsForDoctor(int doctorId)
         {
@@ -180,6 +181,7 @@ namespace Hospital.ViewModels
             List<TimeSlotModel> slots = new();
             DateTime startTime = date.Date;
             DateTime endTime = startTime.AddDays(1); 
+
             var selectedAppointments = Appointments
                 .Where(a => a.Date.Date == date.Date)
                 .ToList();
@@ -240,25 +242,7 @@ namespace Hospital.ViewModels
             return slots;
         }
 
-        private async Task ShowMessageDialog(string message)
-        {
-            ContentDialog messageDialog = new ContentDialog
-            {
-                Title = "Information",
-                Content = message,
-                CloseButtonText = "OK"
-            };
-
-            if (App.Current != null && Window.Current != null)
-            {
-                messageDialog.XamlRoot = ((FrameworkElement)Window.Current.Content).XamlRoot;
-            }
-
-            await messageDialog.ShowAsync();
-        }
-
-
+        
 
     }
-
 }
