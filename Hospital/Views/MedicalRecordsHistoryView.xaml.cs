@@ -5,6 +5,7 @@ using Microsoft.UI;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using System;
 using System.Diagnostics;
 
 namespace Hospital.Views
@@ -26,13 +27,28 @@ namespace Hospital.Views
             this.MedicalRecordsPanel.DataContext = _viewModel;
         }
 
-        private void ShowMedicalRecordDetails(object sender, RoutedEventArgs e)
+        private async void ShowMedicalRecordDetails(object sender, RoutedEventArgs e)
         {
-            var selectedRecord = MedicalRecordsListView.SelectedItem;
-            if (selectedRecord is MedicalRecordJointModel medicalRecord)
+            try
             {
-                Debug.WriteLine($"Opening details for Medical Record ID: {medicalRecord.MedicalRecordId}");
-                _viewModel.ShowMedicalRecordDetails(selectedRecord);
+                var selectedRecord = MedicalRecordsListView.SelectedItem;
+                if (selectedRecord is MedicalRecordJointModel medicalRecord)
+                {
+                    Debug.WriteLine($"Opening details for Medical Record ID: {medicalRecord.MedicalRecordId}");
+                    _viewModel.ShowMedicalRecordDetails(selectedRecord);
+                }
+            }
+            catch (Exception ex)
+            {
+                var validationDialog = new ContentDialog
+                {
+                    Title = "Error",
+                    Content = $"Error: {ex.Message}",
+                    CloseButtonText = "OK"
+                };
+                validationDialog.XamlRoot = this.Content.XamlRoot;
+                await validationDialog.ShowAsync();
+                return;
             }
         }
 

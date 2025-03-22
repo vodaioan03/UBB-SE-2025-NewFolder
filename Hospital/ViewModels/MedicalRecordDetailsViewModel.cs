@@ -1,4 +1,5 @@
 ﻿using Hospital.Commands;
+using Hospital.Exceptions;
 using Hospital.Managers;
 using Hospital.Models;
 using System;
@@ -33,16 +34,23 @@ namespace Hospital.ViewModels
             Debug.WriteLine("Download button clicked");
             if (obj is List<Document> documents)
             {
+                if (documents.Count == 0)
+                {
+                    throw new DocumentNotFoundException("No documents found");
+                }
                 foreach (Document document in documents)
                 {
                     Debug.WriteLine($"\tDownloading document: {document.File}");
                 }
             }
+            else 
+            {
+                throw new FormatException("Invalid object type");
+            }
         }
 
         public void OnDownloadButtonClicked()
         {
-            // Download the documents of the medical record
             downloadDocuments.Execute(Documents.ToList());
         }
     }

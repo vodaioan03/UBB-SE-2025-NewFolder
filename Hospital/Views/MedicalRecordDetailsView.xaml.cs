@@ -44,12 +44,43 @@ namespace Hospital.Views
 
         private async void DownloadButton_Click(object sender, RoutedEventArgs e)
         {
-            _viewModel.OnDownloadButtonClicked();
+            try
+            {
+                _viewModel.OnDownloadButtonClicked();
+            }
+            catch (Exception ex)
+            {
+                var validationDialog = new ContentDialog
+                {
+                    Title = "Error",
+                    Content = $"Error: {ex.Message}",
+                    CloseButtonText = "OK"
+                };
+                validationDialog.XamlRoot = this.Content.XamlRoot;
+                await validationDialog.ShowAsync();
+                return;
+            }
         }
 
         private async void FeedbackButton_Click(object sender, RoutedEventArgs e)
         {
-            Debug.WriteLine("Feedback button clicked");
+            
+            try
+            {
+                Debug.WriteLine("Feedback button clicked");
+            }
+            catch (Exception ex)
+            {
+                var validationDialog = new ContentDialog
+                {
+                    Title = "Error",
+                    Content = $"Error: {ex.Message}",
+                    CloseButtonText = "OK"
+                };
+                validationDialog.XamlRoot = this.Content.XamlRoot;
+                await validationDialog.ShowAsync();
+                return;
+            }
         }
 
         private void StyleTitleBar()
