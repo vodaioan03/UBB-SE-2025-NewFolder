@@ -17,6 +17,7 @@ using Microsoft.UI;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml;
+using System.Reflection.Metadata;
 
 namespace Hospital.ViewModels
 {
@@ -63,6 +64,17 @@ namespace Hospital.ViewModels
             }
         }
 
+        private TimeSlotModel _selectedSlot;
+        public TimeSlotModel SelectedSlot
+        {
+            get => _selectedSlot;
+            set
+            {
+                _selectedSlot = value;
+                OnPropertyChanged();
+            }
+        }
+
         public DoctorScheduleViewModel(AppointmentManagerModel appointmentManager, ShiftManagerModel shiftManager)
         {
             _appointmentManager = appointmentManager;
@@ -71,22 +83,26 @@ namespace Hospital.ViewModels
             Shifts = new List<Shift>();
             ShiftDates = new ObservableCollection<DateTimeOffset>();
 
-            OpenDetailsCommand = new RelayCommand(OpenDetails);
+            OpenDetailsCommand = new RelayCommand(OpenAppointmentForDoctor);
         }
 
-        private void OpenDetails(object obj)
+        private void OpenAppointmentForDoctor(object obj)
         {
-            if (obj is AppointmentJointModel appointment)
-            {
-                Console.WriteLine($"Opening details for Appointment ID: {appointment.AppointmentId}");
-            }
+            if (obj is not TimeSlotModel selectedSlot) return;
+
+            if (string.IsNullOrEmpty(selectedSlot.Appointment) && selectedSlot.HighlightColor.Color == Colors.Transparent)
+                return;
+
+            SelectedSlot = selectedSlot;
         }
 
-        public async Task LoadAppointmentsForDoctor(int doctorId)
+
+
+        public async Task LoadAppointmentsForDoctor()
         {
             try
             {
-                await _appointmentManager.LoadAppointmentsForDoctor(doctorId);
+                await _appointmentManager.LoadAppointmentsForDoctor(DoctorId);
                 var appointments = _appointmentManager.s_appointmentList;
 
                 Appointments.Clear();
@@ -164,7 +180,7 @@ namespace Hospital.ViewModels
         {
             List<TimeSlotModel> slots = new();
             DateTime startTime = date.Date;
-            DateTime endTime = startTime.AddDays(1); // Midnight next day
+            DateTime endTime = startTime.AddDays(1); 
 
             var selectedAppointments = Appointments
                 .Where(a => a.Date.Date == date.Date)
@@ -177,7 +193,7 @@ namespace Hospital.ViewModels
                     var shiftEnd = s.DateTime.Date + s.EndTime;
 
                     if (s.EndTime <= s.StartTime)
-                        shiftEnd = shiftEnd.AddDays(1); // Night shift
+                        shiftEnd = shiftEnd.AddDays(1); 
 
                     return shiftStart < endTime && shiftEnd > startTime;
                 })
@@ -225,6 +241,8 @@ namespace Hospital.ViewModels
 
             return slots;
         }
+
+        
 
     }
 }
