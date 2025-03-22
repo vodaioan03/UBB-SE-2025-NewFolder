@@ -61,7 +61,22 @@ namespace Hospital.Views
             DepartmentText.Text = _viewModel.Department;
             ProcedureNameText.Text = _viewModel.ProcedureName;
             ProcedureDurationText.Text = _viewModel.ProcedureDuration;
+
+            // Decide which button to show
+            bool canCancel = (_viewModel.AppointmentDateTime.ToLocalTime() - DateTime.Now).TotalHours >= 24;
+
+            if (canCancel)
+            {
+                CancelAppointmentEnabledButton.Visibility = Visibility.Visible;
+                CancelAppointmentDisabledButton.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                CancelAppointmentEnabledButton.Visibility = Visibility.Collapsed;
+                CancelAppointmentDisabledButton.Visibility = Visibility.Visible;
+            }
         }
+
 
         private void GoBack_Click(object sender, RoutedEventArgs e)
         {

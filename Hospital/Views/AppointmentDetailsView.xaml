@@ -2,9 +2,12 @@
     x:Class="Hospital.Views.AppointmentDetailsView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Hospital.ViewModels"
     Title="Appointment Details">
 
     <Grid Padding="20">
+
+
         <StackPanel Orientation="Vertical" Spacing="10">
 
             <!-- Title -->
@@ -29,12 +32,30 @@
             </StackPanel>
 
             <!-- Buttons -->
+            <!-- Buttons -->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="20" Margin="20">
-                <Button Content="Go Back" Width="120" Height="40" Background="Green" Foreground="White"
+                <Button Content="Go Back"
+            Width="120" Height="40"
+            Background="Green" Foreground="White"
             Click="GoBack_Click"/>
-                <Button x:Name="CancelAppointmentButton" Content="Cancel Appointment"
-            Width="160" Height="40" Background="Red" Foreground="White"
-            Click="CancelAppointment_Click" IsEnabled="{Binding CanCancelAppointment}"/>
+
+                <!-- Visible when eligible -->
+                <Button x:Name="CancelAppointmentEnabledButton"
+            Content="Cancel Appointment"
+            Width="160" Height="40"
+            Background="Red" Foreground="White"
+            Click="CancelAppointment_Click"
+            Visibility="Collapsed"/>
+
+                <!-- Visible when NOT eligible -->
+                <Button x:Name="CancelAppointmentDisabledButton"
+        Content="Cancel Appointment"
+        Width="160" Height="40"
+        Background="#FF6666" Foreground="White"
+        IsEnabled="False"
+        Visibility="Collapsed"
+        ToolTipService.ToolTip="You can only cancel appointments more than 24 hours in advance."/>
+
             </StackPanel>
 
         </StackPanel>
