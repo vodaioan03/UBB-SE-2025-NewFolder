@@ -22,7 +22,7 @@ namespace Hospital.DatabaseServices
         {
             DateTime recordDate = DateTime.Now;
             const string queryAddMedicalRecord =
-                "INSERT INTO MedicalRecord(DoctorId, PatientId, ProcedureId, Conclusion, DateAndTime) " +
+                "INSERT INTO MedicalRecords(DoctorId, PatientId, ProcedureId, Conclusion, DateAndTime) " +
                 "OUTPUT INSERTED.MedicalRecordId " +
                 "VALUES (@DoctorId, @PatientId, @ProcedureId, @Conclusion, @DateAndTime)";
 
@@ -70,7 +70,7 @@ namespace Hospital.DatabaseServices
               "     pr.ProcedureName, " +
               //"     mr.DateAndTime, " + nu exista in baza de date
               "     mr.Conclusion " +
-              "FROM MedicalRecord mr " +
+              "FROM MedicalRecords mr " +
               "JOIN Users p ON mr.PatientId = p.UserId " +
               "JOIN Users d ON mr.DoctorId = d.UserId " +
               "JOIN Procedures pr ON mr.ProcedureId = pr.ProcedureId " +
@@ -146,7 +146,7 @@ namespace Hospital.DatabaseServices
               "     pr.ProcedureName, " +
               "     mr.DateAndTime, " +
               "     mr.Conclusion " +
-              "FROM MedicalRecord mr " +
+              "FROM MedicalRecords mr " +
               "JOIN Users p ON mr.PatientId = p.UserId " +
               "JOIN Users d ON mr.DoctorId = d.UserId " +
               "JOIN Procedures pr ON mr.ProcedureId = pr.ProcedureId " +
@@ -218,7 +218,7 @@ namespace Hospital.DatabaseServices
               "     pr.ProcedureName, " +
               "     mr.DateAndTime, " +
               "     mr.Conclusion " +
-              "FROM MedicalRecord mr " +
+              "FROM MedicalRecords mr " +
               "JOIN Users p ON mr.PatientId = p.UserId " +
               "JOIN Users d ON mr.DoctorId = d.UserId " +
               "JOIN Procedures pr ON mr.ProcedureId = pr.ProcedureId " +

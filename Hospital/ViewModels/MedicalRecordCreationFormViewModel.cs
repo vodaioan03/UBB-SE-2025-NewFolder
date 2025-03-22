@@ -84,9 +84,9 @@ namespace Hospital.ViewModels
 
         public void AddDocument(int medicalRecordId, string path)
         {
-            Document doc = new Document(0, medicalRecordId, path);
             if (Documents.Count < maxDocs)
             {
+                Document doc = new Document(0, medicalRecordId, path);
                 Documents.Add(path);
                 _ = _documentManager.AddDocumentToMedicalRecord(doc);
             }

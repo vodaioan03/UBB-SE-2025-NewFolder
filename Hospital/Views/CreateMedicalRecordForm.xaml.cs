@@ -56,12 +56,19 @@ namespace Hospital.Views
             {
                 foreach (var file in files)
                 {
+
                     _viewModel.AddDocument(file.Path);
                 }
             }
         }
         private async void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
+            if (_viewModel.Conclusion.Length > 255)
+            {
+                await ShowErrorDialog("Conclusion cannot exceed 100 characters.");
+                return;
+            }
+
             if (string.IsNullOrWhiteSpace(_viewModel.Conclusion))
             {
                 await ShowErrorDialog("Conclusion cannot be empty.");
@@ -75,6 +82,12 @@ namespace Hospital.Views
 
             if (recordId > 0)
             {
+                // Add documents with the new MedicalRecordId
+                foreach (var documentPath in _viewModel.DocumentPaths)
+                {
+                    _viewModel.AddDocument(recordId, documentPath);
+                }
+
                 await ShowSuccessDialog("Medical record created successfully!");
                 this.Close();
             }
@@ -83,6 +96,8 @@ namespace Hospital.Views
                 await ShowErrorDialog("Failed to create medical record.");
             }
         }
+
+
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
