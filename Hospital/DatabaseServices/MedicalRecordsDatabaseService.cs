@@ -68,7 +68,7 @@ namespace Hospital.DatabaseServices
               "     dept.DepartmentName, " +
               "     mr.ProcedureId, " +
               "     pr.ProcedureName, " +
-              //"     mr.DateAndTime, " + nu exista in baza de date
+              "     mr.DateAndTime, " +
               "     mr.Conclusion " +
               "FROM MedicalRecords mr " +
               "JOIN Users p ON mr.PatientId = p.UserId " +
