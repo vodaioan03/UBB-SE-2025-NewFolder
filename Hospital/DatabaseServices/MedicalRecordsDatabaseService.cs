@@ -20,39 +20,28 @@ namespace Hospital.DatabaseServices
 
         public async Task<int> AddMedicalRecord(MedicalRecord medicalRecord)
         {
+            DateTime recordDate = DateTime.Now;
             const string queryAddMedicalRecord =
-              "INSERT INTO MedicalRecord(DoctorId, PatientId, ProcedureId, Conclusion) " +
-              "OUTPUT INSERTED.MedicalRecordId " +
-              "VALUES (@DoctorId, @PatientId, @ProcedureId, @Conclusion)";
+                "INSERT INTO MedicalRecord(DoctorId, PatientId, ProcedureId, Conclusion, DateAndTime) " +
+                "OUTPUT INSERTED.MedicalRecordId " +
+                "VALUES (@DoctorId, @PatientId, @ProcedureId, @Conclusion, @DateAndTime)";
 
             try
             {
                 using var connection = new SqlConnection(_config.DatabaseConnection);
-
-                // Open the database connection asynchronously
                 await connection.OpenAsync().ConfigureAwait(false);
                 Console.WriteLine("Connection established successfully.");
 
-                // Create a command to execute the SQL query
                 using var command = new SqlCommand(queryAddMedicalRecord, connection);
-
-                // Add parameters to the query
                 command.Parameters.AddWithValue("@DoctorId", medicalRecord.DoctorId);
                 command.Parameters.AddWithValue("@PatientId", medicalRecord.PatientId);
                 command.Parameters.AddWithValue("@ProcedureId", medicalRecord.ProcedureId);
                 command.Parameters.AddWithValue("@Conclusion", medicalRecord.Conclusion ?? (object)DBNull.Value);
+                command.Parameters.AddWithValue("@DateAndTime", recordDate); // Pass the record's date
 
-                // Execute the query asynchronously and retrieve the generated MedicalRecordId
-                SqlDataReader result = await command.ExecuteReaderAsync().ConfigureAwait(false);
-                int MedicalRecordId = -1;
-                while (await result.ReadAsync().ConfigureAwait(false))
-                {
-                    MedicalRecordId = result.GetInt32(0);
-                }
-
-
-                // Return the generated MedicalRecordId or -1 if insertion failed
-                return MedicalRecordId;
+                object result = await command.ExecuteScalarAsync().ConfigureAwait(false);
+                int medicalRecordId = result != null ? Convert.ToInt32(result) : -1;
+                return medicalRecordId;
             }
             catch (SqlException sqlException)
             {
@@ -79,9 +68,9 @@ namespace Hospital.DatabaseServices
               "     dept.DepartmentName, " +
               "     mr.ProcedureId, " +
               "     pr.ProcedureName, " +
-              "     mr.DateAndTime, " +
+              //"     mr.DateAndTime, " + nu exista in baza de date
               "     mr.Conclusion " +
-              "FROM MedicalRecords mr " +
+              "FROM MedicalRecord mr " +
               "JOIN Users p ON mr.PatientId = p.UserId " +
               "JOIN Users d ON mr.DoctorId = d.UserId " +
               "JOIN Procedures pr ON mr.ProcedureId = pr.ProcedureId " +
@@ -157,7 +146,7 @@ namespace Hospital.DatabaseServices
               "     pr.ProcedureName, " +
               "     mr.DateAndTime, " +
               "     mr.Conclusion " +
-              "FROM MedicalRecords mr " +
+              "FROM MedicalRecord mr " +
               "JOIN Users p ON mr.PatientId = p.UserId " +
               "JOIN Users d ON mr.DoctorId = d.UserId " +
               "JOIN Procedures pr ON mr.ProcedureId = pr.ProcedureId " +
@@ -229,7 +218,7 @@ namespace Hospital.DatabaseServices
               "     pr.ProcedureName, " +
               "     mr.DateAndTime, " +
               "     mr.Conclusion " +
-              "FROM MedicalRecords mr " +
+              "FROM MedicalRecord mr " +
               "JOIN Users p ON mr.PatientId = p.UserId " +
               "JOIN Users d ON mr.DoctorId = d.UserId " +
               "JOIN Procedures pr ON mr.ProcedureId = pr.ProcedureId " +

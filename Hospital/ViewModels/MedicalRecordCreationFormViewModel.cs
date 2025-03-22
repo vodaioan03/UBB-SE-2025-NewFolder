@@ -64,9 +64,7 @@ namespace Hospital.ViewModels
 
         public async Task<int> CreateMedicalRecord(AppointmentJointModel detailedAppointment, string conclusion)
         {
-            await Task.Delay(500);
-            return new Random().Next(1, 1000); // Returning a random record ID
-
+           
             try
             {
                 detailedAppointment.Finished = true;

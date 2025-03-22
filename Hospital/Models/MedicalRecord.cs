@@ -14,14 +14,17 @@ namespace Hospital.Models
         public int ProcedureId { get; set; }
         public string Conclusion { get; set; }
 
+        public DateTime DateAndTime { get; set; }
 
-        public MedicalRecord(int medicalRecordId, int patientId, int doctorId, int procedureId, string conclusion)
+
+        public MedicalRecord(int medicalRecordId, int patientId, int doctorId, int procedureId, string conclusion, DateTime dateAndTime)
         {
             MedicalRecordId = medicalRecordId;
             PatientId = patientId;
             DoctorId = doctorId;
             ProcedureId = procedureId;
             Conclusion = conclusion;
+            DateAndTime = dateAndTime;
         }
     }
 }
