@@ -22,9 +22,18 @@ namespace Hospital.Views
         private readonly DoctorScheduleViewModel _viewModel;
         public ObservableCollection<TimeSlotModel> _dailySchedule { get; private set; }
 
-        public DoctorScheduleView(AppointmentManagerModel appointmentManagerModel, ShiftManagerModel shiftManagerModel)
+        private MedicalRecordManagerModel _medicalRecordManager;
+        private DocumentManagerModel _documentManager;
+
+        public DoctorScheduleView(
+            AppointmentManagerModel appointmentManagerModel, 
+            ShiftManagerModel shiftManagerModel, 
+            MedicalRecordManagerModel medicalRecordManager, 
+            DocumentManagerModel documentManager)
         {
             _viewModel = new DoctorScheduleViewModel(appointmentManagerModel, shiftManagerModel);
+            _medicalRecordManager = medicalRecordManager;
+            _documentManager = documentManager;
             _dailySchedule = new ObservableCollection<TimeSlotModel>();
 
             LoadInitialCalendarRange();
@@ -203,6 +212,9 @@ namespace Hospital.Views
                                 // TODO
                                 dialog.Hide();
 
+                                MedicalRecordCreationFormViewModel viewModel = new MedicalRecordCreationFormViewModel(_medicalRecordManager, _documentManager);
+                                CreateMedicalRecordForm medicalRecordCreateView = new CreateMedicalRecordForm(viewModel, appointment);
+                                medicalRecordCreateView.Activate();
                             };
 
                             Button viewProfileBtn = new Button { Content = "View Profile" };

@@ -74,7 +74,7 @@ namespace Hospital
 
         private void DoctorScheduleButton(object sender, RoutedEventArgs e)
         {
-            DoctorScheduleView doctorScheduleView = new DoctorScheduleView(AppointmentManager, ShiftManager);
+            DoctorScheduleView doctorScheduleView = new DoctorScheduleView(AppointmentManager, ShiftManager, MedicalRecordManager, DocumentManager);
             doctorScheduleView.Activate();
         }
 
