@@ -40,13 +40,14 @@ namespace Hospital.Views
 
             _viewModel = new MedicalRecordDetailsViewModel(medicalRecordJointModel, documentManagerModel);
             this.MedicalRecordDetailsPanel.DataContext = _viewModel;
+            this.DownloadButton.IsEnabled = _viewModel.getDownloadButtonIsEnabled();
         }
 
         private async void DownloadButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                _viewModel.OnDownloadButtonClicked();
+                await _viewModel.OnDownloadButtonClicked();
             }
             catch (Exception ex)
             {
@@ -64,23 +65,16 @@ namespace Hospital.Views
 
         private async void FeedbackButton_Click(object sender, RoutedEventArgs e)
         {
-            
-            try
+
+            var validationDialog = new ContentDialog
             {
-                Debug.WriteLine("Feedback button clicked");
-            }
-            catch (Exception ex)
-            {
-                var validationDialog = new ContentDialog
-                {
-                    Title = "Error",
-                    Content = $"Error: {ex.Message}",
-                    CloseButtonText = "OK"
-                };
-                validationDialog.XamlRoot = this.Content.XamlRoot;
-                await validationDialog.ShowAsync();
-                return;
-            }
+                Title = "FeedbackButton_Click",
+                Content = "FeedbackButton_Click",
+                CloseButtonText = "OK"
+            };
+            validationDialog.XamlRoot = this.Content.XamlRoot;
+            await validationDialog.ShowAsync();
+            return;
         }
 
         private void StyleTitleBar()

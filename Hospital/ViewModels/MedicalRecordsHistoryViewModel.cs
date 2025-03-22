@@ -18,7 +18,6 @@ namespace Hospital.ViewModels
         private readonly DocumentManagerModel _documentManager;
 
         public List<MedicalRecordJointModel> MedicalRecords { get; private set; }
-        public ICommand ViewDetails { get; set; }
 
         public MedicalRecordsHistoryViewModel(MedicalRecordManagerModel medicalRecordManager, DocumentManagerModel documentManager)
         {
@@ -28,17 +27,13 @@ namespace Hospital.ViewModels
             int patientId = 2;
             _medicalRecordManager.LoadMedicalRecordsForPatient(patientId).Wait();
             MedicalRecords = medicalRecordManager.s_medicalRecordList;
-            ViewDetails = new RelayCommand(ShowMedicalRecordDetails);
         }
 
-        public void ShowMedicalRecordDetails(Object obj)
+        public void ShowMedicalRecordDetails(MedicalRecordJointModel medicalRecord)
         {
-            if (obj is MedicalRecordJointModel medicalRecord)
-            {
-                Console.WriteLine($"Opening details for Medical Record ID: {medicalRecord.MedicalRecordId}");
-                MedicalRecordDetailsView medicalRecordDetailsView = new MedicalRecordDetailsView(medicalRecord, _documentManager);
-                medicalRecordDetailsView.Activate();
-            }
+            Console.WriteLine($"Opening details for Medical Record ID: {medicalRecord.MedicalRecordId}");
+            MedicalRecordDetailsView medicalRecordDetailsView = new MedicalRecordDetailsView(medicalRecord, _documentManager);
+            medicalRecordDetailsView.Activate();
         }
     }
 }

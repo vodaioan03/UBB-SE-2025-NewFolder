@@ -17,41 +17,24 @@ namespace Hospital.ViewModels
     {
         private DocumentManagerModel _documentManager;
         public MedicalRecordJointModel MedicalRecord { get; private set; }
-        public ICommand downloadDocuments { get; private set; }
         public ObservableCollection<Document> Documents { get; private set; }
 
         public MedicalRecordDetailsViewModel(MedicalRecordJointModel medicalRecord, DocumentManagerModel documentManager)
         {
             MedicalRecord = medicalRecord;
             _documentManager = documentManager;
-            _documentManager.LoadDocuments(MedicalRecord.MedicalRecordId).AsAsyncAction().Wait();
+            _documentManager.LoadDocuments(MedicalRecord.MedicalRecordId);
             Documents = new ObservableCollection<Document>(_documentManager.s_documentList);
-            downloadDocuments = new RelayCommand(DownloadDocuments);
         }
 
-        public void DownloadDocuments(Object obj)
+        public async Task OnDownloadButtonClicked()
         {
-            Debug.WriteLine("Download button clicked");
-            if (obj is List<Document> documents)
-            {
-                if (documents.Count == 0)
-                {
-                    throw new DocumentNotFoundException("No documents found");
-                }
-                foreach (Document document in documents)
-                {
-                    Debug.WriteLine($"\tDownloading document: {document.File}");
-                }
-            }
-            else 
-            {
-                throw new FormatException("Invalid object type");
-            }
+            await _documentManager.DownloadDocuments(MedicalRecord.PatientId);
         }
 
-        public void OnDownloadButtonClicked()
+        public bool getDownloadButtonIsEnabled()
         {
-            downloadDocuments.Execute(Documents.ToList());
+            return Documents.Count > 0;
         }
     }
 }
