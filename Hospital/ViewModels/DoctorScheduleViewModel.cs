@@ -17,6 +17,8 @@ using Microsoft.UI;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Input;
+using Windows.ApplicationModel.Appointments;
 
 namespace Hospital.ViewModels
 {
@@ -71,15 +73,28 @@ namespace Hospital.ViewModels
             Shifts = new List<Shift>();
             ShiftDates = new ObservableCollection<DateTimeOffset>();
 
-            OpenDetailsCommand = new RelayCommand(OpenDetails);
+            OpenDetailsCommand = new RelayCommand(OpenAppointmentForDoctor);
         }
 
-        private void OpenDetails(object obj)
+        public void OpenAppointmentForDoctor(object obj)
         {
-            if (obj is AppointmentJointModel appointment)
+            if (obj is not TimeSlotModel selectedSlot) return;
+
+            if (!string.IsNullOrEmpty(selectedSlot.Appointment) && selectedSlot.HighlightColor.Color == Colors.Transparent)
             {
-                Console.WriteLine($"Opening details for Appointment ID: {appointment.AppointmentId}");
+                return;
             }
+
+            if (!string.IsNullOrEmpty(selectedSlot.Appointment))
+            {
+                ShowMessageDialog("Appointments scheduled in this time slot");
+            }
+            else
+            {
+                ShowMessageDialog("No appointments scheduled in this time slot");
+            }
+ 
+            return; 
         }
 
         public async Task LoadAppointmentsForDoctor(int doctorId)
@@ -164,8 +179,7 @@ namespace Hospital.ViewModels
         {
             List<TimeSlotModel> slots = new();
             DateTime startTime = date.Date;
-            DateTime endTime = startTime.AddDays(1); // Midnight next day
-
+            DateTime endTime = startTime.AddDays(1); 
             var selectedAppointments = Appointments
                 .Where(a => a.Date.Date == date.Date)
                 .ToList();
@@ -177,7 +191,7 @@ namespace Hospital.ViewModels
                     var shiftEnd = s.DateTime.Date + s.EndTime;
 
                     if (s.EndTime <= s.StartTime)
-                        shiftEnd = shiftEnd.AddDays(1); // Night shift
+                        shiftEnd = shiftEnd.AddDays(1); 
 
                     return shiftStart < endTime && shiftEnd > startTime;
                 })
@@ -226,5 +240,25 @@ namespace Hospital.ViewModels
             return slots;
         }
 
+        private async Task ShowMessageDialog(string message)
+        {
+            ContentDialog messageDialog = new ContentDialog
+            {
+                Title = "Information",
+                Content = message,
+                CloseButtonText = "OK"
+            };
+
+            if (App.Current != null && Window.Current != null)
+            {
+                messageDialog.XamlRoot = ((FrameworkElement)Window.Current.Content).XamlRoot;
+            }
+
+            await messageDialog.ShowAsync();
+        }
+
+
+
     }
+
 }

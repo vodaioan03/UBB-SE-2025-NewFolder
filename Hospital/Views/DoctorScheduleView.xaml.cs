@@ -12,6 +12,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Appointments;
 using Hospital.Models;
+using Microsoft.UI.Xaml.Input;
 
 namespace Hospital.Views
 {
@@ -108,7 +109,7 @@ namespace Hospital.Views
             }
         }
 
-        private void CalendarView_DayItemChanging(CalendarView sender, CalendarViewDayItemChangingEventArgs args)
+        private async void CalendarView_DayItemChanging(CalendarView sender, CalendarViewDayItemChangingEventArgs args)
         {
             if (_viewModel.ShiftDates == null || !_viewModel.ShiftDates.Any()) return;
             var date = args.Item.Date.Date;
@@ -148,13 +149,23 @@ namespace Hospital.Views
                 Console.WriteLine($"Critical error while showing error dialog: {ex.Message}");
             }
         }
-
-
         private void DailyScheduleList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             return;
-            
         }
+
+
+        private void TimeSlot_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            if (sender is StackPanel panel && panel.DataContext is TimeSlotModel slot)
+            {
+                if (_viewModel.OpenDetailsCommand?.CanExecute(slot) == true)
+                {
+                    _viewModel.OpenDetailsCommand.Execute(slot);
+                }
+            }
+        }
+
 
     }
 
