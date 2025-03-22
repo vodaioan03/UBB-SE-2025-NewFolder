@@ -427,7 +427,7 @@ ORDER BY a.DateAndTime;
 SELECT 
     a.AppointmentId,
     a.Finished,
-    a.DateAndTime,
+    a.DateAndTime,\
     d.DepartmentId,
     d.DepartmentName,
     doc.DoctorId,
@@ -466,3 +466,53 @@ JOIN Users p ON mr.PatientId = p.UserId
 JOIN Users d ON mr.DoctorId = d.UserId 
 JOIN Procedures pr ON mr.ProcedureId = pr.ProcedureId
 JOIN Departments dept ON pr.DepartmentId = dept.DepartmentId;
+
+-- 1. Check that all PatientId values exist in Patients
+
+SELECT mr.*
+FROM MedicalRecords mr
+LEFT JOIN Patients p ON mr.PatientId = p.PatientId
+WHERE p.PatientId IS NULL;
+
+-- 2. Check that all DoctorId values exist in Doctors
+
+SELECT mr.*
+FROM MedicalRecords mr
+LEFT JOIN Doctors d ON mr.DoctorId = d.DoctorId
+WHERE d.DoctorId IS NULL;
+
+-- 3. Check that all ProcedureId values exist in Procedures
+
+SELECT mr.*
+FROM MedicalRecords mr
+LEFT JOIN Procedures pr ON mr.ProcedureId = pr.ProcedureId
+WHERE pr.ProcedureId IS NULL;
+
+-- 4. Check for duplicate entries (same patient, doctor, date, and procedure)
+
+SELECT PatientId, DoctorId, DateAndTime, ProcedureId, COUNT(*) AS Count
+FROM MedicalRecords
+GROUP BY PatientId, DoctorId, DateAndTime, ProcedureId
+HAVING COUNT(*) > 1;
+
+-- 5. Check that all MedicalRecordIds are unique (should always be true if it's a primary key)
+
+SELECT MedicalRecordId, COUNT(*) AS Count
+FROM MedicalRecords
+GROUP BY MedicalRecordId
+HAVING COUNT(*) > 1;
+
+-- 6. Check for NULL or invalid DateAndTime values
+
+SELECT *
+FROM MedicalRecords
+WHERE DateAndTime IS NULL;
+
+-- 7. Verify all fields are properly filled (optional check for Conclusion)
+
+SELECT *
+FROM MedicalRecords
+WHERE PatientId IS NULL
+   OR DoctorId IS NULL
+   OR ProcedureId IS NULL
+   OR DateAndTime IS NULL;
