@@ -5,13 +5,13 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Hospital.Managers;
 using Hospital.Models;
-using System.Diagnostics;
 using Microsoft.UI.Xaml.Media;
 using Windows.UI;
 using System.Collections.Generic;
 using Microsoft.UI;
 using Hospital.ViewModels;
-
+using System.Threading.Tasks;
+using Microsoft.UI.Dispatching;
 
 namespace Hospital.Views
 {
@@ -20,12 +20,14 @@ namespace Hospital.Views
         private readonly AppointmentManagerModel _appointmentManager;
         public ObservableCollection<TimeSlotModel> DailyAppointments { get; private set; }
         private ObservableCollection<DateTimeOffset> HighlightedDates;
+        private readonly DispatcherQueue _dispatcherQueue;
 
         public PatientScheduleView()
         {
             this.ExtendsContentIntoTitleBar = false;
-            Debug.WriteLine("PatientScheduleView initialized.");
             this.InitializeComponent();
+
+            _dispatcherQueue = DispatcherQueue.GetForCurrentThread();
 
             _appointmentManager = new AppointmentManagerModel(new DatabaseServices.AppointmentsDatabaseService());
             DailyAppointments = new ObservableCollection<TimeSlotModel>();
@@ -34,22 +36,51 @@ namespace Hospital.Views
             DailyScheduleList.ItemsSource = DailyAppointments;
             AppointmentsCalendar.CalendarViewDayItemChanging += CalendarView_DayItemChanging;
 
-            LoadAppointmentsForPatient(1); // Replace with actual patient ID
+            DateTime now = DateTime.Now;
+            DateTime firstDay = new DateTime(now.Year, now.Month, 1);
+            DateTime lastDay = firstDay.AddMonths(1).AddDays(-1);
+
+            AppointmentsCalendar.MinDate = firstDay;
+            AppointmentsCalendar.MaxDate = lastDay;
+
+            LoadAppointmentsAndUpdateUI();
         }
 
-        private async void LoadAppointmentsForPatient(int patientId)
+        private async void LoadAppointmentsAndUpdateUI()
         {
-            Debug.WriteLine($"Fetching appointments for patient ID: {patientId}...");
+            await LoadAppointmentsForPatient(1); // can be changed to the current patient
+            ForceCalendarUIRefresh();
+            await Task.Delay(150);
+            ForceCalendarUIRefresh();
+        }
 
+        private void RefreshButton_Click(object sender, RoutedEventArgs e)
+        {
+            RefreshAppointments();
+        }
+
+
+        private async Task LoadAppointmentsForPatient(int patientId)
+        {
             await _appointmentManager.LoadAppointmentsForPatient(patientId);
 
             HighlightedDates.Clear();
             foreach (var appointment in _appointmentManager.s_appointmentList)
             {
-                HighlightedDates.Add(new DateTimeOffset(appointment.Date.Date)); // Highlight days
+                HighlightedDates.Add(new DateTimeOffset(appointment.Date.Date));
             }
 
-            AppointmentsCalendar.InvalidateMeasure(); // Refresh calendar UI
+            ForceCalendarUIRefresh();
+        }
+
+        private void ForceCalendarUIRefresh()
+        {
+            _dispatcherQueue.TryEnqueue(() =>
+            {
+                AppointmentsCalendar.SelectedDates.Clear();
+                AppointmentsCalendar.InvalidateMeasure();
+                AppointmentsCalendar.UpdateLayout();
+            });
         }
 
         private void AppointmentsCalendar_SelectedDatesChanged(CalendarView sender, CalendarViewSelectedDatesChangedEventArgs args)
@@ -57,7 +88,6 @@ namespace Hospital.Views
             if (args.AddedDates.Count > 0)
             {
                 DateTime selectedDate = args.AddedDates[0].DateTime.Date;
-                Debug.WriteLine($"Selected Date: {selectedDate}");
 
                 DailyAppointments.Clear();
                 List<TimeSlotModel> timeSlots = GenerateTimeSlots(selectedDate);
@@ -130,7 +160,7 @@ namespace Hospital.Views
                 {
                     var selectedDate = AppointmentsCalendar.SelectedDates.Any()
                         ? AppointmentsCalendar.SelectedDates.First().DateTime.Date
-                        : DateTime.MinValue;  // Default to MinValue if no date is selected
+                        : DateTime.MinValue;
 
                     var selectedAppointment = _appointmentManager.s_appointmentList
                         .FirstOrDefault(a =>
@@ -139,13 +169,18 @@ namespace Hospital.Views
 
                     if (selectedAppointment != null)
                     {
-                        AppointmentDetailsView detailsView = new AppointmentDetailsView(selectedAppointment, _appointmentManager);
+                        AppointmentDetailsView detailsView = new AppointmentDetailsView(selectedAppointment, _appointmentManager, RefreshAppointments);
                         detailsView.Activate();
                     }
                 }
             }
         }
 
+        private async void RefreshAppointments()
+        {
+            await LoadAppointmentsForPatient(1);
+            await Task.Delay(100);
+            ForceCalendarUIRefresh();
+        }
     }
-
 }

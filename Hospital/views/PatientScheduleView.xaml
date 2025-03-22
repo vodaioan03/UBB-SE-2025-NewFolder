@@ -11,13 +11,24 @@
     <Grid Background="White">
         <StackPanel Orientation="Vertical" Padding="20">
             <!-- Calendar View -->
-            <CalendarView x:Name="AppointmentsCalendar"
-                          SelectionMode="Single"
-                          SelectedDatesChanged="AppointmentsCalendar_SelectedDatesChanged"
-                          HorizontalAlignment="Stretch"
-                          VerticalAlignment="Top"
-                          BorderBrush="Green"
-                          BorderThickness="2"/>
+            <Grid>
+                <CalendarView x:Name="AppointmentsCalendar"
+                              SelectionMode="Single"
+                              SelectedDatesChanged="AppointmentsCalendar_SelectedDatesChanged"
+                              HorizontalAlignment="Stretch"
+                              VerticalAlignment="Top"
+                              BorderBrush="Green"
+                              BorderThickness="2"/>
+
+                <!-- Refresh Button in top-right corner -->
+                <Button Content="Refresh"
+                        Width="80"
+                        Height="30"
+                        VerticalAlignment="Top"
+                        HorizontalAlignment="Center"
+                        Margin="0,5,5,0"
+                        Click="RefreshButton_Click"/>
+            </Grid>
 
             <!-- Daily Schedule Label -->
             <TextBlock Text="Daily Schedule" FontSize="20" FontWeight="Bold"
