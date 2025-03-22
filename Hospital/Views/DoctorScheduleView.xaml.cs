@@ -164,39 +164,84 @@ namespace Hospital.Views
                 if (_viewModel.OpenDetailsCommand?.CanExecute(slot) == true)
                 {
                     _viewModel.OpenDetailsCommand.Execute(slot);
-
                     var selected = _viewModel.SelectedSlot;
                     if (selected != null)
                     {
-                        string message;
-
                         if (!string.IsNullOrEmpty(selected.Appointment))
                         {
                             var appointment = _viewModel.Appointments.FirstOrDefault(a => a.ProcedureName == selected.Appointment);
-                            message = $"Appointment: {appointment.ProcedureName}\n" +
-                                      $"Date: {appointment.Date}\n" +
-                                      $"Doctor: {appointment.DoctorName}\n" +
-                                      $"Patient: {appointment.PatientName}";
+                            string message = $"Appointment: {appointment.ProcedureName}\n" +
+                                             $"Date: {appointment.Date}\n" +
+                                             $"Doctor: {appointment.DoctorName}\n" +
+                                             $"Patient: {appointment.PatientName}\n";
+
+                            ContentDialog dialog = new ContentDialog
+                            {
+                                Title = "Appointment Info",
+                                XamlRoot = this.Content.XamlRoot,
+                                RequestedTheme = ElementTheme.Default
+                            };
+
+                            StackPanel dialogContent = new StackPanel();
+                            dialogContent.Children.Add(new TextBlock
+                            {
+                                Text = message,
+                                TextWrapping = TextWrapping.Wrap,
+                                Margin = new Thickness(0, 0, 0, 20)
+                            });
+
+                            StackPanel buttonPanel = new StackPanel
+                            {
+                                Orientation = Orientation.Horizontal,
+                                HorizontalAlignment = HorizontalAlignment.Center,
+                                Spacing = 10
+                            };
+
+                            Button createRecordBtn = new Button { Content = "Create Medical Record" };
+                            createRecordBtn.Click += (s, args) =>
+                            {
+                                // TODO
+                                dialog.Hide();
+
+                            };
+
+                            Button viewProfileBtn = new Button { Content = "View Profile" };
+                            viewProfileBtn.Click += (s, args) =>
+                            {
+                                dialog.Hide();
+                                // TODO
+                            };
+
+                            Button viewHistoryBtn = new Button { Content = "Medical Records History" };
+                            viewHistoryBtn.Click += (s, args) =>
+                            {
+                                dialog.Hide();
+                                //  TODO
+                            };
+
+                            buttonPanel.Children.Add(createRecordBtn);
+                            buttonPanel.Children.Add(viewProfileBtn);
+                            buttonPanel.Children.Add(viewHistoryBtn);
+
+                            dialogContent.Children.Add(buttonPanel);
+                            dialog.Content = dialogContent;
+                            dialog.CloseButtonText = "Close";
+
+                            await dialog.ShowAsync();
                         }
                         else if (selected.HighlightColor.Color == Colors.Green)
                         {
-                            message = $"No appointments scheduled in this shift slot.\nTime: {selected.Time}";
-                        }
-                        else
-                        {
-                            return;
-                        }
+                            ContentDialog dialog = new ContentDialog
+                            {
+                                Title = "Appointment Info",
+                                Content = $"No appointments scheduled in this shift slot.\nTime: {selected.Time}",
+                                CloseButtonText = "OK",
+                                XamlRoot = this.Content.XamlRoot,
+                                RequestedTheme = ElementTheme.Default
+                            };
 
-                        ContentDialog dialog = new ContentDialog
-                        {
-                            Title = "Appointment Info",
-                            Content = message,
-                            CloseButtonText = "OK",
-                            XamlRoot = this.Content.XamlRoot,
-                            RequestedTheme = ElementTheme.Default
-                        };
-
-                        await dialog.ShowAsync();
+                            await dialog.ShowAsync();
+                        }
 
                         _viewModel.SelectedSlot = null;
                     }
