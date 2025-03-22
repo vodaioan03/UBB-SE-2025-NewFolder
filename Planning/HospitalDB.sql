@@ -243,12 +243,12 @@ VALUES
 -------------------------------------
 INSERT INTO Appointments (PatientId, DoctorId, DateAndTime, ProcedureId, Finished)
 VALUES
-    (1, 1, '2023-03-17T12:00:00', 1, 0), -- Jane Doe w/ Dr. John Smith (Cardiology)
-    (1, 2, '2023-03-17T13:00:00', 4, 1), -- Jane Doe w/ Dr. Alice Brown (Cardiology)
-    (2, 3, '2023-03-18T09:30:00', 2, 0), -- Mike Davis w/ Dr. Robert Johnson (Neurology)
-    (2, 4, '2023-03-19T10:15:00', 3, 0), -- Mike Davis w/ Dr. Emily Carter (Pediatrics)
-    (3, 1, '2023-03-19T14:45:00', 1, 1), -- Sarah Miller w/ Dr. John Smith (Cardiology)
-    (3, 2, '2023-03-20T15:00:00', 4, 0); -- Sarah Miller w/ Dr. Alice Brown (Cardiology)
+    (1, 1, '2025-03-23T17:00:00', 1, 0), -- Jane Doe w/ Dr. John Smith (Cardiology)
+    (1, 2, '2025-03-23T13:00:00', 4, 1), -- Jane Doe w/ Dr. Alice Brown (Cardiology)
+    (2, 3, '2025-03-23T09:30:00', 2, 0), -- Mike Davis w/ Dr. Robert Johnson (Neurology)
+    (2, 4, '2025-03-23T10:00:00', 3, 0), -- Mike Davis w/ Dr. Emily Carter (Pediatrics)
+    (3, 1, '2025-03-23T18:00:00', 1, 1), -- Sarah Miller w/ Dr. John Smith (Cardiology)
+    (3, 2, '2025-03-23T15:00:00', 4, 0); -- Sarah Miller w/ Dr. Alice Brown (Cardiology)
 
 
 -------------------------------------
