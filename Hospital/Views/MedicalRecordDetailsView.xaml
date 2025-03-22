@@ -62,7 +62,7 @@
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="local1:Document">
                     <StackPanel Padding="10" BorderBrush="LightGreen" BorderThickness="2" CornerRadius="20" Margin="2">
-                        <TextBlock Text="{x:Bind File}" FontWeight="Bold"/>
+                        <TextBlock Text="{x:Bind Files}" FontWeight="Bold"/>
                     </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>

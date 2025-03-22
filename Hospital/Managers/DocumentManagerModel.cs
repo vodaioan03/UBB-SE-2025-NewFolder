@@ -55,7 +55,7 @@ namespace Hospital.Managers
             List<string> filePaths = new List<string>();
             foreach (Document document in s_documentList)
             {
-                filePaths.Add(document.File);
+                filePaths.Add(document.Files);
             }
 
             using (var memoryStream = new MemoryStream())

@@ -65,7 +65,7 @@ namespace Hospital.Views
         {
             if (_viewModel.Conclusion.Length > 255)
             {
-                await ShowErrorDialog("Conclusion cannot exceed 100 characters.");
+                await ShowErrorDialog("Conclusion cannot exceed 255 characters.");
                 return;
             }
 
