@@ -1,3 +1,4 @@
+using Hospital.Exceptions;
 using Hospital.Managers;
 using Hospital.Models;
 using Hospital.ViewModels;
@@ -5,48 +6,48 @@ using Microsoft.UI;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Controls.Primitives;
+using Microsoft.UI.Xaml.Data;
+using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media;
+using Microsoft.UI.Xaml.Navigation;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.Foundation;
+using Windows.Foundation.Collections;
+
+// To learn more about WinUI, the WinUI project structure,
+// and more about our project templates, see: http://aka.ms/winui-project-info.
 
 namespace Hospital.Views
 {
     /// <summary>
-    /// A window where past medical records are listed for the logged in user.
+    /// A window where the details of a medical record are displayed.
     /// </summary>
-    public sealed partial class MedicalRecordsHistoryView : Window
+    public sealed partial class MedicalRecordDetailsView : Window
     {
-        private MedicalRecordsHistoryViewModel _viewModel;
+        private MedicalRecordDetailsViewModel _viewModel;
 
-        public MedicalRecordsHistoryView(MedicalRecordManagerModel medicalRecordManager, DocumentManagerModel documentManager)
+        public MedicalRecordDetailsView(MedicalRecordJointModel medicalRecordJointModel, DocumentManagerModel documentManagerModel)
         {
             this.InitializeComponent();
             this.AppWindow.Resize(new(800, 600));
             this.StyleTitleBar();
 
-            _viewModel = new MedicalRecordsHistoryViewModel(medicalRecordManager, documentManager);
-            this.MedicalRecordsPanel.DataContext = _viewModel;
+            _viewModel = new MedicalRecordDetailsViewModel(medicalRecordJointModel, documentManagerModel);
+            this.MedicalRecordDetailsPanel.DataContext = _viewModel;
+            this.DownloadButton.IsEnabled = _viewModel.getDownloadButtonIsEnabled();
         }
 
-        private async void ShowMedicalRecordDetails(object sender, RoutedEventArgs e)
+        private async void DownloadButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                var selectedRecord = MedicalRecordsListView.SelectedItem;
-                if (selectedRecord is MedicalRecordJointModel medicalRecord)
-                {
-                    _viewModel.ShowMedicalRecordDetails(medicalRecord);
-                }
-                else if (selectedRecord == null)
-                {
-                    var validationDialog = new ContentDialog
-                    {
-                        Title = "No element selected",
-                        Content = "Please select a medical record to view its details.",
-                        CloseButtonText = "OK"
-                    };
-                    validationDialog.XamlRoot = this.Content.XamlRoot;
-                    await validationDialog.ShowAsync();
-                }
+                await _viewModel.OnDownloadButtonClicked();
             }
             catch (Exception ex)
             {
@@ -60,6 +61,20 @@ namespace Hospital.Views
                 await validationDialog.ShowAsync();
                 return;
             }
+        }
+
+        private async void FeedbackButton_Click(object sender, RoutedEventArgs e)
+        {
+
+            var validationDialog = new ContentDialog
+            {
+                Title = "FeedbackButton_Click",
+                Content = "FeedbackButton_Click",
+                CloseButtonText = "OK"
+            };
+            validationDialog.XamlRoot = this.Content.XamlRoot;
+            await validationDialog.ShowAsync();
+            return;
         }
 
         private void StyleTitleBar()

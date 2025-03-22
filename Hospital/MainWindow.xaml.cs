@@ -18,6 +18,7 @@ using Hospital.Managers;
 using Hospital.ViewModels;
 using System.Diagnostics;
 using Windows.ApplicationModel.Appointments;
+using Hospital.Exceptions;
 using Hospital.Models;
 
 // To learn more about WinUI, the WinUI project structure,
@@ -66,7 +67,7 @@ namespace Hospital
 
         private void Patient3_Click(object sender, RoutedEventArgs e)
         {
-            MedicalRecordsHistoryView medicalRecordsHistoryView = new MedicalRecordsHistoryView(MedicalRecordManager);
+            MedicalRecordsHistoryView medicalRecordsHistoryView = new MedicalRecordsHistoryView(MedicalRecordManager, DocumentManager);
             medicalRecordsHistoryView.Activate();
         }
 

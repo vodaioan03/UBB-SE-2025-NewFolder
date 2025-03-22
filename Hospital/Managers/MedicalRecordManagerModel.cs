@@ -30,6 +30,10 @@ namespace Hospital.Managers
                     .GetMedicalRecordsForPatient(patientId)
                     .ConfigureAwait(false);
                 s_medicalRecordList.Clear();
+                if (medicalRecords == null)
+                {
+                    medicalRecords = new List<MedicalRecordJointModel>();
+                }
                 foreach (MedicalRecordJointModel medicalRecord in medicalRecords)
                 {
                     s_medicalRecordList.Add(medicalRecord);

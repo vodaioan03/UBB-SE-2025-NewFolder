@@ -1,9 +1,11 @@
 ﻿using Hospital.Commands;
+using Hospital.Exceptions;
 using Hospital.Managers;
 using Hospital.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,33 +17,24 @@ namespace Hospital.ViewModels
     {
         private DocumentManagerModel _documentManager;
         public MedicalRecordJointModel MedicalRecord { get; private set; }
-        public ICommand downloadDocuments { get; private set; }
         public ObservableCollection<Document> Documents { get; private set; }
 
         public MedicalRecordDetailsViewModel(MedicalRecordJointModel medicalRecord, DocumentManagerModel documentManager)
         {
             MedicalRecord = medicalRecord;
             _documentManager = documentManager;
-            _documentManager.LoadDocuments(MedicalRecord.MedicalRecordId).ConfigureAwait(false);
-            List<Document> documents = _documentManager.GetDocuments().ConfigureAwait(false).GetAwaiter().GetResult();
-            Documents = new ObservableCollection<Document>(documents);
-            downloadDocuments = new RelayCommand(DownloadDocuments);
+            _documentManager.LoadDocuments(MedicalRecord.MedicalRecordId);
+            Documents = new ObservableCollection<Document>(_documentManager.s_documentList);
         }
 
-        public void DownloadDocuments(Object obj)
+        public async Task OnDownloadButtonClicked()
         {
-            if (obj is List<Document> documents)
-            {
-                foreach (Document document in documents)
-                {
-                    Console.WriteLine($"Downloading document: {document.Files}");
-                }
-            }
+            await _documentManager.DownloadDocuments(MedicalRecord.PatientId);
         }
 
-        public void OnDownloadButtonClicked()
+        public bool getDownloadButtonIsEnabled()
         {
-            // Download the documents of the medical record
+            return Documents.Count > 0;
         }
     }
 }
