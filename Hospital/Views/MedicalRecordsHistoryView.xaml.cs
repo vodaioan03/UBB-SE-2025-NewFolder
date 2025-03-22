@@ -34,8 +34,18 @@ namespace Hospital.Views
                 var selectedRecord = MedicalRecordsListView.SelectedItem;
                 if (selectedRecord is MedicalRecordJointModel medicalRecord)
                 {
-                    Debug.WriteLine($"Opening details for Medical Record ID: {medicalRecord.MedicalRecordId}");
-                    _viewModel.ShowMedicalRecordDetails(selectedRecord);
+                    _viewModel.ShowMedicalRecordDetails(medicalRecord);
+                }
+                else if (selectedRecord == null)
+                {
+                    var validationDialog = new ContentDialog
+                    {
+                        Title = "No element selected",
+                        Content = "Please select a medical record to view its details.",
+                        CloseButtonText = "OK"
+                    };
+                    validationDialog.XamlRoot = this.Content.XamlRoot;
+                    await validationDialog.ShowAsync();
                 }
             }
             catch (Exception ex)
