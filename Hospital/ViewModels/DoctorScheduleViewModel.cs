@@ -17,6 +17,7 @@ using Microsoft.UI;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml;
+using System.Reflection.Metadata;
 
 namespace Hospital.ViewModels
 {
@@ -26,11 +27,11 @@ namespace Hospital.ViewModels
         private void OnPropertyChanged([CallerMemberName] string propertyName = "")
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
-        //Mangers
+        // Managers
         private readonly AppointmentManagerModel _appointmentManager;
         private readonly ShiftManagerModel _shiftManager;
 
-        //Observable Collections
+        // Observable Collections
         public ObservableCollection<TimeSlotModel> DailySchedule { get; set; } = new();
         public ObservableCollection<DateTimeOffset> ShiftDates { get; set; }
 
@@ -41,7 +42,6 @@ namespace Hospital.ViewModels
 
         public int DoctorId { get; set; } = 1; // default for testing
 
-        //Setting the calendar to show only the current month
         private DateTimeOffset _minDate;
         public DateTimeOffset MinDate
         {
@@ -53,7 +53,6 @@ namespace Hospital.ViewModels
             }
         }
 
-        //Setting the calendar to not allow navigation to other months
         private DateTimeOffset _maxDate;
         public DateTimeOffset MaxDate
         {
@@ -65,6 +64,16 @@ namespace Hospital.ViewModels
             }
         }
 
+        private TimeSlotModel _selectedSlot;
+        public TimeSlotModel SelectedSlot
+        {
+            get => _selectedSlot;
+            set
+            {
+                _selectedSlot = value;
+                OnPropertyChanged();
+            }
+        }
 
         public DoctorScheduleViewModel(AppointmentManagerModel appointmentManager, ShiftManagerModel shiftManager)
         {
@@ -74,27 +83,29 @@ namespace Hospital.ViewModels
             Shifts = new List<Shift>();
             ShiftDates = new ObservableCollection<DateTimeOffset>();
 
-            OpenDetailsCommand = new RelayCommand(OpenDetails);
+            OpenDetailsCommand = new RelayCommand(OpenAppointmentForDoctor);
         }
 
-
-        private void OpenDetails(object obj)
+        private void OpenAppointmentForDoctor(object obj)
         {
-            if (obj is AppointmentJointModel appointment)
-            {
-                Console.WriteLine($"Opening details for Appointment ID: {appointment.AppointmentId}");
-            }
+            if (obj is not TimeSlotModel selectedSlot) return;
+
+            if (string.IsNullOrEmpty(selectedSlot.Appointment) && selectedSlot.HighlightColor.Color == Colors.Transparent)
+                return;
+
+            SelectedSlot = selectedSlot;
         }
 
-        public async Task LoadAppointmentsForDoctor(int doctorId)
+
+
+        public async Task LoadAppointmentsForDoctor()
         {
             try
             {
-                await _appointmentManager.LoadAppointmentsForDoctor(doctorId);
+                await _appointmentManager.LoadAppointmentsForDoctor(DoctorId);
                 var appointments = _appointmentManager.s_appointmentList;
 
                 Appointments.Clear();
-
                 foreach (var appointment in appointments)
                 {
                     Appointments.Add(appointment);
@@ -115,12 +126,24 @@ namespace Hospital.ViewModels
                 Shifts = _shiftManager.GetShifts();
 
                 ShiftDates.Clear();
-
                 foreach (var shift in Shifts)
                 {
-                    var shiftDate = shift.DateTime.Date;
-                    ShiftDates.Add(new DateTimeOffset(shiftDate, TimeSpan.Zero));
+                    var shiftStartDate = shift.DateTime.Date;
+                    var shiftEndDate = shift.DateTime.Date;
+
+                    if (shift.EndTime <= shift.StartTime)
+                    {
+                        shiftEndDate = shiftEndDate.AddDays(1); 
+                    }
+
+                    ShiftDates.Add(new DateTimeOffset(shiftStartDate, TimeSpan.Zero));
+
+                    if (shiftEndDate > shiftStartDate)
+                    {
+                        ShiftDates.Add(new DateTimeOffset(shiftEndDate, TimeSpan.Zero));
+                    }
                 }
+
                 OnPropertyChanged(nameof(ShiftDates));
             }
             catch (Exception ex)
@@ -136,32 +159,44 @@ namespace Hospital.ViewModels
             try
             {
                 await _appointmentManager.LoadDoctorAppointmentsOnDate(DoctorId, date);
+                Appointments = _appointmentManager.s_appointmentList;
                 await _shiftManager.LoadShifts(DoctorId);
+                Shifts = _shiftManager.GetShifts();
+
                 var slots = GenerateTimeSlots(date);
                 foreach (var slot in slots)
                 {
                     DailySchedule.Add(slot);
                 }
-
                 OnPropertyChanged(nameof(DailySchedule));
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Database access failed: {ex.Message}");
             }
-          
         }
-
 
         private List<TimeSlotModel> GenerateTimeSlots(DateTime date)
         {
-            List<TimeSlotModel> slots = new List<TimeSlotModel>();
-            DateTime startTime = date.Date.AddHours(0); 
-            DateTime endTime = date.Date.AddHours(24);
+            List<TimeSlotModel> slots = new();
+            DateTime startTime = date.Date;
+            DateTime endTime = startTime.AddDays(1); 
 
             var selectedAppointments = Appointments
                 .Where(a => a.Date.Date == date.Date)
-                .OrderBy(a => a.Date.TimeOfDay)
+                .ToList();
+
+            var selectedShifts = Shifts
+                .Where(s =>
+                {
+                    var shiftStart = s.DateTime.Date + s.StartTime;
+                    var shiftEnd = s.DateTime.Date + s.EndTime;
+
+                    if (s.EndTime <= s.StartTime)
+                        shiftEnd = shiftEnd.AddDays(1); 
+
+                    return shiftStart < endTime && shiftEnd > startTime;
+                })
                 .ToList();
 
             while (startTime < endTime)
@@ -171,22 +206,35 @@ namespace Hospital.ViewModels
                     TimeSlot = startTime,
                     Time = startTime.ToString("hh:mm tt"),
                     Appointment = "",
-                    HighlightColor = new SolidColorBrush(Colors.Transparent) 
+                    HighlightColor = new SolidColorBrush(Colors.Transparent)
                 };
 
-                foreach (var appointment in selectedAppointments)
-                {
-                    DateTime appointmentStart = appointment.Date;
-                    DateTime appointmentEnd = appointmentStart.Add(appointment.ProcedureDuration);
+                SolidColorBrush brush = new SolidColorBrush(Colors.Transparent);
 
-                    if (startTime >= appointmentStart && startTime < appointmentEnd)
-                    {
-                        slot.Appointment = appointment.ProcedureName;
-                        slot.HighlightColor = new SolidColorBrush(Colors.Green); 
-                        break;
-                    }
+                bool isInShift = selectedShifts.Any(s =>
+                {
+                    DateTime shiftStart = s.DateTime.Date + s.StartTime;
+                    DateTime shiftEnd = s.DateTime.Date + s.EndTime;
+                    if (s.EndTime <= s.StartTime)
+                        shiftEnd = shiftEnd.AddDays(1);
+
+                    return startTime >= shiftStart && startTime < shiftEnd;
+                });
+
+                var matchingAppointment = selectedAppointments.FirstOrDefault(a =>
+                    a.Date == startTime && isInShift);
+
+                if (matchingAppointment != null)
+                {
+                    slot.Appointment = matchingAppointment.ProcedureName;
+                    brush = new SolidColorBrush(Colors.Orange);
+                }
+                else if (isInShift)
+                {
+                    brush = new SolidColorBrush(Colors.Green);
                 }
 
+                slot.HighlightColor = brush;
                 slots.Add(slot);
                 startTime = startTime.AddMinutes(30);
             }
@@ -194,7 +242,7 @@ namespace Hospital.ViewModels
             return slots;
         }
 
-
+        
 
     }
 }

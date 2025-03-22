@@ -10,14 +10,14 @@ namespace Hospital.Models
     {
         public int DocumentId { get; set; }
         public int MedicalRecordId { get; set; }
-        public string File { get; set; }
+        public string Files { get; set; }
 
 
-        public Document(int documentId, int medicalRecordId, string file)
+        public Document(int documentId, int medicalRecordId, string files)
         {
             DocumentId = documentId;
             MedicalRecordId = medicalRecordId;
-            File = file;
+            Files = files;
         }
     }
 }

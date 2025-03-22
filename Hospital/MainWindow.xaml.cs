@@ -88,16 +88,16 @@ namespace Hospital
 
             // Create a mock appointment for testing
             AppointmentJointModel mockAppointment = new AppointmentJointModel(
-                appointmentId: 123,
+                appointmentId: 1,
                 finished: false,
                 date: DateTime.Now,
-                departmentId: 2,
+                departmentId: 1,
                 departmentName: "Cardiology",
-                doctorId: 45,
+                doctorId: 1,
                 doctorName: "Dr. Jane Doe",
-                patientId: 678,
+                patientId: 1,
                 patientName: "John Doe",
-                procedureId: 12,
+                procedureId: 1,
                 procedureName: "Heart Checkup",
                 procedureDuration: TimeSpan.FromMinutes(30)
             );

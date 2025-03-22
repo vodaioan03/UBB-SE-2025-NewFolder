@@ -64,9 +64,7 @@ namespace Hospital.ViewModels
 
         public async Task<int> CreateMedicalRecord(AppointmentJointModel detailedAppointment, string conclusion)
         {
-            await Task.Delay(500);
-            return new Random().Next(1, 1000); // Returning a random record ID
-
+           
             try
             {
                 detailedAppointment.Finished = true;
@@ -86,9 +84,9 @@ namespace Hospital.ViewModels
 
         public void AddDocument(int medicalRecordId, string path)
         {
-            Document doc = new Document(0, medicalRecordId, path);
             if (Documents.Count < maxDocs)
             {
+                Document doc = new Document(0, medicalRecordId, path);
                 Documents.Add(path);
                 _ = _documentManager.AddDocumentToMedicalRecord(doc);
             }

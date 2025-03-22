@@ -18,11 +18,11 @@ namespace Hospital.DatabaseServices
 			_config = Config.GetInstance();
 		}
 
-		public async Task<bool> UploadDocumentToDB(Document document )
+		public async Task<bool> UploadDocumentToDB(Document document)
 		{
 			const string queryUploadDocument =
-			  "INSERT INTO Documents (MedicalRecordId, File) " +
-			  "VALUES (@MedicalRecordId, @File)";
+			  "INSERT INTO Documents (MedicalRecordId, Files) " +
+			  "VALUES (@MedicalRecordId, @Files)";
 			
 			try
 			{
@@ -37,7 +37,7 @@ namespace Hospital.DatabaseServices
 
 				// Add the parameters to the query with values from the appointment object
 				command.Parameters.AddWithValue("@MedicalRecordId", document.MedicalRecordId);
-				command.Parameters.AddWithValue("@File", document.File);
+				command.Parameters.AddWithValue("@Files", document.Files);
 
 				// Execute the query asynchronously and check how many rows were affected
 				int rowsAffected = await command.ExecuteNonQueryAsync().ConfigureAwait(false);

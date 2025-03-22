@@ -77,7 +77,8 @@ namespace Hospital.Managers
                     detailedAppointment.PatientId,
                     detailedAppointment.DoctorId,
                     detailedAppointment.ProcedureId,
-                    conclusion
+                    conclusion,
+                    DateTime.Now
                 );
 
                 // Insert the new record into the database and get the generated ID.
