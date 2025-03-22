@@ -67,7 +67,8 @@ namespace Hospital
 
         private void Patient3_Click(object sender, RoutedEventArgs e)
         {
-            MedicalRecordsHistoryView medicalRecordsHistoryView = new MedicalRecordsHistoryView(MedicalRecordManager, DocumentManager);
+            int mockPatientId = 1;
+            MedicalRecordsHistoryView medicalRecordsHistoryView = new MedicalRecordsHistoryView(mockPatientId, MedicalRecordManager, DocumentManager);
             medicalRecordsHistoryView.Activate();
         }
 

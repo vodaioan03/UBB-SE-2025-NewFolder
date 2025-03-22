@@ -17,13 +17,13 @@ namespace Hospital.Views
     {
         private MedicalRecordsHistoryViewModel _viewModel;
 
-        public MedicalRecordsHistoryView(MedicalRecordManagerModel medicalRecordManager, DocumentManagerModel documentManager)
+        public MedicalRecordsHistoryView(int patientId, MedicalRecordManagerModel medicalRecordManager, DocumentManagerModel documentManager)
         {
             this.InitializeComponent();
             this.AppWindow.Resize(new(800, 600));
             this.StyleTitleBar();
 
-            _viewModel = new MedicalRecordsHistoryViewModel(medicalRecordManager, documentManager);
+            _viewModel = new MedicalRecordsHistoryViewModel(patientId, medicalRecordManager, documentManager);
             this.MedicalRecordsPanel.DataContext = _viewModel;
         }
 

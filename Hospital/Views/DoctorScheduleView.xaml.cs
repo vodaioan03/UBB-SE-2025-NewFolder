@@ -229,7 +229,9 @@ namespace Hospital.Views
                             viewHistoryBtn.Click += (s, args) =>
                             {
                                 dialog.Hide();
-                                //  TODO
+
+                                MedicalRecordsHistoryView recordsHistoryView = new MedicalRecordsHistoryView(appointment.PatientId, _medicalRecordManager, _documentManager);
+                                recordsHistoryView.Activate();
                             };
 
                             buttonPanel.Children.Add(createRecordBtn);

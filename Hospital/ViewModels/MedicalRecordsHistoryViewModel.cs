@@ -19,12 +19,10 @@ namespace Hospital.ViewModels
 
         public List<MedicalRecordJointModel> MedicalRecords { get; private set; }
 
-        public MedicalRecordsHistoryViewModel(MedicalRecordManagerModel medicalRecordManager, DocumentManagerModel documentManager)
+        public MedicalRecordsHistoryViewModel(int patientId, MedicalRecordManagerModel medicalRecordManager, DocumentManagerModel documentManager)
         {
             _medicalRecordManager = medicalRecordManager;
             _documentManager = documentManager;
-            // patient id will be substituted with the logged in user's id after login is implemented
-            int patientId = 2;
             _medicalRecordManager.LoadMedicalRecordsForPatient(patientId).Wait();
             MedicalRecords = medicalRecordManager.s_medicalRecordList;
         }
