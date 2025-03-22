@@ -209,7 +209,6 @@ namespace Hospital.Views
                             Button createRecordBtn = new Button { Content = "Create Medical Record" };
                             createRecordBtn.Click += (s, args) =>
                             {
-                                // TODO
                                 dialog.Hide();
 
                                 MedicalRecordCreationFormViewModel viewModel = new MedicalRecordCreationFormViewModel(_medicalRecordManager, _documentManager);
@@ -221,7 +220,9 @@ namespace Hospital.Views
                             viewProfileBtn.Click += (s, args) =>
                             {
                                 dialog.Hide();
-                                // TODO
+                                
+                                int patientId = appointment.PatientId;
+                                // TODO: Use the patientId to open the patient's profile
                             };
 
                             Button viewHistoryBtn = new Button { Content = "Medical Records History" };
