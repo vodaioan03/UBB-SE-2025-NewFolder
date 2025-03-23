@@ -17,7 +17,7 @@ Title="Register an appointment">
             <TextBlock Text="Department"/>
             <ComboBox x:Name="DepartmentsComboBox" ItemsSource="{Binding DepartmentsList}" 
                       SelectedItem="{Binding SelectedDepartment, Mode=TwoWay}" 
-                      DropDownClosed="DepartmentComboBox_DropDownClosed" 
+                      SelectionChanged="DepartmentComboBox_SelectionChanged" 
                       MinWidth="200" Width="500" 
                       MaxWidth="850" HorizontalAlignment="Stretch" PlaceholderText="Select department">
                 <ComboBox.ItemTemplate>
@@ -29,6 +29,7 @@ Title="Register an appointment">
 
             <TextBlock Text="Procedure"/>
             <ComboBox x:Name="ProceduresComboBox" MinWidth="200" 
+                      IsEnabled="{Binding AreProceduresAndDoctorsEnabled, Mode=OneWay}"
                       MaxWidth="850" ItemsSource="{Binding ProceduresList}" 
                       SelectedItem="{Binding SelectedProcedure, Mode=TwoWay}"
                       SelectionChanged="ProcedureComboBox_SelectionChanged"
@@ -42,6 +43,7 @@ Title="Register an appointment">
 
             <TextBlock Text="Doctor"/>
             <ComboBox x:Name="DoctorsComboBox" ItemsSource="{Binding DoctorsList}" 
+                      IsEnabled="{Binding AreProceduresAndDoctorsEnabled, Mode=OneWay}"
                       SelectedItem="{Binding SelectedDoctor, Mode=TwoWay}"
                       SelectionChanged="DoctorComboBox_SelectionChanged"
                       MinWidth="200" MaxWidth="850" HorizontalAlignment="Stretch" PlaceholderText="Select doctor">
@@ -67,12 +69,14 @@ Title="Register an appointment">
                                 Date="{x:Bind _viewModel.SelectedCalendarDate, Mode=TwoWay}"
                                 MinDate="{Binding MinDate}"
                                 MaxDate="{Binding MaxDate}"
+                                IsEnabled="{Binding IsDateEnabled, Mode=OneWay}"
                                 CalendarViewDayItemChanging="CalendarView_DayItemChanging"
                         MinWidth="200" MaxWidth="850" HorizontalAlignment="Stretch" PlaceholderText="Select a date" />
 
             <TextBlock Text="Time"/>
             <ComboBox x:Name="HourComboBox" 
               ItemsSource="{Binding HoursList}" 
+              IsEnabled="{x:Bind _viewModel.IsTimeEnabled, Mode=OneWay}"
               SelectedItem="{Binding SelectedHour, Mode=TwoWay}"
               MinWidth="200" 
               MaxWidth="850" 

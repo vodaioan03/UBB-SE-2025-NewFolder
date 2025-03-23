@@ -43,13 +43,11 @@ namespace Hospital.DatabaseServices
             }
             catch (SqlException sqlEx)
             {
-                Console.WriteLine($"SQL Error: {sqlEx.Message}");
-                throw;
+                throw new Exception($"Database error loading shifts: {sqlEx.Message}");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"General Error: {ex.Message}");
-                throw;
+                throw new Exception($"Error loading shifts: {ex.Message}");
             }
 
             return shifts;
@@ -117,13 +115,11 @@ namespace Hospital.DatabaseServices
             }
             catch (SqlException sqlEx)
             {
-                Console.WriteLine($"SQL Error: {sqlEx.Message}");
-                throw;
+                throw new Exception($"Database error loading shifts for doctor {doctorId}: {sqlEx.Message}");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"General Error: {ex.Message}");
-                throw;
+                throw new Exception($"Error loading shifts for doctor {doctorId}: {ex.Message}");
             }
 
             return shifts;
@@ -161,13 +157,11 @@ namespace Hospital.DatabaseServices
             }
             catch (SqlException sqlEx)
             {
-                Console.WriteLine($"SQL Error: {sqlEx.Message}");
-                throw;
+                throw new Exception($"Database error loading upcoming shifts for doctor {doctorId}: {sqlEx.Message}");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"General Error: {ex.Message}");
-                throw;
+                throw new Exception($"Error loading upcoming shifts for doctor {doctorId}: {ex.Message}");
             }
 
             return shifts;

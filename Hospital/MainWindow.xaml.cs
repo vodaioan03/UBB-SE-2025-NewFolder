@@ -58,10 +58,24 @@ namespace Hospital
             this.SetupDatabaseServices();
         }
 
-        private void Patient1_Click(object sender, RoutedEventArgs e)
+        private async void Patient1_Click(object sender, RoutedEventArgs e)
         {
-            AppointmentCreationForm appointmentCreationForm = new AppointmentCreationForm(DepartmentManager, ProcedureManager, DoctorManager, ShiftManager, AppointmentManager);
-            appointmentCreationForm.Activate();
+            try
+            {
+                AppointmentCreationForm appointmentCreationForm = await AppointmentCreationForm.CreateAppointmentCreationForm(DepartmentManager, ProcedureManager, DoctorManager, ShiftManager, AppointmentManager);
+                appointmentCreationForm.Activate();
+            }
+            catch (Exception ex)
+            {
+                ContentDialog contentDialog = new ContentDialog
+                {
+                    Title = "Error",
+                    Content = ex.Message,
+                    CloseButtonText = "Ok"
+                };
+                contentDialog.XamlRoot = this.Content.XamlRoot;
+                await contentDialog.ShowAsync();
+            }
         }
 
 

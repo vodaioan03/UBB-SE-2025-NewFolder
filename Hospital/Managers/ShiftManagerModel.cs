@@ -22,14 +22,7 @@ namespace Hospital.Managers
 
         public async Task LoadShifts(int doctorID)
         {
-            try
-            {
-                _shifts = await _shiftsDatabaseService.GetShiftsByDoctorId(doctorID);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Error loading shifts for doctor {doctorID}: {ex.Message}");
-            }
+            _shifts = await _shiftsDatabaseService.GetShiftsByDoctorId(doctorID);
         }
 
 
@@ -40,7 +33,7 @@ namespace Hospital.Managers
 
         public Shift GetShiftByDay(DateTime day)
         {
-            Shift shift = _shifts.FirstOrDefault(s => s.DateTime.Day == day.Day);
+            Shift? shift = _shifts.FirstOrDefault(s => s.DateTime.Date == day.Date);
             if (shift == null)
                 throw new ShiftNotFoundException(string.Format("Shift not found for date {0}", day.ToString()));
             return shift;
@@ -48,14 +41,9 @@ namespace Hospital.Managers
 
         public async Task LoadUpcomingDoctorDayshifts(int doctorID)
         {
-            try
-            {
-                _shifts = await _shiftsDatabaseService.GetDoctorDayShifts(doctorID);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Error loading upcoming shifts for doctor {doctorID}: {ex.Message}");
-            }
+
+            _shifts = await _shiftsDatabaseService.GetDoctorDayShifts(doctorID);
+
         }
 
 
