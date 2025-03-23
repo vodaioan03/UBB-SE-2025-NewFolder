@@ -9,7 +9,7 @@
     Title="Upcoming Appointments">
 
     <Grid Background="White">
-        <StackPanel Orientation="Vertical" Padding="20">
+        <StackPanel x:Name="CalendarContainer" Orientation="Vertical" Padding="20">
             <!-- Calendar View -->
             <Grid>
                 <CalendarView x:Name="AppointmentsCalendar"

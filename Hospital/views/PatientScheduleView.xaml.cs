@@ -49,9 +49,7 @@ namespace Hospital.Views
         private async void LoadAppointmentsAndUpdateUI()
         {
             await LoadAppointmentsForPatient(1); // can be changed to the current patient
-            ForceCalendarUIRefresh();
-            await Task.Delay(150);
-            ForceCalendarUIRefresh();
+
         }
 
         private void RefreshButton_Click(object sender, RoutedEventArgs e)
@@ -69,7 +67,7 @@ namespace Hospital.Views
                 HighlightedDates.Add(new DateTimeOffset(appointment.Date.Date));
             }
 
-            ForceCalendarUIRefresh();
+            RefreshAppointments();
         }
 
         private void ForceCalendarUIRefresh()
@@ -187,9 +185,31 @@ namespace Hospital.Views
 
         private async void RefreshAppointments()
         {
-            await LoadAppointmentsForPatient(1);
-            await Task.Delay(100);
-            ForceCalendarUIRefresh();
+            try
+            {
+                // Detach old event handlers to avoid duplicate calls
+                AppointmentsCalendar.CalendarViewDayItemChanging -= CalendarView_DayItemChanging;
+                AppointmentsCalendar.SelectedDatesChanged -= AppointmentsCalendar_SelectedDatesChanged;
+
+                // Reset visual and functional properties
+                AppointmentsCalendar.MinDate = DateTimeOffset.Now.Date;
+                AppointmentsCalendar.MaxDate = DateTimeOffset.Now.Date.AddMonths(1).AddDays(-1);
+                AppointmentsCalendar.SelectionMode = CalendarViewSelectionMode.Single;
+                AppointmentsCalendar.BorderBrush = new SolidColorBrush(Colors.Green);
+                AppointmentsCalendar.BorderThickness = new Thickness(2);
+
+                // Re-attach event handlers
+                AppointmentsCalendar.CalendarViewDayItemChanging += CalendarView_DayItemChanging;
+                AppointmentsCalendar.SelectedDatesChanged += AppointmentsCalendar_SelectedDatesChanged;
+
+                await LoadAppointmentsForPatient(1);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error refreshing calendar: " + ex.Message);
+            }
         }
+
+
     }
 }
