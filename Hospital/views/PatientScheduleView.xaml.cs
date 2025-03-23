@@ -49,16 +49,13 @@ namespace Hospital.Views
         private async void LoadAppointmentsAndUpdateUI()
         {
             await LoadAppointmentsForPatient(1); // can be changed to the current patient
-            ForceCalendarUIRefresh();
-            await Task.Delay(150);
-            ForceCalendarUIRefresh();
+
         }
 
         private void RefreshButton_Click(object sender, RoutedEventArgs e)
         {
             RefreshAppointments();
         }
-
 
         private async Task LoadAppointmentsForPatient(int patientId)
         {
@@ -70,7 +67,7 @@ namespace Hospital.Views
                 HighlightedDates.Add(new DateTimeOffset(appointment.Date.Date));
             }
 
-            ForceCalendarUIRefresh();
+            RefreshAppointments();
         }
 
         private void ForceCalendarUIRefresh()
@@ -97,6 +94,8 @@ namespace Hospital.Views
                     .OrderBy(a => a.Date.TimeOfDay)
                     .ToList();
 
+                bool anyAppointments = false;
+
                 foreach (var appointment in selectedAppointments)
                 {
                     DateTime appointmentStart = appointment.Date;
@@ -108,6 +107,7 @@ namespace Hospital.Views
                         {
                             slot.Appointment = appointment.ProcedureName;
                             slot.HighlightColor = new SolidColorBrush(Colors.Green);
+                            anyAppointments = true;
                         }
                     }
                 }
@@ -116,14 +116,20 @@ namespace Hospital.Views
                 {
                     DailyAppointments.Add(slot);
                 }
+
+                NoAppointmentsText.Visibility = anyAppointments ? Visibility.Collapsed : Visibility.Visible;
             }
         }
 
         private List<TimeSlotModel> GenerateTimeSlots(DateTime date)
         {
             List<TimeSlotModel> slots = new List<TimeSlotModel>();
-            DateTime startTime = date.Date;
-            DateTime endTime = startTime.AddHours(24);
+
+            // Start at 8:00 AM
+            DateTime startTime = date.Date.AddHours(8);
+
+            // End at 6:00 PM (18:00)
+            DateTime endTime = date.Date.AddHours(18);
 
             while (startTime < endTime)
             {
@@ -140,6 +146,7 @@ namespace Hospital.Views
 
             return slots;
         }
+
 
         private void CalendarView_DayItemChanging(CalendarView sender, CalendarViewDayItemChangingEventArgs args)
         {
@@ -178,9 +185,31 @@ namespace Hospital.Views
 
         private async void RefreshAppointments()
         {
-            await LoadAppointmentsForPatient(1);
-            await Task.Delay(100);
-            ForceCalendarUIRefresh();
+            try
+            {
+                // Detach old event handlers to avoid duplicate calls
+                AppointmentsCalendar.CalendarViewDayItemChanging -= CalendarView_DayItemChanging;
+                AppointmentsCalendar.SelectedDatesChanged -= AppointmentsCalendar_SelectedDatesChanged;
+
+                // Reset visual and functional properties
+                AppointmentsCalendar.MinDate = DateTimeOffset.Now.Date;
+                AppointmentsCalendar.MaxDate = DateTimeOffset.Now.Date.AddMonths(1).AddDays(-1);
+                AppointmentsCalendar.SelectionMode = CalendarViewSelectionMode.Single;
+                AppointmentsCalendar.BorderBrush = new SolidColorBrush(Colors.Green);
+                AppointmentsCalendar.BorderThickness = new Thickness(2);
+
+                // Re-attach event handlers
+                AppointmentsCalendar.CalendarViewDayItemChanging += CalendarView_DayItemChanging;
+                AppointmentsCalendar.SelectedDatesChanged += AppointmentsCalendar_SelectedDatesChanged;
+
+                await LoadAppointmentsForPatient(1);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error refreshing calendar: " + ex.Message);
+            }
         }
+
+
     }
 }

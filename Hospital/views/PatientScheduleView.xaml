@@ -9,7 +9,7 @@
     Title="Upcoming Appointments">
 
     <Grid Background="White">
-        <StackPanel Orientation="Vertical" Padding="20">
+        <StackPanel x:Name="CalendarContainer" Orientation="Vertical" Padding="20">
             <!-- Calendar View -->
             <Grid>
                 <CalendarView x:Name="AppointmentsCalendar"
@@ -20,7 +20,7 @@
                               BorderBrush="Green"
                               BorderThickness="2"/>
 
-                <!-- Refresh Button in top-right corner -->
+                <!-- Refresh Button -->
                 <Button Content="Refresh"
                         Width="80"
                         Height="30"
@@ -34,30 +34,51 @@
             <TextBlock Text="Daily Schedule" FontSize="20" FontWeight="Bold"
                        Foreground="Green" Margin="10,20,10,5"/>
 
-            <!-- ListView to Show Time Slots -->
-            <ScrollViewer VerticalScrollBarVisibility="Auto" Height="400">
-                <ListView x:Name="DailyScheduleList" SelectionChanged="DailyScheduleList_SelectionChanged"
-          Background="White" BorderBrush="Green" BorderThickness="1"
-          ScrollViewer.VerticalScrollBarVisibility="Auto">
+            <!-- Static Green Border, scrollable content inside -->
+            <Border BorderBrush="Green"
+                    BorderThickness="1"
+                    Height="270"
+                    Margin="0,0,0,10">
+                <Grid>
+                    <!-- Time Slots List -->
+                    <ListView x:Name="DailyScheduleList"
+                              SelectionChanged="DailyScheduleList_SelectionChanged"
+                              Background="White"
+                              ScrollViewer.VerticalScrollBarVisibility="Auto">
 
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal" Margin="5">
-                                <!-- Time Slot -->
-                                <TextBlock Text="{Binding Time}" FontSize="18" Foreground="Black" Width="100" VerticalAlignment="Center"/>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" Margin="5">
+                                    <TextBlock Text="{Binding Time}"
+                                               FontSize="18"
+                                               Foreground="Black"
+                                               Width="100"
+                                               VerticalAlignment="Center"/>
+                                    <Border Background="{Binding HighlightColor}"
+                                            Padding="5"
+                                            CornerRadius="5">
+                                        <TextBlock Text="{Binding Appointment}"
+                                                   FontSize="18"
+                                                   FontWeight="Bold"
+                                                   Foreground="White"/>
+                                    </Border>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
 
-                                <!-- Appointment Block with Background Color -->
-                                <Border Background="{Binding HighlightColor}" Padding="5" CornerRadius="5">
-
-                                    <TextBlock Text="{Binding Appointment}" FontSize="18" FontWeight="Bold" Foreground="White"/>
-                                </Border>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-            </ScrollViewer>
-
-
+                    <!-- Message shown when there are no appointments -->
+                    <TextBlock x:Name="NoAppointmentsText"
+                               Text="No upcoming appointments."
+                               FontSize="16"
+                               Foreground="Gray"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Margin="10"
+                               Visibility="Collapsed"
+                               IsHitTestVisible="False"/>
+                </Grid>
+            </Border>
         </StackPanel>
     </Grid>
 </Window>
