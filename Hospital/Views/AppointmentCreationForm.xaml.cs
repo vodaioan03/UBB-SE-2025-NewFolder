@@ -156,27 +156,28 @@ namespace Hospital.Views
 
             if (result == ContentDialogResult.Primary)
             {
-                // User confirmed, now attempt to book the appointment
-                bool bookingResult = await _viewModel.BookAppointment();
-
                 // Show appropriate dialog based on the result of booking the appointment
                 ContentDialog successDialog;
 
-                if (bookingResult)
+                // User confirmed, now attempt to book the appointment
+                try
                 {
+                    await _viewModel.BookAppointment();
+
                     successDialog = new ContentDialog
                     {
                         Title = "Success",
                         Content = "Appointment created successfully!",
                         CloseButtonText = "OK"
                     };
+
                 }
-                else
+                catch(Exception ex)
                 {
                     successDialog = new ContentDialog
                     {
                         Title = "Error",
-                        Content = "Error creating appointment!",
+                        Content = "Error creating appointment!\n" + ex.Message,
                         CloseButtonText = "OK"
                     };
                 }
@@ -220,11 +221,11 @@ namespace Hospital.Views
             m_TitleBar.ButtonInactiveBackgroundColor = Colors.SeaGreen;
         }
 
-        private async void DepartmentComboBox_DropDownClosed(object sender, object e)
+        private async void DepartmentComboBox_SelectionChanged(object sender, object e)
         {
             try
             {
-                _viewModel.LoadProceduresAndDoctorsOfSelectedDepartment();
+                await _viewModel.LoadProceduresAndDoctorsOfSelectedDepartment();
             }
             catch(Exception ex)
             {
@@ -237,14 +238,14 @@ namespace Hospital.Views
                 errorDialog.XamlRoot = this.Content.XamlRoot;
                 await errorDialog.ShowAsync();
             }
-            
         }
 
         private async void ProcedureComboBox_SelectionChanged(object sender, object e)
         {
             try
             {
-                _viewModel.LoadAvailableTimeSlots();
+                await _viewModel.LoadAvailableTimeSlots();
+
             }
             catch (Exception ex)
             {
@@ -269,6 +270,7 @@ namespace Hospital.Views
                 //force a calendar reset in a dirty way can be left out
                 CalendarDatePicker.MinDate = DateTime.Today.AddDays(1);
                 CalendarDatePicker.MinDate = DateTime.Today;
+
             }
             catch (Exception ex)
             {

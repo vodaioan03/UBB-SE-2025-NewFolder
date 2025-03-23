@@ -33,7 +33,7 @@ namespace Hospital.Managers
 
         public Shift GetShiftByDay(DateTime day)
         {
-            Shift shift = _shifts.FirstOrDefault(s => s.DateTime.Day == day.Day);
+            Shift? shift = _shifts.FirstOrDefault(s => s.DateTime.Date == day.Date);
             if (shift == null)
                 throw new ShiftNotFoundException(string.Format("Shift not found for date {0}", day.ToString()));
             return shift;

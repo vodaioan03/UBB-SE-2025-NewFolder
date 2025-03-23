@@ -11,15 +11,17 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Appointments;
+using Windows.Foundation;
 using Windows.UI.Popups;
 
 namespace Hospital.ViewModels
 {
-    class AppointmentCreationFormViewModel
+    class AppointmentCreationFormViewModel : INotifyPropertyChanged
     {
         // List Properties
         public ObservableCollection<Department>? DepartmentsList { get; set; }
@@ -61,7 +63,7 @@ namespace Hospital.ViewModels
             {
                 _selectedCalendarDate = value;
                 OnPropertyChanged(nameof(SelectedCalendarDate));
-                Task task = LoadAvailableTimeSlots();
+                Task task = LoadAvailableTimeSlots(); 
             }
         }
 
@@ -91,6 +93,43 @@ namespace Hospital.ViewModels
             {
                 _bookingStatusMessage = value;
                 OnPropertyChanged(nameof(BookingStatusMessage));
+            }
+        }
+
+        //disable controls
+        private bool _areProceduresAndDoctorsEnabled = false;
+        public bool AreProceduresAndDoctorsEnabled
+        {
+            get => _areProceduresAndDoctorsEnabled;
+            set
+            {
+                _areProceduresAndDoctorsEnabled = true;
+                OnPropertyChanged(nameof(AreProceduresAndDoctorsEnabled));
+            }
+        }
+
+
+        private bool _isDateEnabled = false;
+        public bool IsDateEnabled
+        {
+            get => _isDateEnabled;
+            set
+            {
+                _isDateEnabled = value;
+                OnPropertyChanged(nameof(IsDateEnabled));
+            }
+        }
+
+
+        private bool _isTimeEnabled = false;
+        public bool IsTimeEnabled
+        {
+            get => _isTimeEnabled;
+            set
+            {
+                _isTimeEnabled = value;
+                Debug.WriteLine("IsTimeEnabled: " + _isTimeEnabled);
+                OnPropertyChanged(nameof(IsTimeEnabled));
             }
         }
 
@@ -154,11 +193,14 @@ namespace Hospital.ViewModels
             {
                 DoctorsList?.Add(doc);
             }
+            AreProceduresAndDoctorsEnabled = true;
         }
 
         public async Task LoadDoctorSchedule()
         {
             HighlightedDates.Clear();
+            SelectedCalendarDate = null;
+
             if (SelectedDoctor == null)
             {
                 return;
@@ -167,18 +209,19 @@ namespace Hospital.ViewModels
             await _shiftManager.LoadUpcomingDoctorDayshifts(SelectedDoctor.DoctorId);
             shiftsList = _shiftManager.GetShifts();
 
-            if (shiftsList == null)
+            if (shiftsList.Count == 0)
             {
-                HighlightedDates.Clear();
                 HoursList.Clear();
+                IsDateEnabled = false;
+                IsTimeEnabled = false;
                 return;
             }
 
-            HighlightedDates.Clear();
             foreach (Shift shift in shiftsList)
             {
                 HighlightedDates.Add(new DateTimeOffset(shift.DateTime));
             }
+            IsDateEnabled = true;
         }
 
         public async Task LoadAvailableTimeSlots()
@@ -187,6 +230,7 @@ namespace Hospital.ViewModels
             if (SelectedDoctor == null || SelectedCalendarDate == null || SelectedProcedure == null)
             {
                 HoursList.Clear();
+                IsTimeEnabled = false;
                 return;
             }
 
@@ -195,6 +239,7 @@ namespace Hospital.ViewModels
             {
                 HighlightedDates.Clear();
                 HoursList.Clear();
+                IsTimeEnabled = false;
                 return;
             }
 
@@ -208,12 +253,27 @@ namespace Hospital.ViewModels
             {
                 //if there is no shift for the selected date return
                 HoursList.Clear();
+                IsTimeEnabled = false;
                 return;
             }
 
             //get appointments for the selected doctor on the selected date
-            await _appointmentManager.LoadDoctorAppointmentsOnDate(SelectedDoctor.DoctorId, SelectedCalendarDate.Value.Date);
-
+            try
+            {
+                await _appointmentManager.LoadDoctorAppointmentsOnDate(SelectedDoctor.DoctorId, SelectedCalendarDate.Value.Date);
+            }
+            catch (Exception ex)
+            {
+                ContentDialog contentDialog = new ContentDialog
+                {
+                    Title = "Error",
+                    Content = ex.Message,
+                    CloseButtonText = "Ok"
+                };
+                contentDialog.XamlRoot = Root;
+                await contentDialog.ShowAsync();
+                return;
+            }
             //get the appointments
             AppointmentsList = _appointmentManager.GetAppointments();
 
@@ -275,9 +335,18 @@ namespace Hospital.ViewModels
             {
                 HoursList.Add(timeSlot);
             }
+
+            if(HoursList.Count == 0)
+            {
+                IsTimeEnabled = false;
+            }
+            else
+            {
+                IsTimeEnabled = true;
+            }
         }
 
-        public async Task<bool> BookAppointment()
+        public async Task BookAppointment()
         {
             var date = SelectedCalendarDate.Value.Date; // e.g. 2025-04-01
             var time = TimeSpan.Parse(SelectedHour); // e.g. 14:00:00
@@ -293,12 +362,8 @@ namespace Hospital.ViewModels
                 SelectedProcedure.ProcedureId
             );
 
-            bool isCreated = await _appointmentManager.CreateAppointment(newAppointment);
-            BookingStatusMessage = isCreated
-                ? "Appointment created successfully!"
-                : "Failed to create appointment. Please try again later.";
 
-            return isCreated;
+            await _appointmentManager.CreateAppointment(newAppointment);
         }
 
         // Validate user input
