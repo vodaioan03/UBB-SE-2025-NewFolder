@@ -176,12 +176,127 @@ namespace Hospital.Views
 
                     if (selectedAppointment != null)
                     {
-                        AppointmentDetailsView detailsView = new AppointmentDetailsView(selectedAppointment, _appointmentManager, RefreshAppointments);
-                        detailsView.Activate();
+                        ShowAppointmentDetailsDialog(selectedAppointment);
+
                     }
                 }
             }
         }
+
+        private async Task ShowAppointmentDetailsDialog(AppointmentJointModel appointment)
+        {
+            string message = $"Date and Time: {appointment.Date:f}\n" +
+                             $"Doctor: {appointment.DoctorName}\n" +
+                             $"Department: {appointment.DepartmentName}\n" +
+                             $"Procedure: {appointment.ProcedureName}\n" +
+                             $"Procedure Duration: {appointment.ProcedureDuration.TotalMinutes} minutes";
+
+            ContentDialog dialog = new ContentDialog
+            {
+                Title = "Appointment Details",
+                CloseButtonText = "Close",
+                XamlRoot = this.Content.XamlRoot,
+                RequestedTheme = ElementTheme.Default
+            };
+
+            StackPanel dialogContent = new StackPanel
+            {
+                Spacing = 10
+            };
+
+            dialogContent.Children.Add(new TextBlock
+            {
+                Text = message,
+                TextWrapping = TextWrapping.Wrap
+            });
+
+            // Determine if cancellation is allowed
+            bool canCancel = (appointment.Date.ToLocalTime() - DateTime.Now).TotalHours >= 24;
+
+            StackPanel buttonRow = new StackPanel
+            {
+                Orientation = Orientation.Horizontal,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                Spacing = 10,
+                Margin = new Thickness(0, 10, 0, 0)
+            };
+
+            // Go Back button
+
+            // Cancel button (enabled or disabled)
+            if (canCancel)
+            {
+                Button cancelBtn = new Button
+                {
+                    Content = "Cancel Appointment",
+                    Width = 160,
+                    Height = 40,
+                    Background = new SolidColorBrush(Colors.Red),
+                    Foreground = new SolidColorBrush(Colors.White)
+                };
+                cancelBtn.Click += async (s, e) =>
+                {
+                    dialog.Hide();
+                    ContentDialog confirmDialog = new ContentDialog
+                    {
+                        Title = "Confirm Cancellation",
+                        Content = "Are you sure you want to cancel this appointment?",
+                        PrimaryButtonText = "Yes",
+                        CloseButtonText = "No",
+                        DefaultButton = ContentDialogButton.Close,
+                        XamlRoot = this.Content.XamlRoot
+                    };
+
+                    var result = await confirmDialog.ShowAsync();
+                    if (result == ContentDialogResult.Primary)
+                    {
+                        try
+                        {
+                            _appointmentManager.RemoveAppointment(appointment.AppointmentId);
+                            RefreshAppointments();
+                        }
+                        catch (Exception ex)
+                        {
+                            ContentDialog errorDialog = new ContentDialog
+                            {
+                                Title = "Cancellation Failed",
+                                Content = ex.Message,
+                                CloseButtonText = "OK",
+                                XamlRoot = this.Content.XamlRoot
+                            };
+                            await errorDialog.ShowAsync();
+                        }
+                    }
+                };
+
+                buttonRow.Children.Add(cancelBtn);
+            }
+            else
+            {
+                Button disabledBtn = new Button
+                {
+                    Content = "Cancel Appointment",
+                    Width = 160,
+                    Height = 40,
+                    IsEnabled = false,
+                    Background = new SolidColorBrush(Color.FromArgb(255, 255, 102, 102)),
+                    Foreground = new SolidColorBrush(Colors.White)
+                };
+                ToolTipService.SetToolTip(disabledBtn, "You can only cancel appointments more than 24 hours in advance.");
+                buttonRow.Children.Add(disabledBtn);
+            }
+
+            // Add the full row of buttons to the dialog
+            dialogContent.Children.Add(buttonRow);
+
+
+            dialog.Content = dialogContent;
+
+            await dialog.ShowAsync();
+
+            DailyScheduleList.SelectedItem = null;
+        }
+
 
         private async void RefreshAppointments()
         {
