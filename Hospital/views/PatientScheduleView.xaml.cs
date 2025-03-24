@@ -70,15 +70,6 @@ namespace Hospital.Views
             RefreshAppointments();
         }
 
-        private void ForceCalendarUIRefresh()
-        {
-            _dispatcherQueue.TryEnqueue(() =>
-            {
-                AppointmentsCalendar.SelectedDates.Clear();
-                AppointmentsCalendar.InvalidateMeasure();
-                AppointmentsCalendar.UpdateLayout();
-            });
-        }
 
         private void AppointmentsCalendar_SelectedDatesChanged(CalendarView sender, CalendarViewSelectedDatesChangedEventArgs args)
         {
@@ -157,11 +148,14 @@ namespace Hospital.Views
             }
         }
 
-        private void DailyScheduleList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void DailyScheduleList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count > 0)
             {
                 var selectedSlot = (TimeSlotModel)e.AddedItems[0];
+
+                // Clear selection immediately to allow re-selection later
+                DailyScheduleList.SelectedItem = null;
 
                 if (!string.IsNullOrEmpty(selectedSlot.Appointment))
                 {
@@ -176,12 +170,12 @@ namespace Hospital.Views
 
                     if (selectedAppointment != null)
                     {
-                        ShowAppointmentDetailsDialog(selectedAppointment);
-
+                        await ShowAppointmentDetailsDialog(selectedAppointment);
                     }
                 }
             }
         }
+
 
         private async Task ShowAppointmentDetailsDialog(AppointmentJointModel appointment)
         {
@@ -203,6 +197,7 @@ namespace Hospital.Views
             {
                 Spacing = 10
             };
+
 
             dialogContent.Children.Add(new TextBlock
             {
@@ -253,7 +248,45 @@ namespace Hospital.Views
                         try
                         {
                             _appointmentManager.RemoveAppointment(appointment.AppointmentId);
-                            RefreshAppointments();
+
+
+                            // Force a full refresh of the DailyScheduleList (destroy and recreate)
+                            if (AppointmentsCalendar.SelectedDates.Any())
+                            {
+                                var selectedDate = AppointmentsCalendar.SelectedDates.First().DateTime.Date;
+
+                                DailyAppointments.Clear();
+
+                                List<TimeSlotModel> timeSlots = GenerateTimeSlots(selectedDate);
+
+                                var selectedAppointments = _appointmentManager.s_appointmentList
+                                    .Where(a => a.Date.Date == selectedDate)
+                                    .OrderBy(a => a.Date.TimeOfDay)
+                                    .ToList();
+
+                                foreach (var appointment in selectedAppointments)
+                                {
+                                    DateTime start = appointment.Date;
+                                    DateTime end = start.Add(appointment.ProcedureDuration);
+
+                                    foreach (var slot in timeSlots)
+                                    {
+                                        if (slot.TimeSlot >= start && slot.TimeSlot < end)
+                                        {
+                                            slot.Appointment = appointment.ProcedureName;
+                                            slot.HighlightColor = new SolidColorBrush(Colors.Green);
+                                        }
+                                    }
+                                }
+
+                                foreach (var slot in timeSlots)
+                                {
+                                    DailyAppointments.Add(slot);
+                                }
+
+                                NoAppointmentsText.Visibility = selectedAppointments.Any() ? Visibility.Collapsed : Visibility.Visible;
+                            }
+
                         }
                         catch (Exception ex)
                         {
