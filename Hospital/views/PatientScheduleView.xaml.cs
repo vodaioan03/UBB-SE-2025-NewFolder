@@ -62,7 +62,7 @@ namespace Hospital.Views
             await _appointmentManager.LoadAppointmentsForPatient(patientId);
 
             HighlightedDates.Clear();
-            foreach (var appointment in _appointmentManager.s_appointmentList)
+            foreach (var appointment in _appointmentManager.appointmentList)
             {
                 HighlightedDates.Add(new DateTimeOffset(appointment.Date.Date));
             }
@@ -80,7 +80,7 @@ namespace Hospital.Views
                 DailyAppointments.Clear();
                 List<TimeSlotModel> timeSlots = GenerateTimeSlots(selectedDate);
 
-                var selectedAppointments = _appointmentManager.s_appointmentList
+                var selectedAppointments = _appointmentManager.appointmentList
                     .Where(a => a.Date.Date == selectedDate)
                     .OrderBy(a => a.Date.TimeOfDay)
                     .ToList();
@@ -163,7 +163,7 @@ namespace Hospital.Views
                         ? AppointmentsCalendar.SelectedDates.First().DateTime.Date
                         : DateTime.MinValue;
 
-                    var selectedAppointment = _appointmentManager.s_appointmentList
+                    var selectedAppointment = _appointmentManager.appointmentList
                         .FirstOrDefault(a =>
                             a.ProcedureName == selectedSlot.Appointment &&
                             a.Date.Date == selectedDate);
@@ -259,7 +259,7 @@ namespace Hospital.Views
 
                                 List<TimeSlotModel> timeSlots = GenerateTimeSlots(selectedDate);
 
-                                var selectedAppointments = _appointmentManager.s_appointmentList
+                                var selectedAppointments = _appointmentManager.appointmentList
                                     .Where(a => a.Date.Date == selectedDate)
                                     .OrderBy(a => a.Date.TimeOfDay)
                                     .ToList();

@@ -15,18 +15,18 @@ namespace Hospital.Managers
 {
     public class DocumentManagerModel
     {
-        public List<Document> s_documentList { get; private set; }
+        public List<Document> documentList { get; private set; }
         private readonly DocumentDatabaseService _documentDBService;
 
         public DocumentManagerModel(DocumentDatabaseService dbService)
         {
             _documentDBService = dbService;
-            s_documentList = new List<Document>();
+            documentList = new List<Document>();
         }
 
         public List<Document> GetDocuments()
         {
-            return s_documentList;
+            return documentList;
         }
 
         public async Task AddDocumentToMedicalRecord(Document document)
@@ -36,7 +36,7 @@ namespace Hospital.Managers
                 bool success = await _documentDBService.UploadDocumentToDB(document).ConfigureAwait(false);
                 if (success)
                 {
-                    s_documentList.Add(document);
+                    documentList.Add(document);
                 }
             }
             catch (Exception ex)
@@ -47,13 +47,13 @@ namespace Hospital.Managers
 
         public void LoadDocuments(int MedicalRecordId)
         {
-            s_documentList = _documentDBService.GetDocumentsByMedicalRecordId(MedicalRecordId).Result;
+            documentList = _documentDBService.GetDocumentsByMedicalRecordId(MedicalRecordId).Result;
         }
 
         public async Task DownloadDocuments(int patientId)
         {
             List<string> filePaths = new List<string>();
-            foreach (Document document in s_documentList)
+            foreach (Document document in documentList)
             {
                 filePaths.Add(document.Files);
             }

@@ -24,7 +24,7 @@ namespace Hospital.ViewModels
             _medicalRecordManager = medicalRecordManager;
             _documentManager = documentManager;
             _medicalRecordManager.LoadMedicalRecordsForPatient(patientId).Wait();
-            MedicalRecords = medicalRecordManager.s_medicalRecordList;
+            MedicalRecords = medicalRecordManager.medicalRecordList;
         }
 
         public void ShowMedicalRecordDetails(MedicalRecordJointModel medicalRecord)

@@ -103,7 +103,7 @@ namespace Hospital.ViewModels
             try
             {
                 await _appointmentManager.LoadAppointmentsForDoctor(DoctorId);
-                var appointments = _appointmentManager.s_appointmentList;
+                var appointments = _appointmentManager.appointmentList;
 
                 Appointments.Clear();
                 foreach (var appointment in appointments)
@@ -159,7 +159,7 @@ namespace Hospital.ViewModels
             try
             {
                 await _appointmentManager.LoadDoctorAppointmentsOnDate(DoctorId, date);
-                Appointments = _appointmentManager.s_appointmentList;
+                Appointments = _appointmentManager.appointmentList;
                 await _shiftManager.LoadShifts(DoctorId);
                 Shifts = _shiftManager.GetShifts();
 
