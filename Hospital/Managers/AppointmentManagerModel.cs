@@ -12,19 +12,19 @@ namespace Hospital.Managers
 {
     public class AppointmentManagerModel
     {
-        public List<AppointmentJointModel> s_appointmentList { get; private set; }
+        public List<AppointmentJointModel> appointmentList { get; private set; }
 
         private readonly AppointmentsDatabaseService _appointmentsDBService;
 
         public AppointmentManagerModel(AppointmentsDatabaseService dbService)
         {
             _appointmentsDBService = dbService;
-            s_appointmentList = new List<AppointmentJointModel>();
+            appointmentList = new List<AppointmentJointModel>();
         }
 
         public List<AppointmentJointModel> GetAppointments()
         {
-          return s_appointmentList;
+          return appointmentList;
         }
 
         public async Task LoadDoctorAppointmentsOnDate(int doctorId, DateTime date)
@@ -34,7 +34,7 @@ namespace Hospital.Managers
                 List<AppointmentJointModel> appointments = await _appointmentsDBService
                     .GetAppointmentsByDoctorAndDate(doctorId, date)
                     .ConfigureAwait(false);
-                s_appointmentList = new List<AppointmentJointModel>(appointments);
+                appointmentList = new List<AppointmentJointModel>(appointments);
             }
             catch (Exception ex)
             {
@@ -51,15 +51,15 @@ namespace Hospital.Managers
                     .GetAppointmentsForPatient(patientId)
                     .ConfigureAwait(false);
 
-                s_appointmentList = new List<AppointmentJointModel>(
+                appointmentList = new List<AppointmentJointModel>(
                     appointments.Where(a => a.Date > DateTime.Now && !a.Finished)
                 );
                 
 
-                s_appointmentList.Clear();
+                appointmentList.Clear();
                 foreach (AppointmentJointModel appointment in appointments)
                 { 
-                    s_appointmentList.Add(appointment);
+                    appointmentList.Add(appointment);
                 }
             }
             catch (Exception ex)
@@ -102,10 +102,10 @@ namespace Hospital.Managers
             {
                 List<AppointmentJointModel> appointments =
                     await _appointmentsDBService.GetAppointmentsForDoctor(doctorId).ConfigureAwait(false);
-                s_appointmentList.Clear();
+                appointmentList.Clear();
                 foreach (AppointmentJointModel appointment in appointments)
                 {
-                    s_appointmentList.Add(appointment);
+                    appointmentList.Add(appointment);
                 }
             }
             catch (Exception ex)
@@ -121,10 +121,10 @@ namespace Hospital.Managers
                 List<AppointmentJointModel> appointments = await _appointmentsDBService
                     .GetAppointmentsByDoctorAndDate(doctorId, date)
                     .ConfigureAwait(false);
-                s_appointmentList.Clear();
+                appointmentList.Clear();
                 foreach (AppointmentJointModel appointment in appointments)
                 {
-                    s_appointmentList.Add(appointment);
+                    appointmentList.Add(appointment);
                 }
             }
             catch (Exception ex)

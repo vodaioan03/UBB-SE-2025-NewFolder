@@ -24,7 +24,7 @@ namespace Hospital.ViewModels
         {
             await _appointmentManager.LoadAppointmentsForPatient(patientId);
             Appointments.Clear();
-            foreach (var appointment in _appointmentManager.s_appointmentList)
+            foreach (var appointment in _appointmentManager.appointmentList)
             {
                 Appointments.Add(appointment.Date.Date);
             }

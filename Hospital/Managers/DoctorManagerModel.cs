@@ -12,24 +12,24 @@ namespace Hospital.Managers
 {
   public class DoctorManagerModel
   {
-    public List<DoctorJointModel> s_doctorList { get; private set; }
+    public List<DoctorJointModel> doctorList { get; private set; }
     private DoctorsDatabaseService _doctorDBService;
 
     public DoctorManagerModel(DoctorsDatabaseService dbService)
     {
             _doctorDBService = dbService;
-            s_doctorList = new List<DoctorJointModel>();
+            doctorList = new List<DoctorJointModel>();
     }
 
     public async Task LoadDoctors(int departmentId)
     {
       try
       {
-        s_doctorList.Clear();
+        doctorList.Clear();
         List<DoctorJointModel> doctorsList = await _doctorDBService.GetDoctorsByDepartment(departmentId).ConfigureAwait(false);
         foreach (DoctorJointModel doc in doctorsList)
         {
-          s_doctorList.Add(doc);
+          doctorList.Add(doc);
         }
       }
       catch (Exception ex)
@@ -40,7 +40,7 @@ namespace Hospital.Managers
 
     public List<DoctorJointModel> GetDoctorsWithRatings()
     {
-      return s_doctorList;
+      return doctorList;
     }
   }
 }

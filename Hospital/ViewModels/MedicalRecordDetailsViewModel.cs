@@ -24,7 +24,7 @@ namespace Hospital.ViewModels
             MedicalRecord = medicalRecord;
             _documentManager = documentManager;
             _documentManager.LoadDocuments(MedicalRecord.MedicalRecordId);
-            Documents = new ObservableCollection<Document>(_documentManager.s_documentList);
+            Documents = new ObservableCollection<Document>(_documentManager.documentList);
         }
 
         public async Task OnDownloadButtonClicked()

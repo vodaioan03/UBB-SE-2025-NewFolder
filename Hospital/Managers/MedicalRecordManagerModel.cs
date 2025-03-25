@@ -13,13 +13,13 @@ namespace Hospital.Managers
 {
     public class MedicalRecordManagerModel
     {
-        public List<MedicalRecordJointModel> s_medicalRecordList { get; private set; }
+        public List<MedicalRecordJointModel> medicalRecordList { get; private set; }
         private readonly MedicalRecordsDatabaseService _medicalRecordsDBService;
 
         public MedicalRecordManagerModel(MedicalRecordsDatabaseService dbService)
         {
             _medicalRecordsDBService = dbService;
-            s_medicalRecordList = new List<MedicalRecordJointModel>();
+            medicalRecordList = new List<MedicalRecordJointModel>();
         }
 
         public async Task LoadMedicalRecordsForPatient(int patientId)
@@ -29,14 +29,14 @@ namespace Hospital.Managers
                 List<MedicalRecordJointModel> medicalRecords = await _medicalRecordsDBService
                     .GetMedicalRecordsForPatient(patientId)
                     .ConfigureAwait(false);
-                s_medicalRecordList.Clear();
+                medicalRecordList.Clear();
                 if (medicalRecords == null)
                 {
                     medicalRecords = new List<MedicalRecordJointModel>();
                 }
                 foreach (MedicalRecordJointModel medicalRecord in medicalRecords)
                 {
-                    s_medicalRecordList.Add(medicalRecord);
+                    medicalRecordList.Add(medicalRecord);
                 }
             }
             catch (Exception ex)
@@ -90,7 +90,7 @@ namespace Hospital.Managers
                 {
                     medicalRecord.MedicalRecordId = newMedicalRecordId;
                     // Optionally, retrieve the full record from the database (with join data) and add it.
-                    s_medicalRecordList.Add(GetMedicalRecordById(newMedicalRecordId));
+                    medicalRecordList.Add(GetMedicalRecordById(newMedicalRecordId));
                 }
 
                 return newMedicalRecordId;
@@ -110,10 +110,10 @@ namespace Hospital.Managers
                 List<MedicalRecordJointModel> medicalRecords = await _medicalRecordsDBService
                     .GetMedicalRecordsForDoctor(doctorId)
                     .ConfigureAwait(false);
-                s_medicalRecordList.Clear();
+                medicalRecordList.Clear();
                 foreach (MedicalRecordJointModel medicalRecord in medicalRecords)
                 {
-                    s_medicalRecordList.Add(medicalRecord);
+                    medicalRecordList.Add(medicalRecord);
                 }
             }
             catch (Exception ex)
@@ -125,7 +125,7 @@ namespace Hospital.Managers
 
         public async Task<List<MedicalRecordJointModel>> getMedicalRecords()
         {
-            return s_medicalRecordList;
+            return medicalRecordList;
         }
     }
 }
