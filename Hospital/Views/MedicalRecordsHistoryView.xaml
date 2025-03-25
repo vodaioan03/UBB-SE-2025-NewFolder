@@ -10,25 +10,24 @@
     mc:Ignorable="d"
     Title="MedicalRecordsHistoryView">
 
-    
-    <StackPanel x:Name="MedicalRecordsPanel" Padding="20">
+    <Grid x:Name="MedicalRecordsPanel" RowDefinitions="Auto,Auto,*,Auto" Padding="20">
         <TextBlock Text="Medical Records" FontSize="24" Margin="0,0,0,10" HorizontalAlignment="Center" />
+        <TextBlock Grid.Row="1" Text="Select Medical Record for which you want to display the details." FontSize="16" Margin="0,0,0,10" HorizontalAlignment="Center" VerticalAlignment="Top" />
 
-        <TextBlock Text="Select Medical Record for which you want to display the details." FontSize="16" Margin="0,0,0,10" HorizontalAlignment="Center" />
-        <ListView Background="LightGreen" CornerRadius="20"
-            x:Name="MedicalRecordsListView"
-            ItemsSource="{Binding MedicalRecords}" 
-            Width="400">
-            <ListView.ItemTemplate>
-                <DataTemplate x:DataType="local1:MedicalRecordJointModel">
-                    <StackPanel Padding="10">
-                        <!-- TODO replace DoctorName with DepartmentName after adding it to MedicalRecordJointModel -->
-                        <TextBlock Text="{x:Bind DepartmentName}" FontWeight="Bold"/>
-                        <TextBlock Text="{x:Bind Date}"/>
-                    </StackPanel>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-        <Button Content="Show Details" Click="ShowMedicalRecordDetails" Margin="0,10,0,0" HorizontalAlignment="Center"/>
-    </StackPanel>
+
+        <ScrollViewer Grid.Row="2" Margin="20, 20, 20, 20" Background="LightGreen" CornerRadius="20" Width="400">
+            <ListView x:Name="MedicalRecordsListView" ItemsSource="{Binding MedicalRecords}">
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="local1:MedicalRecordJointModel">
+                        <StackPanel Padding="10">
+                            <TextBlock Text="{x:Bind DepartmentName}" FontWeight="Bold"/>
+                            <TextBlock Text="{x:Bind Date}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </ScrollViewer>
+
+        <Button Grid.Row="3" Content="Show Details" Click="ShowMedicalRecordDetails" Margin="0,10,0,0" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
+    </Grid>
 </Window>

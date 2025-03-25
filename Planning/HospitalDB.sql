@@ -261,7 +261,13 @@ VALUES
     (2, 3, '2023-03-18T10:30:00', 2, 'Brain MRI results normal'), -- Mike Davis w/ Dr. Robert Johnson (Neurology)
     (2, 4, '2023-03-19T11:00:00', 3, 'Child checkup results normal'), -- Mike Davis w/ Dr. Emily Carter (Pediatrics)
     (3, 1, '2023-03-19T15:30:00', 1, 'ECG results pending'), -- Sarah Miller w/ Dr. John Smith (Cardiology)
-    (3, 2, '2023-03-20T16:00:00', 4, 'Stress test results normal'); -- Sarah Miller w/ Dr. Alice Brown (Cardiology)
+    (3, 2, '2023-03-20T16:00:00', 4, 'Stress test results normal'), -- Sarah Miller w/ Dr. Alice Brown (Cardiology)
+    (1, 1, '2023-03-17T12:30:00', 1, 'Normal ECG results'), -- Jane Doe w/ Dr. John Smith (Cardiology)
+    (1, 2, '2023-03-17T13:45:00', 4, 'Stress test results pending'), -- Jane Doe w/ Dr. Alice Brown (Cardiology)
+    (1, 3, '2023-03-18T10:30:00', 2, 'Brain MRI results normal'), -- Jane Doe w/ Dr. Robert Johnson (Neurology)
+    (1, 4, '2023-03-19T11:00:00', 3, 'Child checkup results normal'), -- Jane Doe w/ Dr. Emily Carter (Pediatrics)
+    (1, 1, '2023-03-19T15:30:00', 1, 'ECG results pending'), -- Jane Doe w/ Dr. John Smith (Cardiology)
+    (1, 2, '2023-03-20T16:00:00', 4, 'Stress test results normal'); -- Jane Doe w/ Dr. Alice Brown (Cardiology)
 
 
 -------------------------------------
@@ -427,7 +433,7 @@ ORDER BY a.DateAndTime;
 SELECT 
     a.AppointmentId,
     a.Finished,
-    a.DateAndTime,\
+    a.DateAndTime,
     d.DepartmentId,
     d.DepartmentName,
     doc.DoctorId,
