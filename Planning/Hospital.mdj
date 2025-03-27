@@ -2880,7 +2880,7 @@
 											"parentStyle": true,
 											"left": 2989,
 											"top": 1775,
-											"width": 445.73583984375,
+											"width": 486,
 											"height": 13,
 											"text": "DoctorsDatabaseService"
 										},
@@ -2918,7 +2918,7 @@
 									"parentStyle": true,
 									"left": 2984,
 									"top": 1768,
-									"width": 455.73583984375,
+									"width": 496,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGVdXKdIh0Fqp0="
@@ -2956,7 +2956,7 @@
 											"parentStyle": true,
 											"left": 2989,
 											"top": 1798,
-											"width": 445.73583984375,
+											"width": 486,
 											"height": 13,
 											"text": "-_config: Config",
 											"horizontalAlignment": 0
@@ -2966,7 +2966,7 @@
 									"parentStyle": true,
 									"left": 2984,
 									"top": 1793,
-									"width": 455.73583984375,
+									"width": 496,
 									"height": 23
 								},
 								{
@@ -2981,24 +2981,6 @@
 									"subViews": [
 										{
 											"_type": "UMLOperationView",
-											"_id": "AAAAAAGVlOIlXa7Z4MU=",
-											"_parent": {
-												"$ref": "AAAAAAGVdXKdIx0KmyI="
-											},
-											"model": {
-												"$ref": "AAAAAAGVlOIlUa7WHeM="
-											},
-											"font": "Arial;13;0",
-											"parentStyle": true,
-											"left": 2989,
-											"top": 1821,
-											"width": 445.73583984375,
-											"height": 13,
-											"text": "+DoctorsDatabaseService()",
-											"horizontalAlignment": 0
-										},
-										{
-											"_type": "UMLOperationView",
 											"_id": "AAAAAAGVlOJt4rEi3Ts=",
 											"_parent": {
 												"$ref": "AAAAAAGVdXKdIx0KmyI="
@@ -3009,10 +2991,10 @@
 											"font": "Arial;13;0",
 											"parentStyle": true,
 											"left": 2989,
-											"top": 1836,
-											"width": 445.73583984375,
+											"top": 1821,
+											"width": 486,
 											"height": 13,
-											"text": "+GetDoctorsByDepartment(int departmentId): Task<List<DoctorJointModel>>",
+											"text": "+GetDoctorsByDepartment(int departmentId): async Task<List<DoctorJointModel>>",
 											"horizontalAlignment": 0
 										}
 									],
@@ -3020,8 +3002,8 @@
 									"parentStyle": true,
 									"left": 2984,
 									"top": 1816,
-									"width": 455.73583984375,
-									"height": 38
+									"width": 496,
+									"height": 23
 								},
 								{
 									"_type": "UMLReceptionCompartmentView",
@@ -3063,7 +3045,7 @@
 							"containerChangeable": true,
 							"left": 2984,
 							"top": 1768,
-							"width": 454.73583984375,
+							"width": 495,
 							"height": 104,
 							"nameCompartment": {
 								"$ref": "AAAAAAGVdXKdIh0Ecu0="
@@ -3444,7 +3426,7 @@
 											"top": 1030,
 											"width": 544.029296875,
 											"height": 13,
-											"text": "+appointmentList: ObservableCollection<AppointmentJointModel>",
+											"text": "+appointmentList: List<AppointmentJointModel>",
 											"horizontalAlignment": 0
 										},
 										{
@@ -3498,7 +3480,7 @@
 											"top": 1068,
 											"width": 544.029296875,
 											"height": 13,
-											"text": "+LoadAppointmentsForPatient(int patientId): Task",
+											"text": "+LoadAppointmentsForPatient(int patientId): async Task",
 											"horizontalAlignment": 0
 										},
 										{
@@ -3516,7 +3498,7 @@
 											"top": 1083,
 											"width": 544.029296875,
 											"height": 13,
-											"text": "+LoadAppointmentsForDoctor(int doctorId): Task",
+											"text": "+LoadAppointmentsForDoctor(int doctorId): async Task",
 											"horizontalAlignment": 0
 										},
 										{
@@ -3570,7 +3552,7 @@
 											"top": 1128,
 											"width": 544.029296875,
 											"height": 13,
-											"text": "+LoadAppointmentsByDoctorAndDate(doctor: DoctorJointModel, date: Date): Task",
+											"text": "+LoadAppointmentsByDoctorAndDate(int doctorId, DateTime: date): async Task",
 											"horizontalAlignment": 0
 										},
 										{
@@ -3607,7 +3589,7 @@
 											"top": 1143,
 											"width": 544.029296875,
 											"height": 13,
-											"text": "+GetAppointments(): ObservableCollection<AppointmentJointModel>",
+											"text": "+GetAppointments(): List<AppointmentJointModel>",
 											"horizontalAlignment": 0
 										},
 										{
@@ -3625,7 +3607,25 @@
 											"top": 1158,
 											"width": 544.029296875,
 											"height": 13,
-											"text": "+LoadDoctorAppointmentsOnDate(int doctorId, DateTime date): Task",
+											"text": "+LoadDoctorAppointmentsOnDate(int doctorId, DateTime date): async Task",
+											"horizontalAlignment": 0
+										},
+										{
+											"_type": "UMLOperationView",
+											"_id": "AAAAAAGV2XfjwfTotpk=",
+											"_parent": {
+												"$ref": "AAAAAAGVgaQyGlspJN8="
+											},
+											"model": {
+												"$ref": "AAAAAAGV2Xfjt/TlW10="
+											},
+											"font": "Arial;13;0",
+											"parentStyle": true,
+											"left": 2581,
+											"top": 1173,
+											"width": 544.029296875,
+											"height": 13,
+											"text": "+MarkAppointmentAsCompletedInDB(int appointmentId): static async task",
 											"horizontalAlignment": 0
 										}
 									],
@@ -3634,7 +3634,7 @@
 									"left": 2576,
 									"top": 1063,
 									"width": 554.029296875,
-									"height": 113
+									"height": 128
 								},
 								{
 									"_type": "UMLReceptionCompartmentView",
@@ -3838,24 +3838,6 @@
 									"subViews": [
 										{
 											"_type": "UMLOperationView",
-											"_id": "AAAAAAGVlF2zvn2P9r4=",
-											"_parent": {
-												"$ref": "AAAAAAGVgaRtgVtUxy8="
-											},
-											"model": {
-												"$ref": "AAAAAAGVlF2ztn2MU8Q="
-											},
-											"font": "Arial;13;0",
-											"parentStyle": true,
-											"left": 3077,
-											"top": 1365,
-											"width": 359,
-											"height": 13,
-											"text": "+DepartmentDatabaseService()",
-											"horizontalAlignment": 0
-										},
-										{
-											"_type": "UMLOperationView",
 											"_id": "AAAAAAGVgbYbV1zcTJI=",
 											"_parent": {
 												"$ref": "AAAAAAGVgaRtgVtUxy8="
@@ -3866,10 +3848,10 @@
 											"font": "Arial;13;0",
 											"parentStyle": true,
 											"left": 3077,
-											"top": 1380,
+											"top": 1365,
 											"width": 359,
 											"height": 13,
-											"text": "+GetDepartmentsFromDB(): Task<List<Department>>",
+											"text": "+GetDepartmentsFromDB(): async Task<List<Department>>",
 											"horizontalAlignment": 0
 										}
 									],
@@ -3878,7 +3860,7 @@
 									"left": 3072,
 									"top": 1360,
 									"width": 369,
-									"height": 38
+									"height": 23
 								},
 								{
 									"_type": "UMLReceptionCompartmentView",
@@ -3981,7 +3963,7 @@
 											"parentStyle": true,
 											"left": 2933,
 											"top": 1535,
-											"width": 500.68115234375,
+											"width": 533,
 											"height": 13,
 											"text": "MedicalRecordsDatabaseService"
 										},
@@ -4019,7 +4001,7 @@
 									"parentStyle": true,
 									"left": 2928,
 									"top": 1528,
-									"width": 510.68115234375,
+									"width": 543,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGVgaSya1t7ubA="
@@ -4057,7 +4039,7 @@
 											"parentStyle": true,
 											"left": 2933,
 											"top": 1558,
-											"width": 500.68115234375,
+											"width": 533,
 											"height": 13,
 											"text": "-_config: Config",
 											"horizontalAlignment": 0
@@ -4067,7 +4049,7 @@
 									"parentStyle": true,
 									"left": 2928,
 									"top": 1553,
-									"width": 510.68115234375,
+									"width": 543,
 									"height": 23
 								},
 								{
@@ -4120,24 +4102,6 @@
 										},
 										{
 											"_type": "UMLOperationView",
-											"_id": "AAAAAAGVlKHSTaw4AOA=",
-											"_parent": {
-												"$ref": "AAAAAAGVgaSya1uAOgM="
-											},
-											"model": {
-												"$ref": "AAAAAAGVlKHSQaw1cg8="
-											},
-											"font": "Arial;13;0",
-											"parentStyle": true,
-											"left": 2933,
-											"top": 1583,
-											"width": 500.68115234375,
-											"height": 13,
-											"text": "+MedicalRecordDatabaseService()",
-											"horizontalAlignment": 0
-										},
-										{
-											"_type": "UMLOperationView",
 											"_id": "AAAAAAGVhVdvHyXlW2I=",
 											"_parent": {
 												"$ref": "AAAAAAGVgaSya1uAOgM="
@@ -4148,10 +4112,10 @@
 											"font": "Arial;13;0",
 											"parentStyle": true,
 											"left": 2933,
-											"top": 1598,
-											"width": 500.68115234375,
+											"top": 1583,
+											"width": 533,
 											"height": 13,
-											"text": "+GetMedicalRecordsForPatient(int patientId): Task<List<MedicalRecordJointModel>>",
+											"text": "+GetMedicalRecordsForPatient(int patientId): async Task<List<MedicalRecordJointModel>>",
 											"horizontalAlignment": 0
 										},
 										{
@@ -4185,10 +4149,10 @@
 											"font": "Arial;13;0",
 											"parentStyle": true,
 											"left": 2933,
-											"top": 1613,
-											"width": 500.68115234375,
+											"top": 1598,
+											"width": 533,
 											"height": 13,
-											"text": "+GetMedicalRecordsForDoctor(int doctorId): Task<List<MedicalRecordJointModel>>",
+											"text": "+GetMedicalRecordsForDoctor(int DoctorId): async Task<List<MedicalRecordJointModel>>",
 											"horizontalAlignment": 0
 										},
 										{
@@ -4203,10 +4167,10 @@
 											"font": "Arial;13;0",
 											"parentStyle": true,
 											"left": 2933,
-											"top": 1628,
-											"width": 500.68115234375,
+											"top": 1613,
+											"width": 533,
 											"height": 13,
-											"text": "+RetrieveMedicalRecordById(): Task<MedicalRecordJointModel>",
+											"text": "+RetrieveMedicalRecordById(int medicalRecordId): async Task<MedicalRecordJointModel>",
 											"horizontalAlignment": 0
 										},
 										{
@@ -4221,10 +4185,10 @@
 											"font": "Arial;13;0",
 											"parentStyle": true,
 											"left": 2933,
-											"top": 1643,
-											"width": 500.68115234375,
+											"top": 1628,
+											"width": 533,
 											"height": 13,
-											"text": "+AddMedicalRecord(MedicalRecord medrecord): Task<int>",
+											"text": "+AddMedicalRecord(MedicalRecord medicalrecord): async Task<int>",
 											"horizontalAlignment": 0
 										}
 									],
@@ -4232,8 +4196,8 @@
 									"parentStyle": true,
 									"left": 2928,
 									"top": 1576,
-									"width": 510.68115234375,
-									"height": 85
+									"width": 543,
+									"height": 70
 								},
 								{
 									"_type": "UMLReceptionCompartmentView",
@@ -4275,7 +4239,7 @@
 							"containerChangeable": true,
 							"left": 2928,
 							"top": 1528,
-							"width": 509.68115234375,
+							"width": 542,
 							"height": 163,
 							"nameCompartment": {
 								"$ref": "AAAAAAGVgaSya1t6y9Q="
@@ -4414,7 +4378,7 @@
 											"top": 1782,
 											"width": 400.19775390625,
 											"height": 13,
-											"text": "+doctorList: ObservableCollection<DoctorJointModel>",
+											"text": "+doctorList: List<DoctorJointModel>",
 											"horizontalAlignment": 0
 										},
 										{
@@ -4468,7 +4432,7 @@
 											"top": 1820,
 											"width": 400.19775390625,
 											"height": 13,
-											"text": "+LoadDoctors(int departmentId): Task",
+											"text": "+LoadDoctors(int departmentId): async Task",
 											"horizontalAlignment": 0
 										},
 										{
@@ -4486,7 +4450,7 @@
 											"top": 1835,
 											"width": 400.19775390625,
 											"height": 13,
-											"text": "+GetDoctorsWithRatings(): ObservableCollection<DoctorJointModel>",
+											"text": "+GetDoctorsWithRatings(): List<DoctorJointModel>",
 											"horizontalAlignment": 0
 										}
 									],
@@ -4961,24 +4925,6 @@
 									"subViews": [
 										{
 											"_type": "UMLOperationView",
-											"_id": "AAAAAAGVhYrtMyh12Zk=",
-											"_parent": {
-												"$ref": "AAAAAAGVgaW1b1wEu/E="
-											},
-											"model": {
-												"$ref": "AAAAAAGVhYrtMChyCDQ="
-											},
-											"font": "Arial;13;0",
-											"parentStyle": true,
-											"left": 2853,
-											"top": 2141,
-											"width": 583.7021484375,
-											"height": 13,
-											"text": "+DocumentDatabaseService()",
-											"horizontalAlignment": 0
-										},
-										{
-											"_type": "UMLOperationView",
 											"_id": "AAAAAAGVhYn9vihoM7k=",
 											"_parent": {
 												"$ref": "AAAAAAGVgaW1b1wEu/E="
@@ -4989,10 +4935,10 @@
 											"font": "Arial;13;0",
 											"parentStyle": true,
 											"left": 2853,
-											"top": 2156,
+											"top": 2141,
 											"width": 583.7021484375,
 											"height": 13,
-											"text": "+UploadDocumentToDB(document: Document): Task<bool>",
+											"text": "+UploadDocumentToDB(document: Document): async Task<bool>",
 											"horizontalAlignment": 0
 										},
 										{
@@ -5007,10 +4953,10 @@
 											"font": "Arial;13;0",
 											"parentStyle": true,
 											"left": 2853,
-											"top": 2171,
+											"top": 2156,
 											"width": 583.7021484375,
 											"height": 13,
-											"text": "+GetDocumentsByMedicalRecordId(int medicalRecordId): Task<List<Document>>",
+											"text": "+GetDocumentsByMedicalRecordId(int medicalRecordId): async Task<List<Document>>",
 											"horizontalAlignment": 0
 										}
 									],
@@ -5019,7 +4965,7 @@
 									"left": 2848,
 									"top": 2136,
 									"width": 593.7021484375,
-									"height": 53
+									"height": 38
 								},
 								{
 									"_type": "UMLReceptionCompartmentView",
@@ -6057,7 +6003,7 @@
 											"parentStyle": true,
 											"left": 2373,
 											"top": 1327,
-											"width": 326.86962890625,
+											"width": 327,
 											"height": 13,
 											"text": "DepartmentManagerModel"
 										},
@@ -6095,7 +6041,7 @@
 									"parentStyle": true,
 									"left": 2368,
 									"top": 1320,
-									"width": 336.86962890625,
+									"width": 337,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGVgbsRU10VRJI="
@@ -6133,9 +6079,9 @@
 											"parentStyle": true,
 											"left": 2373,
 											"top": 1350,
-											"width": 326.86962890625,
+											"width": 327,
 											"height": 13,
-											"text": "+s_departmentList: ObservableCollection<Department>",
+											"text": "+s_departmentList: List<Department>",
 											"horizontalAlignment": 0
 										},
 										{
@@ -6151,9 +6097,9 @@
 											"parentStyle": true,
 											"left": 2373,
 											"top": 1365,
-											"width": 326.86962890625,
+											"width": 327,
 											"height": 13,
-											"text": "-_departmentsDBService: DepartmentsDatabaseService",
+											"text": "+_departmentsDBService: DepartmentsDatabaseService",
 											"horizontalAlignment": 0
 										}
 									],
@@ -6161,7 +6107,7 @@
 									"parentStyle": true,
 									"left": 2368,
 									"top": 1345,
-									"width": 336.86962890625,
+									"width": 337,
 									"height": 38
 								},
 								{
@@ -6187,9 +6133,9 @@
 											"parentStyle": true,
 											"left": 2373,
 											"top": 1388,
-											"width": 326.86962890625,
+											"width": 327,
 											"height": 13,
-											"text": "+LoadDepartments(): Task",
+											"text": "+LoadDepartments(): async Task",
 											"horizontalAlignment": 0
 										},
 										{
@@ -6205,9 +6151,9 @@
 											"parentStyle": true,
 											"left": 2373,
 											"top": 1403,
-											"width": 326.86962890625,
+											"width": 327,
 											"height": 13,
-											"text": "+GetDepartments(): ObservableCollection<Department>",
+											"text": "+GetDepartments(): List<Department>",
 											"horizontalAlignment": 0
 										}
 									],
@@ -6215,7 +6161,7 @@
 									"parentStyle": true,
 									"left": 2368,
 									"top": 1383,
-									"width": 336.86962890625,
+									"width": 337,
 									"height": 38
 								},
 								{
@@ -6258,7 +6204,7 @@
 							"containerChangeable": true,
 							"left": 2368,
 							"top": 1320,
-							"width": 335.86962890625,
+							"width": 336,
 							"height": 101,
 							"nameCompartment": {
 								"$ref": "AAAAAAGVgbsRU10U7ZM="
@@ -6305,8 +6251,8 @@
 											"visible": false,
 											"font": "Arial;13;0",
 											"parentStyle": true,
-											"left": 464,
-											"top": 768,
+											"left": 496,
+											"top": 720,
 											"height": 13
 										},
 										{
@@ -6317,8 +6263,8 @@
 											},
 											"font": "Arial;13;1",
 											"parentStyle": true,
-											"left": 1517,
-											"top": 1271,
+											"left": 1533,
+											"top": 1247,
 											"width": 416.84130859375,
 											"height": 13,
 											"text": "PatientScheduleViewModel"
@@ -6332,8 +6278,8 @@
 											"visible": false,
 											"font": "Arial;13;0",
 											"parentStyle": true,
-											"left": 464,
-											"top": 768,
+											"left": 496,
+											"top": 720,
 											"width": 73.67724609375,
 											"height": 13,
 											"text": "(from Model)"
@@ -6347,16 +6293,16 @@
 											"visible": false,
 											"font": "Arial;13;0",
 											"parentStyle": true,
-											"left": 464,
-											"top": 768,
+											"left": 496,
+											"top": 720,
 											"height": 13,
 											"horizontalAlignment": 1
 										}
 									],
 									"font": "Arial;13;0",
 									"parentStyle": true,
-									"left": 1512,
-									"top": 1264,
+									"left": 1528,
+									"top": 1240,
 									"width": 426.84130859375,
 									"height": 25,
 									"stereotypeLabel": {
@@ -6393,8 +6339,8 @@
 											},
 											"font": "Arial;13;0",
 											"parentStyle": true,
-											"left": 1517,
-											"top": 1294,
+											"left": 1533,
+											"top": 1270,
 											"width": 416.84130859375,
 											"height": 13,
 											"text": "-_appointmentManager: AppointmentManagerModel",
@@ -6411,8 +6357,8 @@
 											},
 											"font": "Arial;13;0",
 											"parentStyle": true,
-											"left": 1517,
-											"top": 1309,
+											"left": 1533,
+											"top": 1285,
 											"width": 416.84130859375,
 											"height": 13,
 											"text": "+Appointments: ObservableCollection<DateTime>",
@@ -6421,8 +6367,8 @@
 									],
 									"font": "Arial;13;0",
 									"parentStyle": true,
-									"left": 1512,
-									"top": 1289,
+									"left": 1528,
+									"top": 1265,
 									"width": 426.84130859375,
 									"height": 38
 								},
@@ -6448,8 +6394,8 @@
 											"visible": false,
 											"font": "Arial;13;0",
 											"parentStyle": true,
-											"left": 1421,
-											"top": 1016,
+											"left": 1453,
+											"top": 968,
 											"width": 416.84130859375,
 											"height": 13,
 											"text": "+retrieveProceduresByDepartment(departmentId: int): List<Procedures>",
@@ -6466,8 +6412,8 @@
 											},
 											"font": "Arial;13;0",
 											"parentStyle": true,
-											"left": 1517,
-											"top": 1334,
+											"left": 1533,
+											"top": 1310,
 											"width": 416.84130859375,
 											"height": 13,
 											"text": "+LoadAppointmentsForPacient(int pacientId): async Task",
@@ -6476,8 +6422,8 @@
 									],
 									"font": "Arial;13;0",
 									"parentStyle": true,
-									"left": 1512,
-									"top": 1327,
+									"left": 1528,
+									"top": 1303,
 									"width": 426.84130859375,
 									"height": 25
 								},
@@ -6493,8 +6439,8 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"parentStyle": true,
-									"left": 232,
-									"top": 384,
+									"left": 248,
+									"top": 360,
 									"width": 10,
 									"height": 10
 								},
@@ -6510,8 +6456,8 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"parentStyle": true,
-									"left": 232,
-									"top": 384,
+									"left": 248,
+									"top": 360,
 									"width": 10,
 									"height": 10
 								}
@@ -6519,8 +6465,8 @@
 							"font": "Arial;13;0",
 							"parentStyle": false,
 							"containerChangeable": true,
-							"left": 1512,
-							"top": 1264,
+							"left": 1528,
+							"top": 1240,
 							"width": 425.84130859375,
 							"height": 103,
 							"nameCompartment": {
@@ -7817,7 +7763,7 @@
 											"visible": false,
 											"font": "Arial;13;0",
 											"parentStyle": true,
-											"left": -576,
+											"left": -320,
 											"top": 96,
 											"height": 13
 										},
@@ -7829,7 +7775,7 @@
 											},
 											"font": "Arial;13;1",
 											"parentStyle": true,
-											"left": 2117,
+											"left": 2245,
 											"top": 2095,
 											"width": 583.7021484375,
 											"height": 13,
@@ -7844,7 +7790,7 @@
 											"visible": false,
 											"font": "Arial;13;0",
 											"parentStyle": true,
-											"left": -576,
+											"left": -320,
 											"top": 96,
 											"width": 73.67724609375,
 											"height": 13,
@@ -7859,7 +7805,7 @@
 											"visible": false,
 											"font": "Arial;13;0",
 											"parentStyle": true,
-											"left": -576,
+											"left": -320,
 											"top": 96,
 											"height": 13,
 											"horizontalAlignment": 1
@@ -7867,7 +7813,7 @@
 									],
 									"font": "Arial;13;0",
 									"parentStyle": true,
-									"left": 2112,
+									"left": 2240,
 									"top": 2088,
 									"width": 593.7021484375,
 									"height": 25,
@@ -7905,11 +7851,11 @@
 											},
 											"font": "Arial;13;0",
 											"parentStyle": true,
-											"left": 2117,
+											"left": 2245,
 											"top": 2118,
 											"width": 583.7021484375,
 											"height": 13,
-											"text": "+documentList: ObservableCollection<Document>",
+											"text": "+documentList: List<Document>",
 											"horizontalAlignment": 0
 										},
 										{
@@ -7923,7 +7869,7 @@
 											},
 											"font": "Arial;13;0",
 											"parentStyle": true,
-											"left": 2117,
+											"left": 2245,
 											"top": 2133,
 											"width": 583.7021484375,
 											"height": 13,
@@ -7933,7 +7879,7 @@
 									],
 									"font": "Arial;13;0",
 									"parentStyle": true,
-									"left": 2112,
+									"left": 2240,
 									"top": 2113,
 									"width": 593.7021484375,
 									"height": 38
@@ -7959,11 +7905,11 @@
 											},
 											"font": "Arial;13;0",
 											"parentStyle": true,
-											"left": 2117,
+											"left": 2245,
 											"top": 2156,
 											"width": 583.7021484375,
 											"height": 13,
-											"text": "+LoadDocuments(int medicalRecordId): Task",
+											"text": "+LoadDocuments(int medicalRecordId): void",
 											"horizontalAlignment": 0
 										},
 										{
@@ -7977,11 +7923,11 @@
 											},
 											"font": "Arial;13;0",
 											"parentStyle": true,
-											"left": 2117,
+											"left": 2245,
 											"top": 2171,
 											"width": 583.7021484375,
 											"height": 13,
-											"text": "+GetDocuments(): ObservableCollection<Document>",
+											"text": "+GetDocuments(): List<Document>",
 											"horizontalAlignment": 0
 										},
 										{
@@ -7995,11 +7941,11 @@
 											},
 											"font": "Arial;13;0",
 											"parentStyle": true,
-											"left": 2117,
+											"left": 2245,
 											"top": 2186,
 											"width": 583.7021484375,
 											"height": 13,
-											"text": "+AddDocumentToMedicalRecord(Document doc): Task",
+											"text": "+AddDocumentToMedicalRecord(Document doc): async Task",
 											"horizontalAlignment": 0
 										},
 										{
@@ -8014,7 +7960,7 @@
 											"visible": false,
 											"font": "Arial;13;0",
 											"parentStyle": true,
-											"left": 2629,
+											"left": 2885,
 											"top": 2445,
 											"width": 522.65673828125,
 											"height": 13,
@@ -8032,17 +7978,17 @@
 											},
 											"font": "Arial;13;0",
 											"parentStyle": true,
-											"left": 2117,
+											"left": 2245,
 											"top": 2201,
 											"width": 583.7021484375,
 											"height": 13,
-											"text": "+DownloadDocuments(int patientId): Task",
+											"text": "+DownloadDocuments(int patientId): async Task",
 											"horizontalAlignment": 0
 										}
 									],
 									"font": "Arial;13;0",
 									"parentStyle": true,
-									"left": 2112,
+									"left": 2240,
 									"top": 2151,
 									"width": 593.7021484375,
 									"height": 68
@@ -8059,7 +8005,7 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"parentStyle": true,
-									"left": -880,
+									"left": -752,
 									"top": 48,
 									"width": 10,
 									"height": 10
@@ -8076,7 +8022,7 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"parentStyle": true,
-									"left": -880,
+									"left": -752,
 									"top": 48,
 									"width": 10,
 									"height": 10
@@ -8085,7 +8031,7 @@
 							"font": "Arial;13;0",
 							"parentStyle": false,
 							"containerChangeable": true,
-							"left": 2112,
+							"left": 2240,
 							"top": 2088,
 							"width": 592.7021484375,
 							"height": 146,
@@ -8352,7 +8298,7 @@
 											"top": 1112,
 											"width": 1961.765625,
 											"height": 13,
-											"text": "+CancelButton_Click(object sender, RoutedEventArgs e): void",
+											"text": "-CancelButton_Click(object sender, RoutedEventArgs e): void",
 											"horizontalAlignment": 0
 										},
 										{
@@ -8370,7 +8316,7 @@
 											"top": 1127,
 											"width": 1961.765625,
 											"height": 13,
-											"text": "+ConfirmButton_Click(object sender, RoutedEventArgs e): void",
+											"text": "-ConfirmButton_Click(object sender, RoutedEventArgs e): async void",
 											"horizontalAlignment": 0
 										},
 										{
@@ -8388,7 +8334,7 @@
 											"top": 1142,
 											"width": 1961.765625,
 											"height": 13,
-											"text": "+StyleTitleBar(): void",
+											"text": "-StyleTitleBar(): void",
 											"horizontalAlignment": 0
 										},
 										{
@@ -8406,7 +8352,7 @@
 											"top": 1157,
 											"width": 1961.765625,
 											"height": 13,
-											"text": "+DepartmentComboBox_SelectionChanged(object sender, object e): async void",
+											"text": "-DepartmentComboBox_SelectionChanged(object sender, object e): async void",
 											"horizontalAlignment": 0
 										},
 										{
@@ -8424,7 +8370,7 @@
 											"top": 1172,
 											"width": 1961.765625,
 											"height": 13,
-											"text": "+ProcedureComboBox_SelectionChanged(object sender, object e): async void",
+											"text": "-ProcedureComboBox_SelectionChanged(object sender, object e): async void",
 											"horizontalAlignment": 0
 										},
 										{
@@ -8442,7 +8388,7 @@
 											"top": 1187,
 											"width": 1961.765625,
 											"height": 13,
-											"text": "+DoctorComboBox_SelectionChanged(object sender, object e): async void",
+											"text": "-DoctorComboBox_SelectionChanged(object sender, object e): async void",
 											"horizontalAlignment": 0
 										},
 										{
@@ -8460,7 +8406,7 @@
 											"top": 1202,
 											"width": 1961.765625,
 											"height": 13,
-											"text": "+CalendarView_DayItemChanging(CalendarView sender, CalendarViewDayItemChangingEventArgs args): void",
+											"text": "-CalendarView_DayItemChanging(CalendarView sender, CalendarViewDayItemChangingEventArgs args): void",
 											"horizontalAlignment": 0
 										},
 										{
@@ -8794,7 +8740,7 @@
 											"top": 1784,
 											"width": 753.654296875,
 											"height": 13,
-											"text": "-LoadInitialCalendarView(): Task",
+											"text": "-LoadInitialCalendarView(): void",
 											"horizontalAlignment": 0
 										},
 										{
@@ -9110,7 +9056,7 @@
 											"top": 1549,
 											"width": 432.03759765625,
 											"height": 13,
-											"text": "-ResizeAndCenterWindow(): void",
+											"text": "-ResizeAndCenterWindow(int width, int height): void",
 											"horizontalAlignment": 0
 										},
 										{
@@ -9610,7 +9556,7 @@
 											"parentStyle": true,
 											"left": 1605,
 											"top": 1951,
-											"width": 605.4619140625,
+											"width": 608,
 											"height": 13,
 											"text": "MedicalRecordCreationFormViewModel"
 										},
@@ -9648,7 +9594,7 @@
 									"parentStyle": true,
 									"left": 1600,
 									"top": 1944,
-									"width": 615.4619140625,
+									"width": 618,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGVhevhEDeN5ps="
@@ -9686,7 +9632,7 @@
 											"parentStyle": true,
 											"left": 1605,
 											"top": 1974,
-											"width": 605.4619140625,
+											"width": 608,
 											"height": 13,
 											"text": "+DocumentsPaths: ObservableCollection<string>",
 											"horizontalAlignment": 0
@@ -9704,7 +9650,7 @@
 											"parentStyle": true,
 											"left": 1605,
 											"top": 1989,
-											"width": 605.4619140625,
+											"width": 608,
 											"height": 13,
 											"text": "#maxDocs: int",
 											"horizontalAlignment": 0
@@ -9722,7 +9668,7 @@
 											"parentStyle": true,
 											"left": 1605,
 											"top": 2004,
-											"width": 605.4619140625,
+											"width": 608,
 											"height": 13,
 											"text": "-_medicalRecordManager: MedicalRecordManagerModel",
 											"horizontalAlignment": 0
@@ -9740,7 +9686,7 @@
 											"parentStyle": true,
 											"left": 1605,
 											"top": 2019,
-											"width": 605.4619140625,
+											"width": 608,
 											"height": 13,
 											"text": "-_documentManager: DocumentManagerModel",
 											"horizontalAlignment": 0
@@ -9758,7 +9704,7 @@
 											"parentStyle": true,
 											"left": 1605,
 											"top": 2034,
-											"width": 605.4619140625,
+											"width": 608,
 											"height": 13,
 											"text": "-_pacientName: string",
 											"horizontalAlignment": 0
@@ -9776,7 +9722,7 @@
 											"parentStyle": true,
 											"left": 1605,
 											"top": 2049,
-											"width": 605.4619140625,
+											"width": 608,
 											"height": 13,
 											"text": "-_doctorName: string",
 											"horizontalAlignment": 0
@@ -9794,7 +9740,7 @@
 											"parentStyle": true,
 											"left": 1605,
 											"top": 2064,
-											"width": 605.4619140625,
+											"width": 608,
 											"height": 13,
 											"text": "-_appointmentTime: string",
 											"horizontalAlignment": 0
@@ -9812,7 +9758,7 @@
 											"parentStyle": true,
 											"left": 1605,
 											"top": 2079,
-											"width": 605.4619140625,
+											"width": 608,
 											"height": 13,
 											"text": "-_department: string",
 											"horizontalAlignment": 0
@@ -9830,7 +9776,7 @@
 											"parentStyle": true,
 											"left": 1605,
 											"top": 2094,
-											"width": 605.4619140625,
+											"width": 608,
 											"height": 13,
 											"text": "-_conclusion: string",
 											"horizontalAlignment": 0
@@ -9848,7 +9794,7 @@
 											"parentStyle": true,
 											"left": 1605,
 											"top": 2109,
-											"width": 605.4619140625,
+											"width": 608,
 											"height": 13,
 											"text": "-_appointmentDate: DateTime",
 											"horizontalAlignment": 0
@@ -9866,7 +9812,7 @@
 											"parentStyle": true,
 											"left": 1605,
 											"top": 2124,
-											"width": 605.4619140625,
+											"width": 608,
 											"height": 13,
 											"text": "-_appointmentDateOffset: DateTimeOffset",
 											"horizontalAlignment": 0
@@ -9884,7 +9830,7 @@
 											"parentStyle": true,
 											"left": 1605,
 											"top": 2139,
-											"width": 605.4619140625,
+											"width": 608,
 											"height": 13,
 											"text": "+PropertyChanged: PropertyChangedEventHandler",
 											"horizontalAlignment": 0
@@ -9902,7 +9848,7 @@
 											"parentStyle": true,
 											"left": 1605,
 											"top": 2154,
-											"width": 605.4619140625,
+											"width": 608,
 											"height": 13,
 											"text": "+Documents: ObservableCollection<string>",
 											"horizontalAlignment": 0
@@ -9912,7 +9858,7 @@
 									"parentStyle": true,
 									"left": 1600,
 									"top": 1969,
-									"width": 615.4619140625,
+									"width": 618,
 									"height": 203
 								},
 								{
@@ -9938,7 +9884,7 @@
 											"parentStyle": true,
 											"left": 1605,
 											"top": 2177,
-											"width": 605.4619140625,
+											"width": 608,
 											"height": 13,
 											"text": "+AddInputField(): void",
 											"horizontalAlignment": 0
@@ -9956,7 +9902,7 @@
 											"parentStyle": true,
 											"left": 1605,
 											"top": 2192,
-											"width": 605.4619140625,
+											"width": 608,
 											"height": 13,
 											"text": "+RemoveInputFieldd(): void",
 											"horizontalAlignment": 0
@@ -9993,7 +9939,7 @@
 											"parentStyle": true,
 											"left": 1605,
 											"top": 2207,
-											"width": 605.4619140625,
+											"width": 608,
 											"height": 13,
 											"text": "+AddDocument(string Path): void",
 											"horizontalAlignment": 0
@@ -10011,7 +9957,7 @@
 											"parentStyle": true,
 											"left": 1605,
 											"top": 2222,
-											"width": 605.4619140625,
+											"width": 608,
 											"height": 13,
 											"text": "#OnPropertyChanged(string propertyName): void",
 											"horizontalAlignment": 0
@@ -10029,7 +9975,7 @@
 											"parentStyle": true,
 											"left": 1605,
 											"top": 2237,
-											"width": 605.4619140625,
+											"width": 608,
 											"height": 13,
 											"text": "+CreateMedicalRecord(AppointmentJointModel detailedAppointment, string conclusion): async Task<int>",
 											"horizontalAlignment": 0
@@ -10047,7 +9993,7 @@
 											"parentStyle": true,
 											"left": 1605,
 											"top": 2252,
-											"width": 605.4619140625,
+											"width": 608,
 											"height": 13,
 											"text": "+AddDocument(int medicalRecordId, string path): void",
 											"horizontalAlignment": 0
@@ -10057,7 +10003,7 @@
 									"parentStyle": true,
 									"left": 1600,
 									"top": 2172,
-									"width": 615.4619140625,
+									"width": 618,
 									"height": 98
 								},
 								{
@@ -10100,7 +10046,7 @@
 							"containerChangeable": true,
 							"left": 1600,
 							"top": 1944,
-							"width": 614.4619140625,
+							"width": 617,
 							"height": 356,
 							"nameCompartment": {
 								"$ref": "AAAAAAGVhevhEDeMZbw="
@@ -11286,7 +11232,7 @@
 											"parentStyle": true,
 											"left": 3253,
 											"top": 999,
-											"width": 594.861328125,
+											"width": 636,
 											"height": 13,
 											"text": "AppointmentsDatabaseService"
 										},
@@ -11324,7 +11270,7 @@
 									"parentStyle": true,
 									"left": 3248,
 									"top": 992,
-									"width": 604.861328125,
+									"width": 646,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGVlDfVobWz16s="
@@ -11362,7 +11308,7 @@
 											"parentStyle": true,
 											"left": 3253,
 											"top": 1022,
-											"width": 594.861328125,
+											"width": 636,
 											"height": 13,
 											"text": "-_config: Config",
 											"horizontalAlignment": 0
@@ -11372,7 +11318,7 @@
 									"parentStyle": true,
 									"left": 3248,
 									"top": 1017,
-									"width": 604.861328125,
+									"width": 646,
 									"height": 23
 								},
 								{
@@ -11398,7 +11344,7 @@
 											"parentStyle": true,
 											"left": 3253,
 											"top": 1045,
-											"width": 594.861328125,
+											"width": 636,
 											"height": 13,
 											"text": "+AppointmentsDatabaseServicel()",
 											"horizontalAlignment": 0
@@ -11416,9 +11362,9 @@
 											"parentStyle": true,
 											"left": 3253,
 											"top": 1060,
-											"width": 594.861328125,
+											"width": 636,
 											"height": 13,
-											"text": "+GetAppointmentsForPatient(int patientId): Task<List<AppointmentJointModel>>",
+											"text": "+GetAppointmentsForPatient(int patientId): async Task<List<AppointmentJointModel>>",
 											"horizontalAlignment": 0
 										},
 										{
@@ -11434,9 +11380,9 @@
 											"parentStyle": true,
 											"left": 3253,
 											"top": 1075,
-											"width": 594.861328125,
+											"width": 636,
 											"height": 13,
-											"text": "+GetAppointmentsForDoctor(int doctorId): Task<List<AppointmentJoinModel>>",
+											"text": "+GetAppointmentsForDoctor(int doctorId): async Task<List<AppointmentJoinModel>>",
 											"horizontalAlignment": 0
 										},
 										{
@@ -11452,9 +11398,9 @@
 											"parentStyle": true,
 											"left": 3253,
 											"top": 1090,
-											"width": 594.861328125,
+											"width": 636,
 											"height": 13,
-											"text": "+AddAppointmentToDB(Appointment appointment): Task<bool>",
+											"text": "+AddAppointmentToDB(Appointment appointment): async Task<bool>",
 											"horizontalAlignment": 0
 										},
 										{
@@ -11470,7 +11416,7 @@
 											"parentStyle": true,
 											"left": 3253,
 											"top": 1105,
-											"width": 594.861328125,
+											"width": 636,
 											"height": 13,
 											"text": "+RemoveAppointmentFromDB(int appointmentId): Task<bool>",
 											"horizontalAlignment": 0
@@ -11488,9 +11434,9 @@
 											"parentStyle": true,
 											"left": 3253,
 											"top": 1120,
-											"width": 594.861328125,
+											"width": 636,
 											"height": 13,
-											"text": "+GetAppointment(int appointmentId): Task<AppointmentJointModel>",
+											"text": "+GetAppointment(int appointmentId): async Task<AppointmentJointModel>",
 											"horizontalAlignment": 0
 										},
 										{
@@ -11506,9 +11452,27 @@
 											"parentStyle": true,
 											"left": 3253,
 											"top": 1135,
-											"width": 594.861328125,
+											"width": 636,
 											"height": 13,
-											"text": "+GetAppointmentsByDoctorAndDate(int doctorId, DateTime date): Task<List<AppointmentJoinModel>>",
+											"text": "+GetAppointmentsByDoctorAndDate(int doctorId, DateTime date): async Task<List<AppointmentJoinModel>>",
+											"horizontalAlignment": 0
+										},
+										{
+											"_type": "UMLOperationView",
+											"_id": "AAAAAAGV2Z8wiizBjNI=",
+											"_parent": {
+												"$ref": "AAAAAAGVlDfVobW4p3Y="
+											},
+											"model": {
+												"$ref": "AAAAAAGV2Z8wdyy+pLI="
+											},
+											"font": "Arial;13;0",
+											"parentStyle": true,
+											"left": 3253,
+											"top": 1150,
+											"width": 636,
+											"height": 13,
+											"text": "+GetAppointments(): async Task<List<AppointmentJointModel>>",
 											"horizontalAlignment": 0
 										}
 									],
@@ -11516,8 +11480,8 @@
 									"parentStyle": true,
 									"left": 3248,
 									"top": 1040,
-									"width": 604.861328125,
-									"height": 113
+									"width": 646,
+									"height": 128
 								},
 								{
 									"_type": "UMLReceptionCompartmentView",
@@ -11559,7 +11523,7 @@
 							"containerChangeable": true,
 							"left": 3248,
 							"top": 992,
-							"width": 603.861328125,
+							"width": 645,
 							"height": 228,
 							"nameCompartment": {
 								"$ref": "AAAAAAGVlDfVobWy3NY="
@@ -13092,9 +13056,9 @@
 									},
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 3695,
-									"top": 1753,
-									"width": 28.5517578125,
+									"left": 3715,
+									"top": 1752,
+									"width": 29,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 15,
@@ -13116,8 +13080,8 @@
 									"visible": null,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 3708,
-									"top": 1738,
+									"left": 3728,
+									"top": 1737,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 30,
@@ -13138,8 +13102,8 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 3712,
-									"top": 1782,
+									"left": 3732,
+									"top": 1781,
 									"height": 13,
 									"alpha": -1.5707963267948966,
 									"distance": 15,
@@ -13158,7 +13122,7 @@
 								"$ref": "AAAAAAGVdXKdIh0DHyI="
 							},
 							"lineStyle": 1,
-							"points": "3440:1799;3983:1749",
+							"points": "3480:1797;3983:1749",
 							"showVisibility": true,
 							"nameLabel": {
 								"$ref": "AAAAAAGVlObOkvBGKGE="
@@ -13191,9 +13155,9 @@
 									},
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 3699,
-									"top": 1660,
-									"width": 28.5517578125,
+									"left": 3715,
+									"top": 1662,
+									"width": 29,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 15,
@@ -13215,8 +13179,8 @@
 									"visible": null,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 3715,
-									"top": 1645,
+									"left": 3731,
+									"top": 1647,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 30,
@@ -13237,8 +13201,8 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 3708,
-									"top": 1689,
+									"left": 3724,
+									"top": 1691,
 									"height": 13,
 									"alpha": -1.5707963267948966,
 									"distance": 15,
@@ -13257,7 +13221,7 @@
 								"$ref": "AAAAAAGVgaSya1t5+tk="
 							},
 							"lineStyle": 1,
-							"points": "3439:1644;3983:1719",
+							"points": "3471:1647;3983:1719",
 							"showVisibility": true,
 							"nameLabel": {
 								"$ref": "AAAAAAGVlOdPRQWEC9o="
@@ -13292,7 +13256,7 @@
 									"parentStyle": false,
 									"left": 3682,
 									"top": 1537,
-									"width": 28.5517578125,
+									"width": 29,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 15,
@@ -13389,9 +13353,9 @@
 									},
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 3846,
-									"top": 1425,
-									"width": 28.5517578125,
+									"left": 3856,
+									"top": 1426,
+									"width": 29,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 15,
@@ -13413,8 +13377,8 @@
 									"visible": null,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 3871,
-									"top": 1415,
+									"left": 3881,
+									"top": 1416,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 30,
@@ -13435,8 +13399,8 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 3837,
-									"top": 1446,
+									"left": 3847,
+									"top": 1445,
 									"height": 13,
 									"alpha": -1.5707963267948966,
 									"distance": 15,
@@ -13455,7 +13419,7 @@
 								"$ref": "AAAAAAGVlDfVobWxtL8="
 							},
 							"lineStyle": 1,
-							"points": "3652:1221;4047:1663",
+							"points": "3669:1221;4049:1663",
 							"showVisibility": true,
 							"nameLabel": {
 								"$ref": "AAAAAAGVlOhLMBLAzT4="
@@ -13894,24 +13858,6 @@
 									"subViews": [
 										{
 											"_type": "UMLOperationView",
-											"_id": "AAAAAAGVlO5tGWm0j+8=",
-											"_parent": {
-												"$ref": "AAAAAAGVlOyNhDvNH8Y="
-											},
-											"model": {
-												"$ref": "AAAAAAGVlO5tBmmiY14="
-											},
-											"font": "Arial;13;0",
-											"parentStyle": true,
-											"left": 2957,
-											"top": 1989,
-											"width": 479,
-											"height": 13,
-											"text": "+ProcedureDatabaseService()",
-											"horizontalAlignment": 0
-										},
-										{
-											"_type": "UMLOperationView",
 											"_id": "AAAAAAGVlO6/8Wslnt8=",
 											"_parent": {
 												"$ref": "AAAAAAGVlOyNhDvNH8Y="
@@ -13922,10 +13868,10 @@
 											"font": "Arial;13;0",
 											"parentStyle": true,
 											"left": 2957,
-											"top": 2004,
+											"top": 1989,
 											"width": 479,
 											"height": 13,
-											"text": "+GetProceduresByDepartmentId(int departmentId): Task<List<Procedure>>",
+											"text": "+GetProceduresByDepartmentId(int departmentId): async Task<List<Procedure>>",
 											"horizontalAlignment": 0
 										}
 									],
@@ -13934,7 +13880,7 @@
 									"left": 2952,
 									"top": 1984,
 									"width": 489,
-									"height": 38
+									"height": 23
 								},
 								{
 									"_type": "UMLReceptionCompartmentView",
@@ -14017,7 +13963,7 @@
 									"parentStyle": false,
 									"left": 3668,
 									"top": 1833,
-									"width": 28.5517578125,
+									"width": 29,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 15,
@@ -14116,7 +14062,7 @@
 									"parentStyle": false,
 									"left": 3621,
 									"top": 1920,
-									"width": 28.5517578125,
+									"width": 29,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 15,
@@ -14497,7 +14443,7 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 2776,
+									"left": 2840,
 									"top": 2136,
 									"height": 13,
 									"alpha": 1.5707963267948966,
@@ -14519,7 +14465,7 @@
 									"visible": null,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 2776,
+									"left": 2840,
 									"top": 2121,
 									"height": 13,
 									"alpha": 1.5707963267948966,
@@ -14541,7 +14487,7 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 2776,
+									"left": 2840,
 									"top": 2166,
 									"height": 13,
 									"alpha": -1.5707963267948966,
@@ -14563,8 +14509,8 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 2731,
-									"top": 2136,
+									"left": 2858,
+									"top": 2135,
 									"height": 13,
 									"alpha": 0.5235987755982988,
 									"distance": 30,
@@ -14585,8 +14531,8 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 2734,
-									"top": 2123,
+									"left": 2860,
+									"top": 2121,
 									"height": 13,
 									"alpha": 0.7853981633974483,
 									"distance": 40,
@@ -14607,8 +14553,8 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 2727,
-									"top": 2164,
+									"left": 2856,
+									"top": 2162,
 									"height": 13,
 									"alpha": -0.5235987755982988,
 									"distance": 25,
@@ -14629,8 +14575,8 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 2820,
-									"top": 2136,
+									"left": 2819,
+									"top": 2138,
 									"height": 13,
 									"alpha": -0.5235987755982988,
 									"distance": 30,
@@ -14650,8 +14596,8 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 2818,
-									"top": 2122,
+									"left": 2816,
+									"top": 2124,
 									"height": 13,
 									"alpha": -0.7853981633974483,
 									"distance": 40,
@@ -14670,8 +14616,8 @@
 									},
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 2822,
-									"top": 2163,
+									"left": 2823,
+									"top": 2165,
 									"width": 7.22998046875,
 									"height": 13,
 									"alpha": 0.5235987755982988,
@@ -14721,7 +14667,7 @@
 								"$ref": "AAAAAAGVhZA5ISjcEyU="
 							},
 							"lineStyle": 1,
-							"points": "2706:2158;2847:2157",
+							"points": "2834:2158;2847:2157",
 							"showVisibility": true,
 							"nameLabel": {
 								"$ref": "AAAAAAGVlPsiPTWglcE="
@@ -14801,7 +14747,7 @@
 											"parentStyle": true,
 											"left": 3165,
 											"top": 2287,
-											"width": 307.00146484375,
+											"width": 352,
 											"height": 13,
 											"text": "ShiftsDatabaseService"
 										},
@@ -14839,7 +14785,7 @@
 									"parentStyle": true,
 									"left": 3160,
 									"top": 2280,
-									"width": 317.00146484375,
+									"width": 362,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGVlQ+0FMpkV90="
@@ -14877,7 +14823,7 @@
 											"parentStyle": true,
 											"left": 3165,
 											"top": 2310,
-											"width": 307.00146484375,
+											"width": 352,
 											"height": 13,
 											"text": "-_config: Config",
 											"horizontalAlignment": 0
@@ -14887,7 +14833,7 @@
 									"parentStyle": true,
 									"left": 3160,
 									"top": 2305,
-									"width": 317.00146484375,
+									"width": 362,
 									"height": 23
 								},
 								{
@@ -14902,24 +14848,6 @@
 									"subViews": [
 										{
 											"_type": "UMLOperationView",
-											"_id": "AAAAAAGVlRAwbdYo3k0=",
-											"_parent": {
-												"$ref": "AAAAAAGVlQ+0FMppjL8="
-											},
-											"model": {
-												"$ref": "AAAAAAGVlRAwWtYQQnQ="
-											},
-											"font": "Arial;13;0",
-											"parentStyle": true,
-											"left": 3165,
-											"top": 2333,
-											"width": 307.00146484375,
-											"height": 13,
-											"text": "+ShiftDatabaseService()",
-											"horizontalAlignment": 0
-										},
-										{
-											"_type": "UMLOperationView",
 											"_id": "AAAAAAGVlRCuStrV8BE=",
 											"_parent": {
 												"$ref": "AAAAAAGVlQ+0FMppjL8="
@@ -14930,10 +14858,10 @@
 											"font": "Arial;13;0",
 											"parentStyle": true,
 											"left": 3165,
-											"top": 2348,
-											"width": 307.00146484375,
+											"top": 2333,
+											"width": 352,
 											"height": 13,
-											"text": "+GetShiftsByDoctorId(int doctorId)",
+											"text": "+GetShiftsByDoctorId(int doctorId): async Task<List<Shift>>",
 											"horizontalAlignment": 0
 										},
 										{
@@ -14948,10 +14876,10 @@
 											"font": "Arial;13;0",
 											"parentStyle": true,
 											"left": 3165,
-											"top": 2363,
-											"width": 307.00146484375,
+											"top": 2348,
+											"width": 352,
 											"height": 13,
-											"text": "+GetShifts(): Task<List<Shift>>",
+											"text": "+GetShifts(): async Task<List<Shift>>",
 											"horizontalAlignment": 0
 										},
 										{
@@ -14966,10 +14894,10 @@
 											"font": "Arial;13;0",
 											"parentStyle": true,
 											"left": 3165,
-											"top": 2378,
-											"width": 307.00146484375,
+											"top": 2363,
+											"width": 352,
 											"height": 13,
-											"text": "+GetSchedules(): Task<List<Schedule>>",
+											"text": "+GetSchedules(): async Task<List<Schedule>>",
 											"horizontalAlignment": 0
 										},
 										{
@@ -14984,10 +14912,10 @@
 											"font": "Arial;13;0",
 											"parentStyle": true,
 											"left": 3165,
-											"top": 2393,
-											"width": 307.00146484375,
+											"top": 2378,
+											"width": 352,
 											"height": 13,
-											"text": "+GetDoctorDayShifts(int doctorId): Task<List<Shift>>",
+											"text": "+GetDoctorDayShifts(int doctorId): async Task<List<Shift>>",
 											"horizontalAlignment": 0
 										}
 									],
@@ -14995,8 +14923,8 @@
 									"parentStyle": true,
 									"left": 3160,
 									"top": 2328,
-									"width": 317.00146484375,
-									"height": 83
+									"width": 362,
+									"height": 68
 								},
 								{
 									"_type": "UMLReceptionCompartmentView",
@@ -15038,7 +14966,7 @@
 							"containerChangeable": true,
 							"left": 3160,
 							"top": 2280,
-							"width": 316.00146484375,
+							"width": 361,
 							"height": 131,
 							"nameCompartment": {
 								"$ref": "AAAAAAGVlQ+0FMpjUGI="
@@ -15077,9 +15005,9 @@
 									},
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 3686,
+									"left": 3697,
 									"top": 2027,
-									"width": 28.5517578125,
+									"width": 29,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 15,
@@ -15101,7 +15029,7 @@
 									"visible": null,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 3691,
+									"left": 3702,
 									"top": 2015,
 									"height": 13,
 									"alpha": 1.5707963267948966,
@@ -15123,7 +15051,7 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 3719,
+									"left": 3730,
 									"top": 2050,
 									"height": 13,
 									"alpha": -1.5707963267948966,
@@ -15143,7 +15071,7 @@
 								"$ref": "AAAAAAGVlQ+0FMpiuRk="
 							},
 							"lineStyle": 1,
-							"points": "3404:2279;4016:1811",
+							"points": "3424:2279;4019:1811",
 							"showVisibility": true,
 							"nameLabel": {
 								"$ref": "AAAAAAGVlREqrON8xmA="
@@ -15276,7 +15204,7 @@
 											"top": 2302,
 											"width": 296.87060546875,
 											"height": 13,
-											"text": "+_shiftsList: List<Shift>",
+											"text": "+_shifts: List<Shift>",
 											"horizontalAlignment": 0
 										},
 										{
@@ -15294,7 +15222,7 @@
 											"top": 2317,
 											"width": 296.87060546875,
 											"height": 13,
-											"text": "-_shiftDBService: ShiftsDatabaseService",
+											"text": "-_shiftDataBaseService: ShiftsDatabaseService",
 											"horizontalAlignment": 0
 										}
 									],
@@ -15330,7 +15258,7 @@
 											"top": 2340,
 											"width": 296.87060546875,
 											"height": 13,
-											"text": "+LoadShifts(int doctorId)",
+											"text": "+LoadShifts(int doctorId): async Task",
 											"horizontalAlignment": 0
 										},
 										{
@@ -15366,7 +15294,7 @@
 											"top": 2370,
 											"width": 296.87060546875,
 											"height": 13,
-											"text": "+GetShiftByDay(TimeStamp day): Shift",
+											"text": "+GetShiftByDay(DateTime day): Shift",
 											"horizontalAlignment": 0
 										},
 										{
@@ -16739,7 +16667,7 @@
 											"top": 1308,
 											"width": 762.57275390625,
 											"height": 13,
-											"text": "-DailyAppointments: ObservableCollection<TimeSlotModel>",
+											"text": "+DailyAppointments: ObservableCollection<TimeSlotModel>",
 											"horizontalAlignment": 0
 										},
 										{
@@ -17028,8 +16956,8 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 1405,
-									"top": 1314,
+									"left": 1412,
+									"top": 1299,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 15,
@@ -17050,8 +16978,8 @@
 									"visible": null,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 1404,
-									"top": 1299,
+									"left": 1411,
+									"top": 1284,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 30,
@@ -17072,8 +17000,8 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 1406,
-									"top": 1343,
+									"left": 1415,
+									"top": 1328,
 									"height": 13,
 									"alpha": -1.5707963267948966,
 									"distance": 15,
@@ -17095,7 +17023,7 @@
 									"font": "Arial;13;0",
 									"parentStyle": false,
 									"left": 1325,
-									"top": 1319,
+									"top": 1307,
 									"height": 13,
 									"alpha": 0.5235987755982988,
 									"distance": 30,
@@ -17116,8 +17044,8 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 1327,
-									"top": 1305,
+									"left": 1326,
+									"top": 1294,
 									"height": 13,
 									"alpha": 0.7853981633974483,
 									"distance": 40,
@@ -17139,7 +17067,7 @@
 									"font": "Arial;13;0",
 									"parentStyle": false,
 									"left": 1323,
-									"top": 1347,
+									"top": 1335,
 									"height": 13,
 									"alpha": -0.5235987755982988,
 									"distance": 25,
@@ -17160,8 +17088,8 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 1484,
-									"top": 1308,
+									"left": 1499,
+									"top": 1291,
 									"height": 13,
 									"alpha": -0.5235987755982988,
 									"distance": 30,
@@ -17181,8 +17109,8 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 1480,
-									"top": 1295,
+									"left": 1496,
+									"top": 1278,
 									"height": 13,
 									"alpha": -0.7853981633974483,
 									"distance": 40,
@@ -17202,8 +17130,8 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 1490,
-									"top": 1335,
+									"left": 1506,
+									"top": 1318,
 									"height": 13,
 									"alpha": 0.5235987755982988,
 									"distance": 25,
@@ -17251,7 +17179,7 @@
 								"$ref": "AAAAAAGVlUW60q2wYaM="
 							},
 							"lineStyle": 1,
-							"points": "1301:1342;1511:1328",
+							"points": "1301:1331;1527:1310",
 							"showVisibility": true,
 							"nameLabel": {
 								"$ref": "AAAAAAGVlUZSD8KiVQ0="
@@ -17667,24 +17595,6 @@
 									"subViews": [
 										{
 											"_type": "UMLOperationView",
-											"_id": "AAAAAAGVlUtum0izOIo=",
-											"_parent": {
-												"$ref": "AAAAAAGVlUbkBPLfiz0="
-											},
-											"model": {
-												"$ref": "AAAAAAGVlUtugUiMXuo="
-											},
-											"font": "Arial;13;0",
-											"parentStyle": true,
-											"left": 1581,
-											"top": 1577,
-											"width": 447.52587890625,
-											"height": 13,
-											"text": "+AppointmentDetailsViewModel(AppointmentJointModel app)",
-											"horizontalAlignment": 0
-										},
-										{
-											"_type": "UMLOperationView",
 											"_id": "AAAAAAGVziUt9+gixCU=",
 											"_parent": {
 												"$ref": "AAAAAAGVlUbkBPLfiz0="
@@ -17695,7 +17605,7 @@
 											"font": "Arial;13;0",
 											"parentStyle": true,
 											"left": 1581,
-											"top": 1592,
+											"top": 1577,
 											"width": 447.52587890625,
 											"height": 13,
 											"text": "-UpdateCancellationEligibility(): void",
@@ -17713,7 +17623,7 @@
 											"font": "Arial;13;0",
 											"parentStyle": true,
 											"left": 1581,
-											"top": 1607,
+											"top": 1592,
 											"width": 447.52587890625,
 											"height": 13,
 											"text": "-CancelAppointment(): async Task",
@@ -17731,7 +17641,7 @@
 											"font": "Arial;13;0",
 											"parentStyle": true,
 											"left": 1581,
-											"top": 1622,
+											"top": 1607,
 											"width": 447.52587890625,
 											"height": 13,
 											"text": "-OnPropertyChanged([CallerMemberName] string propertyName = null): void",
@@ -17762,7 +17672,7 @@
 									"left": 1576,
 									"top": 1572,
 									"width": 457.52587890625,
-									"height": 68
+									"height": 53
 								},
 								{
 									"_type": "UMLReceptionCompartmentView",
@@ -19503,8 +19413,8 @@
 									},
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 1386,
-									"top": 1413,
+									"left": 1393,
+									"top": 1403,
 									"width": 68.3134765625,
 									"height": 13,
 									"alpha": -3.7617755209739627,
@@ -19527,8 +19437,8 @@
 									"visible": null,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 1490,
-									"top": 1398,
+									"left": 1496,
+									"top": 1386,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 30,
@@ -19549,8 +19459,8 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 1510,
-									"top": 1438,
+									"left": 1518,
+									"top": 1426,
 									"height": 13,
 									"alpha": -1.5707963267948966,
 									"distance": 15,
@@ -19569,7 +19479,7 @@
 								"$ref": "AAAAAAGVhdzEKXZE3zM="
 							},
 							"lineStyle": 1,
-							"points": "1384:1495;1624:1368",
+							"points": "1377:1495;1646:1344",
 							"showVisibility": true,
 							"nameLabel": {
 								"$ref": "AAAAAAGVlXGwAghPzYQ="
@@ -19866,7 +19776,7 @@
 								"$ref": "AAAAAAGVga+ZfVx9eFI="
 							},
 							"lineStyle": 1,
-							"points": "3784:867;2662:1319",
+							"points": "3784:867;2663:1319",
 							"showVisibility": true,
 							"nameLabel": {
 								"$ref": "AAAAAAGVlXadRWsXOVY="
@@ -20098,8 +20008,8 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 2254,
-									"top": 1194,
+									"left": 2262,
+									"top": 1181,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 15,
@@ -20120,8 +20030,8 @@
 									"visible": null,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 2251,
-									"top": 1179,
+									"left": 2260,
+									"top": 1166,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 30,
@@ -20142,8 +20052,8 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 2259,
-									"top": 1223,
+									"left": 2267,
+									"top": 1210,
 									"height": 13,
 									"alpha": -1.5707963267948966,
 									"distance": 15,
@@ -20162,7 +20072,7 @@
 								"$ref": "AAAAAAGVhU9HpiVsH3o="
 							},
 							"lineStyle": 1,
-							"points": "1939:1275;2575:1155",
+							"points": "1955:1255;2575:1150",
 							"showVisibility": true,
 							"nameLabel": {
 								"$ref": "AAAAAAGVlXgHBM0Z7iw="
@@ -20394,8 +20304,8 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 2312,
-									"top": 2132,
+									"left": 2229,
+									"top": 2121,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 15,
@@ -20416,8 +20326,8 @@
 									"visible": null,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 2313,
-									"top": 2117,
+									"left": 2230,
+									"top": 2106,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 30,
@@ -20438,8 +20348,8 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 2309,
-									"top": 2161,
+									"left": 2226,
+									"top": 2150,
 									"height": 13,
 									"alpha": -1.5707963267948966,
 									"distance": 15,
@@ -20459,7 +20369,7 @@
 								"$ref": "AAAAAAGVhevhEDeLIqA="
 							},
 							"lineStyle": 1,
-							"points": "2215:2146;2408:2161",
+							"points": "2218:2141;2239:2143",
 							"showVisibility": true,
 							"nameLabel": {
 								"$ref": "AAAAAAGVlXyyx/kDGQ8="
@@ -20693,8 +20603,8 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 2087,
-									"top": 2350,
+									"left": 2152,
+									"top": 2349,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 15,
@@ -20715,8 +20625,8 @@
 									"visible": null,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 2079,
-									"top": 2338,
+									"left": 2145,
+									"top": 2336,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 30,
@@ -20737,8 +20647,8 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 2104,
-									"top": 2375,
+									"left": 2167,
+									"top": 2376,
 									"height": 13,
 									"alpha": -1.5707963267948966,
 									"distance": 15,
@@ -20758,7 +20668,7 @@
 								"$ref": "AAAAAAGVlUdhxv64Yvs="
 							},
 							"lineStyle": 1,
-							"points": "1895:2503;2297:2235",
+							"points": "1918:2503;2402:2235",
 							"showVisibility": true,
 							"nameLabel": {
 								"$ref": "AAAAAAGVlX+b+nSkt6M="
@@ -22271,14 +22181,6 @@
 					"operations": [
 						{
 							"_type": "UMLOperation",
-							"_id": "AAAAAAGVlOIlUa7WHeM=",
-							"_parent": {
-								"$ref": "AAAAAAGVdXKdIh0B0hg="
-							},
-							"name": "DoctorsDatabaseService"
-						},
-						{
-							"_type": "UMLOperation",
 							"_id": "AAAAAAGVlOJt1rEfbnk=",
 							"_parent": {
 								"$ref": "AAAAAAGVdXKdIh0B0hg="
@@ -22291,8 +22193,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVlOJt1rEfbnk="
 									},
-									"name": "int departmentId",
-									"type": ""
+									"name": "int departmentId"
 								},
 								{
 									"_type": "UMLParameter",
@@ -22300,7 +22201,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVlOJt1rEfbnk="
 									},
-									"type": "Task<List<DoctorJointModel>>",
+									"type": "async Task<List<DoctorJointModel>>",
 									"direction": "return"
 								}
 							]
@@ -22481,7 +22382,7 @@
 								"$ref": "AAAAAAGVgaQyGVsg//8="
 							},
 							"name": "appointmentList",
-							"type": "ObservableCollection<AppointmentJointModel>"
+							"type": "List<AppointmentJointModel>"
 						},
 						{
 							"_type": "UMLAttribute",
@@ -22511,8 +22412,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVgaZw1lwmoSQ="
 									},
-									"name": "int patientId",
-									"type": ""
+									"name": "int patientId"
 								},
 								{
 									"_type": "UMLParameter",
@@ -22520,7 +22420,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVgaZw1lwmoSQ="
 									},
-									"type": "Task",
+									"type": "async Task",
 									"direction": "return"
 								}
 							]
@@ -22539,8 +22439,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVlDBVUK5kaWQ="
 									},
-									"name": "int doctorId",
-									"type": ""
+									"name": "int doctorId"
 								},
 								{
 									"_type": "UMLParameter",
@@ -22548,7 +22447,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVlDBVUK5kaWQ="
 									},
-									"type": "Task",
+									"type": "async Task",
 									"direction": "return"
 								}
 							]
@@ -22623,10 +22522,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVgbmlMF0AYNE="
 									},
-									"name": "doctor",
-									"type": {
-										"$ref": "AAAAAAGVdWjupBnB81I="
-									}
+									"name": "int doctorId"
 								},
 								{
 									"_type": "UMLParameter",
@@ -22634,8 +22530,8 @@
 									"_parent": {
 										"$ref": "AAAAAAGVgbmlMF0AYNE="
 									},
-									"name": "date",
-									"type": "Date"
+									"name": "DateTime",
+									"type": "date"
 								},
 								{
 									"_type": "UMLParameter",
@@ -22643,7 +22539,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVgbmlMF0AYNE="
 									},
-									"type": "Task",
+									"type": "async Task",
 									"direction": "return"
 								}
 							]
@@ -22670,7 +22566,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVlM9Bgbm/Z98="
 									},
-									"type": "ObservableCollection<AppointmentJointModel>",
+									"type": "List<AppointmentJointModel>",
 									"direction": "return"
 								}
 							]
@@ -22689,8 +22585,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVlSB/CmJMv9Q="
 									},
-									"name": "int doctorId",
-									"type": ""
+									"name": "int doctorId"
 								},
 								{
 									"_type": "UMLParameter",
@@ -22698,8 +22593,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVlSB/CmJMv9Q="
 									},
-									"name": "DateTime date",
-									"type": ""
+									"name": "DateTime date"
 								},
 								{
 									"_type": "UMLParameter",
@@ -22707,7 +22601,34 @@
 									"_parent": {
 										"$ref": "AAAAAAGVlSB/CmJMv9Q="
 									},
-									"type": "Task",
+									"type": "async Task",
+									"direction": "return"
+								}
+							]
+						},
+						{
+							"_type": "UMLOperation",
+							"_id": "AAAAAAGV2Xfjt/TlW10=",
+							"_parent": {
+								"$ref": "AAAAAAGVgaQyGVsg//8="
+							},
+							"name": "MarkAppointmentAsCompletedInDB",
+							"parameters": [
+								{
+									"_type": "UMLParameter",
+									"_id": "AAAAAAGV2XhNYvZmgyQ=",
+									"_parent": {
+										"$ref": "AAAAAAGV2Xfjt/TlW10="
+									},
+									"name": "int appointmentId"
+								},
+								{
+									"_type": "UMLParameter",
+									"_id": "AAAAAAGV2Xh3sfi1+FI=",
+									"_parent": {
+										"$ref": "AAAAAAGV2Xfjt/TlW10="
+									},
+									"type": "static async task",
 									"direction": "return"
 								}
 							]
@@ -22783,14 +22704,6 @@
 					"operations": [
 						{
 							"_type": "UMLOperation",
-							"_id": "AAAAAAGVlF2ztn2MU8Q=",
-							"_parent": {
-								"$ref": "AAAAAAGVgaRtgFtL1II="
-							},
-							"name": "DepartmentDatabaseService"
-						},
-						{
-							"_type": "UMLOperation",
 							"_id": "AAAAAAGVgbYbSFzZtrc=",
 							"_parent": {
 								"$ref": "AAAAAAGVgaRtgFtL1II="
@@ -22803,7 +22716,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVgbYbSFzZtrc="
 									},
-									"type": "Task<List<Department>>",
+									"type": "async Task<List<Department>>",
 									"direction": "return"
 								}
 							]
@@ -22943,14 +22856,6 @@
 						},
 						{
 							"_type": "UMLOperation",
-							"_id": "AAAAAAGVlKHSQaw1cg8=",
-							"_parent": {
-								"$ref": "AAAAAAGVgaSyalt34EQ="
-							},
-							"name": "MedicalRecordDatabaseService"
-						},
-						{
-							"_type": "UMLOperation",
 							"_id": "AAAAAAGVhVdvFCXiRbk=",
 							"_parent": {
 								"$ref": "AAAAAAGVgaSyalt34EQ="
@@ -22963,7 +22868,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVhVdvFCXiRbk="
 									},
-									"type": "Task<List<MedicalRecordJointModel>>",
+									"type": "async Task<List<MedicalRecordJointModel>>",
 									"direction": "return"
 								},
 								{
@@ -22972,8 +22877,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVhVdvFCXiRbk="
 									},
-									"name": "int patientId",
-									"type": ""
+									"name": "int patientId"
 								}
 							]
 						},
@@ -23023,8 +22927,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVlLIysJn8IF4="
 									},
-									"name": "int doctorId",
-									"type": ""
+									"name": "int DoctorId"
 								},
 								{
 									"_type": "UMLParameter",
@@ -23032,7 +22935,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVlLIysJn8IF4="
 									},
-									"type": "Task<List<MedicalRecordJointModel>>",
+									"type": "async Task<List<MedicalRecordJointModel>>",
 									"direction": "return"
 								}
 							]
@@ -23051,8 +22954,16 @@
 									"_parent": {
 										"$ref": "AAAAAAGVhVmVgSX7lfE="
 									},
-									"type": "Task<MedicalRecordJointModel>",
+									"type": "async Task<MedicalRecordJointModel>",
 									"direction": "return"
+								},
+								{
+									"_type": "UMLParameter",
+									"_id": "AAAAAAGV2aMieVxpMyQ=",
+									"_parent": {
+										"$ref": "AAAAAAGVhVmVgSX7lfE="
+									},
+									"name": "int medicalRecordId"
 								}
 							]
 						},
@@ -23070,8 +22981,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVlLT3nbwd8C0="
 									},
-									"name": "MedicalRecord medrecord",
-									"type": ""
+									"name": "MedicalRecord medicalrecord"
 								},
 								{
 									"_type": "UMLParameter",
@@ -23079,7 +22989,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVlLT3nbwd8C0="
 									},
-									"type": "Task<int>",
+									"type": "async Task<int>",
 									"direction": "return"
 								}
 							]
@@ -23132,7 +23042,7 @@
 								"$ref": "AAAAAAGVgaTrdFujh9c="
 							},
 							"name": "doctorList",
-							"type": "ObservableCollection<DoctorJointModel>"
+							"type": "List<DoctorJointModel>"
 						},
 						{
 							"_type": "UMLAttribute",
@@ -23162,7 +23072,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVlOqovjIAkTo="
 									},
-									"type": "Task",
+									"type": "async Task",
 									"direction": "return"
 								},
 								{
@@ -23171,8 +23081,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVlOqovjIAkTo="
 									},
-									"name": "int departmentId",
-									"type": ""
+									"name": "int departmentId"
 								}
 							]
 						},
@@ -23190,7 +23099,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVlOqzGDKc+dI="
 									},
-									"type": "ObservableCollection<DoctorJointModel>",
+									"type": "List<DoctorJointModel>",
 									"direction": "return"
 								}
 							]
@@ -23348,14 +23257,6 @@
 					"operations": [
 						{
 							"_type": "UMLOperation",
-							"_id": "AAAAAAGVhYrtMChyCDQ=",
-							"_parent": {
-								"$ref": "AAAAAAGVgaW1b1v7jRk="
-							},
-							"name": "DocumentDatabaseService"
-						},
-						{
-							"_type": "UMLOperation",
 							"_id": "AAAAAAGVhYn9sChlkj4=",
 							"_parent": {
 								"$ref": "AAAAAAGVgaW1b1v7jRk="
@@ -23379,7 +23280,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVhYn9sChlkj4="
 									},
-									"type": "Task<bool>",
+									"type": "async Task<bool>",
 									"direction": "return"
 								}
 							]
@@ -23398,8 +23299,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVhY2bwyiqzS4="
 									},
-									"name": "int medicalRecordId",
-									"type": ""
+									"name": "int medicalRecordId"
 								},
 								{
 									"_type": "UMLParameter",
@@ -23407,7 +23307,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVhY2bwyiqzS4="
 									},
-									"type": "Task<List<Document>>",
+									"type": "async Task<List<Document>>",
 									"direction": "return"
 								}
 							]
@@ -24127,7 +24027,7 @@
 								"$ref": "AAAAAAGVgbsRU10R8oY="
 							},
 							"name": "s_departmentList",
-							"type": "ObservableCollection<Department>"
+							"type": "List<Department>"
 						},
 						{
 							"_type": "UMLAttribute",
@@ -24136,7 +24036,6 @@
 								"$ref": "AAAAAAGVgbsRU10R8oY="
 							},
 							"name": "_departmentsDBService",
-							"visibility": "private",
 							"type": {
 								"$ref": "AAAAAAGVgaRtgFtL1II="
 							}
@@ -24157,7 +24056,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVgb7zCF08ngU="
 									},
-									"type": "Task",
+									"type": "async Task",
 									"direction": "return"
 								}
 							]
@@ -24176,7 +24075,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVlM/ECbynmwY="
 									},
-									"type": "ObservableCollection<Department>",
+									"type": "List<Department>",
 									"direction": "return"
 								}
 							]
@@ -24293,7 +24192,8 @@
 									"_parent": {
 										"$ref": "AAAAAAGVlV/zWDZGaWs="
 									},
-									"name": "int pacientId"
+									"name": "int pacientId",
+									"type": ""
 								}
 							]
 						}
@@ -24632,7 +24532,8 @@
 									"_parent": {
 										"$ref": "AAAAAAGVlXKuClzYqeU="
 									},
-									"name": "MedicalRecordJointModel medicalRecord"
+									"name": "MedicalRecordJointModel medicalRecord",
+									"type": ""
 								},
 								{
 									"_type": "UMLParameter",
@@ -25027,7 +24928,8 @@
 									"_parent": {
 										"$ref": "AAAAAAGVzfBfrUEHZLQ="
 									},
-									"name": "objet sender"
+									"name": "objet sender",
+									"type": ""
 								},
 								{
 									"_type": "UMLParameter",
@@ -25035,7 +24937,8 @@
 									"_parent": {
 										"$ref": "AAAAAAGVzfBfrUEHZLQ="
 									},
-									"name": "RoutedEventArgs e"
+									"name": "RoutedEventArgs e",
+									"type": ""
 								},
 								{
 									"_type": "UMLParameter",
@@ -25185,7 +25088,7 @@
 								"$ref": "AAAAAAGVhZA5ISjaDBA="
 							},
 							"name": "documentList",
-							"type": "ObservableCollection<Document>"
+							"type": "List<Document>"
 						},
 						{
 							"_type": "UMLAttribute",
@@ -25215,7 +25118,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVhZGRTykOHxw="
 									},
-									"type": "Task",
+									"type": "void",
 									"direction": "return"
 								},
 								{
@@ -25224,8 +25127,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVhZGRTykOHxw="
 									},
-									"name": "int medicalRecordId",
-									"type": ""
+									"name": "int medicalRecordId"
 								}
 							]
 						},
@@ -25243,7 +25145,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVhZI9uSkbBl8="
 									},
-									"type": "ObservableCollection<Document>",
+									"type": "List<Document>",
 									"direction": "return"
 								}
 							]
@@ -25262,8 +25164,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVhZKjGikkkFg="
 									},
-									"name": "Document doc",
-									"type": ""
+									"name": "Document doc"
 								},
 								{
 									"_type": "UMLParameter",
@@ -25271,7 +25172,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVhZKjGikkkFg="
 									},
-									"type": "Task",
+									"type": "async Task",
 									"direction": "return"
 								}
 							]
@@ -25298,8 +25199,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVzYUR2cDIqwg="
 									},
-									"name": "int patientId",
-									"type": ""
+									"name": "int patientId"
 								},
 								{
 									"_type": "UMLParameter",
@@ -25307,7 +25207,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVzYUR2cDIqwg="
 									},
-									"type": "Task",
+									"type": "async Task",
 									"direction": "return"
 								}
 							]
@@ -25446,6 +25346,7 @@
 								"$ref": "AAAAAAGVhdwrwWNE6G4="
 							},
 							"name": "CancelButton_Click",
+							"visibility": "private",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -25483,6 +25384,7 @@
 								"$ref": "AAAAAAGVhdwrwWNE6G4="
 							},
 							"name": "ConfirmButton_Click",
+							"visibility": "private",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -25490,8 +25392,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVzcar646wu/0="
 									},
-									"name": "object sender",
-									"type": ""
+									"name": "object sender"
 								},
 								{
 									"_type": "UMLParameter",
@@ -25499,8 +25400,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVzcar646wu/0="
 									},
-									"name": "RoutedEventArgs e",
-									"type": ""
+									"name": "RoutedEventArgs e"
 								},
 								{
 									"_type": "UMLParameter",
@@ -25508,7 +25408,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVzcar646wu/0="
 									},
-									"type": "void",
+									"type": "async void",
 									"direction": "return"
 								}
 							]
@@ -25520,6 +25420,7 @@
 								"$ref": "AAAAAAGVhdwrwWNE6G4="
 							},
 							"name": "StyleTitleBar",
+							"visibility": "private",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -25539,6 +25440,7 @@
 								"$ref": "AAAAAAGVhdwrwWNE6G4="
 							},
 							"name": "DepartmentComboBox_SelectionChanged",
+							"visibility": "private",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -25576,6 +25478,7 @@
 								"$ref": "AAAAAAGVhdwrwWNE6G4="
 							},
 							"name": "ProcedureComboBox_SelectionChanged",
+							"visibility": "private",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -25613,6 +25516,7 @@
 								"$ref": "AAAAAAGVhdwrwWNE6G4="
 							},
 							"name": "DoctorComboBox_SelectionChanged",
+							"visibility": "private",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -25650,6 +25554,7 @@
 								"$ref": "AAAAAAGVhdwrwWNE6G4="
 							},
 							"name": "CalendarView_DayItemChanging",
+							"visibility": "private",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -25899,7 +25804,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVzeInrUHB0Bg="
 									},
-									"type": "Task",
+									"type": "void",
 									"direction": "return"
 								}
 							]
@@ -26246,6 +26151,24 @@
 									},
 									"type": "void",
 									"direction": "return"
+								},
+								{
+									"_type": "UMLParameter",
+									"_id": "AAAAAAGV2WuVCKKpDqE=",
+									"_parent": {
+										"$ref": "AAAAAAGVzcmO+dCtNds="
+									},
+									"name": "int width",
+									"type": ""
+								},
+								{
+									"_type": "UMLParameter",
+									"_id": "AAAAAAGV2WuVCKKqHKY=",
+									"_parent": {
+										"$ref": "AAAAAAGVzcmO+dCtNds="
+									},
+									"name": "int height",
+									"type": ""
 								}
 							]
 						},
@@ -27373,8 +27296,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVlDhRSLnHDfU="
 									},
-									"name": "int patientId",
-									"type": ""
+									"name": "int patientId"
 								},
 								{
 									"_type": "UMLParameter",
@@ -27382,7 +27304,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVlDhRSLnHDfU="
 									},
-									"type": "Task<List<AppointmentJointModel>>",
+									"type": "async Task<List<AppointmentJointModel>>",
 									"direction": "return"
 								}
 							]
@@ -27401,8 +27323,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVlEFRe9YKvL0="
 									},
-									"name": "int doctorId",
-									"type": ""
+									"name": "int doctorId"
 								},
 								{
 									"_type": "UMLParameter",
@@ -27410,7 +27331,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVlEFRe9YKvL0="
 									},
-									"type": "Task<List<AppointmentJoinModel>>",
+									"type": "async Task<List<AppointmentJoinModel>>",
 									"direction": "return"
 								}
 							]
@@ -27429,8 +27350,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVlEOc39eJDC0="
 									},
-									"name": "Appointment appointment",
-									"type": ""
+									"name": "Appointment appointment"
 								},
 								{
 									"_type": "UMLParameter",
@@ -27438,7 +27358,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVlEOc39eJDC0="
 									},
-									"type": "Task<bool>",
+									"type": "async Task<bool>",
 									"direction": "return"
 								}
 							]
@@ -27485,8 +27405,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVlEevX+Ur+MA="
 									},
-									"name": "int appointmentId",
-									"type": ""
+									"name": "int appointmentId"
 								},
 								{
 									"_type": "UMLParameter",
@@ -27494,7 +27413,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVlEevX+Ur+MA="
 									},
-									"type": "Task<AppointmentJointModel>",
+									"type": "async Task<AppointmentJointModel>",
 									"direction": "return"
 								}
 							]
@@ -27513,8 +27432,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVlEkxl+sXQ88="
 									},
-									"name": "int doctorId",
-									"type": ""
+									"name": "int doctorId"
 								},
 								{
 									"_type": "UMLParameter",
@@ -27522,7 +27440,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVlEkxl+sXQ88="
 									},
-									"type": "Task<List<AppointmentJoinModel>>",
+									"type": "async Task<List<AppointmentJoinModel>>",
 									"direction": "return"
 								},
 								{
@@ -27531,8 +27449,26 @@
 									"_parent": {
 										"$ref": "AAAAAAGVlEkxl+sXQ88="
 									},
-									"name": "DateTime date",
-									"type": ""
+									"name": "DateTime date"
+								}
+							]
+						},
+						{
+							"_type": "UMLOperation",
+							"_id": "AAAAAAGV2Z8wdyy+pLI=",
+							"_parent": {
+								"$ref": "AAAAAAGVlDfNMbWknQg="
+							},
+							"name": "GetAppointments",
+							"parameters": [
+								{
+									"_type": "UMLParameter",
+									"_id": "AAAAAAGV2Z9qli4/sUs=",
+									"_parent": {
+										"$ref": "AAAAAAGV2Z8wdyy+pLI="
+									},
+									"type": "async Task<List<AppointmentJointModel>>",
+									"direction": "return"
 								}
 							]
 						}
@@ -27805,14 +27741,6 @@
 					"operations": [
 						{
 							"_type": "UMLOperation",
-							"_id": "AAAAAAGVlO5tBmmiY14=",
-							"_parent": {
-								"$ref": "AAAAAAGVlOx+Wjr/vdg="
-							},
-							"name": "ProcedureDatabaseService"
-						},
-						{
-							"_type": "UMLOperation",
 							"_id": "AAAAAAGVlO6/22sTRis=",
 							"_parent": {
 								"$ref": "AAAAAAGVlOx+Wjr/vdg="
@@ -27825,8 +27753,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVlO6/22sTRis="
 									},
-									"name": "int departmentId",
-									"type": ""
+									"name": "int departmentId"
 								},
 								{
 									"_type": "UMLParameter",
@@ -27834,7 +27761,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVlO6/22sTRis="
 									},
-									"type": "Task<List<Procedure>>",
+									"type": "async Task<List<Procedure>>",
 									"direction": "return"
 								}
 							]
@@ -27881,14 +27808,6 @@
 					"operations": [
 						{
 							"_type": "UMLOperation",
-							"_id": "AAAAAAGVlRAwWtYQQnQ=",
-							"_parent": {
-								"$ref": "AAAAAAGVlQ+tB8pJAa0="
-							},
-							"name": "ShiftDatabaseService"
-						},
-						{
-							"_type": "UMLOperation",
 							"_id": "AAAAAAGVlRCuMtq9eso=",
 							"_parent": {
 								"$ref": "AAAAAAGVlQ+tB8pJAa0="
@@ -27901,8 +27820,16 @@
 									"_parent": {
 										"$ref": "AAAAAAGVlRCuMtq9eso="
 									},
-									"name": "int doctorId",
-									"type": ""
+									"name": "int doctorId"
+								},
+								{
+									"_type": "UMLParameter",
+									"_id": "AAAAAAGV2aYhxIntSMw=",
+									"_parent": {
+										"$ref": "AAAAAAGVlRCuMtq9eso="
+									},
+									"type": "async Task<List<Shift>>",
+									"direction": "return"
 								}
 							]
 						},
@@ -27920,7 +27847,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVzXmJSIU3H+8="
 									},
-									"type": "Task<List<Shift>>",
+									"type": "async Task<List<Shift>>",
 									"direction": "return"
 								}
 							]
@@ -27939,7 +27866,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVzXokqYl4hZk="
 									},
-									"type": "Task<List<Schedule>>",
+									"type": "async Task<List<Schedule>>",
 									"direction": "return"
 								}
 							]
@@ -27958,8 +27885,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVzXrFUI25tpU="
 									},
-									"name": "int doctorId",
-									"type": ""
+									"name": "int doctorId"
 								},
 								{
 									"_type": "UMLParameter",
@@ -27967,7 +27893,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVzXrFUI25tpU="
 									},
-									"type": "Task<List<Shift>>",
+									"type": "async Task<List<Shift>>",
 									"direction": "return"
 								}
 							]
@@ -28019,7 +27945,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGVlRFXqOpvbPE="
 							},
-							"name": "_shiftsList",
+							"name": "_shifts",
 							"type": "List<Shift>"
 						},
 						{
@@ -28028,7 +27954,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGVlRFXqOpvbPE="
 							},
-							"name": "_shiftDBService",
+							"name": "_shiftDataBaseService",
 							"visibility": "private",
 							"type": {
 								"$ref": "AAAAAAGVlQ+tB8pJAa0="
@@ -28050,8 +27976,16 @@
 									"_parent": {
 										"$ref": "AAAAAAGVlRP64vuWKpg="
 									},
-									"name": "int doctorId",
-									"type": ""
+									"name": "int doctorId"
+								},
+								{
+									"_type": "UMLParameter",
+									"_id": "AAAAAAGV2Z2AePqwDrI=",
+									"_parent": {
+										"$ref": "AAAAAAGVlRP64vuWKpg="
+									},
+									"type": "async Task",
+									"direction": "return"
 								}
 							]
 						},
@@ -28088,8 +28022,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGVlRZ9CiPuYRI="
 									},
-									"name": "TimeStamp day",
-									"type": ""
+									"name": "DateTime day"
 								},
 								{
 									"_type": "UMLParameter",
@@ -28201,7 +28134,6 @@
 								"$ref": "AAAAAAGVlUW0m62LnfI="
 							},
 							"name": "DailyAppointments",
-							"visibility": "private",
 							"type": "ObservableCollection<TimeSlotModel>"
 						},
 						{
@@ -28646,25 +28578,6 @@
 					"operations": [
 						{
 							"_type": "UMLOperation",
-							"_id": "AAAAAAGVlUtugUiMXuo=",
-							"_parent": {
-								"$ref": "AAAAAAGVlUbdk/Kw0Hs="
-							},
-							"name": "AppointmentDetailsViewModel",
-							"parameters": [
-								{
-									"_type": "UMLParameter",
-									"_id": "AAAAAAGVlUvAWEq16MU=",
-									"_parent": {
-										"$ref": "AAAAAAGVlUtugUiMXuo="
-									},
-									"name": "AppointmentJointModel app",
-									"type": ""
-								}
-							]
-						},
-						{
-							"_type": "UMLOperation",
 							"_id": "AAAAAAGVziUt1Of+hgg=",
 							"_parent": {
 								"$ref": "AAAAAAGVlUbdk/Kw0Hs="
@@ -28900,7 +28813,8 @@
 									"_parent": {
 										"$ref": "AAAAAAGVlWq8WyNvW1A="
 									},
-									"name": "object obj"
+									"name": "object obj",
+									"type": ""
 								}
 							]
 						},
